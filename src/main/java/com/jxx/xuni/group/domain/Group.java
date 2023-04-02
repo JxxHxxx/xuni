@@ -1,0 +1,74 @@
+package com.jxx.xuni.group.domain;
+
+import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
+import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.jxx.xuni.group.domain.Capacity.*;
+import static com.jxx.xuni.group.domain.GroupStatus.*;
+import static javax.persistence.GenerationType.*;
+
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "study_group")
+public class Group {
+
+    @Id @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "group_id")
+    private Long id;
+
+    @Enumerated(value = EnumType.STRING)
+    private GroupStatus groupStatus;
+    @Embedded
+    private Period period;
+    @Embedded
+    private Time time;
+    @Embedded
+    private Capacity capacity;
+    @Embedded
+    private Study study;
+    @Embedded
+    private Host host;
+
+    @ElementCollection
+    @CollectionTable(name = "group_member", joinColumns = @JoinColumn(name = "group_id"))
+    private List<GroupMember> groupMembers = new ArrayList<>();
+
+    public Group(Period period, Time time, Capacity capacity, Study study, Host host) {
+        this.groupStatus = GATHERING;
+        this.period = period;
+        this.time = time;
+        this.capacity = capacity;
+        this.study = study;
+        this.host = host;
+    }
+
+    public void verifyCreateRule() {
+        isGroupState(GATHERING);
+        checkCapacityRange();
+    }
+
+    protected void isGroupState(GroupStatus status) {
+        if (!this.groupStatus.equals(status)){
+            throw new NotAppropriateGroupStatusException();
+        }
+    }
+
+    protected void checkCapacityRange() {
+        if (this.capacity.getTotalCapacity() > CAPACITY_MAX || this.capacity.getTotalCapacity() < CAPACITY_MIN) {
+            throw new CapacityOutOfBoundException();
+        }
+    }
+
+    public boolean canJoinGroup() {
+        return capacity.isValidLeft();
+    }
+
+}
