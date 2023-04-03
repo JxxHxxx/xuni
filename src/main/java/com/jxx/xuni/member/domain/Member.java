@@ -38,4 +38,8 @@ public class Member {
     public void matches(String password) {
         if (loginInfo.isNotSame(password)) throw new PasswordNotMatchedException(LOGIN_FAIL);
     }
+
+    public String receiveEmail() {
+        return loginInfo.getEmail();
+    }
 }
