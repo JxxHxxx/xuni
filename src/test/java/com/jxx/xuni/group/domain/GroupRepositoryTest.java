@@ -1,0 +1,28 @@
+package com.jxx.xuni.group.domain;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest
+class GroupRepositoryTest {
+
+    @Autowired
+    GroupRepository groupRepository;
+
+    @DisplayName("그룹 엔티티 저장 및 조회 테스트")
+    @Test
+    void saveAndFind() {
+        //given
+        Group group = new Group(new Period(), new Time(), new Capacity(), new Study(), new Host());
+
+        //when
+        Group saveGroup = groupRepository.save(group);
+
+        //then
+        assertThat(groupRepository.findById(saveGroup.getId())).isNotEmpty();
+    }
+}
