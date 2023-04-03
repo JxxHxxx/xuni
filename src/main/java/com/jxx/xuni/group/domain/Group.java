@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.jxx.xuni.group.domain.Capacity.*;
 import static com.jxx.xuni.group.domain.GroupStatus.*;
+import static com.jxx.xuni.group.dto.response.GroupCreateMessage.FAIL_MESSAGE;
 import static javax.persistence.GenerationType.*;
 
 @Entity
@@ -57,13 +58,13 @@ public class Group {
 
     protected void isGroupState(GroupStatus status) {
         if (!this.groupStatus.equals(status)){
-            throw new NotAppropriateGroupStatusException();
+            throw new NotAppropriateGroupStatusException(FAIL_MESSAGE);
         }
     }
 
     protected void checkCapacityRange() {
         if (this.capacity.getTotalCapacity() > CAPACITY_MAX || this.capacity.getTotalCapacity() < CAPACITY_MIN) {
-            throw new CapacityOutOfBoundException();
+            throw new CapacityOutOfBoundException(FAIL_MESSAGE);
         }
     }
 
