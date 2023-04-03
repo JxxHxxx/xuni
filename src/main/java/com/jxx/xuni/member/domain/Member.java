@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import static com.jxx.xuni.member.dto.response.MemberResponseMessage.LOGIN_FAIL;
+import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
 
 @Getter
 @Entity
