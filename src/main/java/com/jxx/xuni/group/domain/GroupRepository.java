@@ -1,10 +1,6 @@
 package com.jxx.xuni.group.domain;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
-public interface GroupRepository extends Repository<Group, Long> {
-    Optional<Group> findById(Long id);
-    Group save(Group group);
+public interface GroupRepository extends JpaRepository<Group, Long> {
 }
