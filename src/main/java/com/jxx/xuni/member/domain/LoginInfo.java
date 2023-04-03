@@ -1,12 +1,10 @@
 package com.jxx.xuni.member.domain;
 
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 
-@Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LoginInfo {
@@ -24,5 +22,9 @@ public class LoginInfo {
 
     protected boolean isNotSame(String password) {
         return !this.password.equals(password);
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
