@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum GroupStatus {
-    GATHERING, GATHER_COMPLETE, START, DROP_OUT, END
+    GATHERING, GATHER_COMPLETE, START, END
 }
