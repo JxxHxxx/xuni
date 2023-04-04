@@ -1,5 +1,6 @@
 package com.jxx.xuni.group.presentation;
 
+import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.group.application.GroupCreateService;
 import com.jxx.xuni.group.dto.request.GroupCreateForm;
 import com.jxx.xuni.group.dto.response.GroupCreateResult;
@@ -17,9 +18,10 @@ public class GroupCreateController {
 
     private final GroupCreateService groupCreateService;
 
-    @PostMapping("/members/{member-id}/groups")
-    public ResponseEntity<GroupCreateResult> create(@PathVariable("member-id") Long memberId, @RequestBody GroupCreateForm groupCreateForm) {
-        groupCreateService.create(memberId, groupCreateForm);
+    @PostMapping("/groups")
+    public ResponseEntity<GroupCreateResult> create(@SessionAttribute("loginMember") MemberDetails memberDetails,
+                                                    @RequestBody GroupCreateForm groupCreateForm) {
+        groupCreateService.create(memberDetails.getUserId(), groupCreateForm);
         return new ResponseEntity(GroupCreateResult.created(), CREATED);
     }
 }
