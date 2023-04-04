@@ -39,7 +39,7 @@ public class GroupControllerTest extends ControllerTest {
         //given
         GroupCreateForm groupCreateForm = makeGroupCreateForm(5);
         //when
-        mockMvc.perform(post("/members/{member-id}/groups", memberId)
+        mockMvc.perform(post("/groups", memberId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(groupCreateForm)))
                 // then
@@ -57,7 +57,7 @@ public class GroupControllerTest extends ControllerTest {
         GroupCreateForm groupCreateForm = makeGroupCreateForm(-1);
         //when - then
         String requestBody = objectMapper.writeValueAsString(groupCreateForm);
-        mockMvc.perform(post("/members/{member-id}/groups", memberId)
+        mockMvc.perform(post("/groups", memberId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(jsonPath("$.message").value(GroupCreateMessage.FAIL_MESSAGE));
