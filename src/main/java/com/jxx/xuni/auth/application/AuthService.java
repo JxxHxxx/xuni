@@ -21,12 +21,12 @@ public class AuthService {
         memberRepository.save(member);
     }
 
-    public MemberDetails login(LoginForm loginForm) {
+    public SimpleMemberDetails login(LoginForm loginForm) {
         Member member = memberRepository.findByLoginInfoEmail(loginForm.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일 입니다."));
         member.matches(loginForm.getPassword());
 
-        return new MemberDetails(member.getId(), member.receiveEmail(), member.getName());
+        return new SimpleMemberDetails(member.getId(), member.receiveEmail(), member.getName());
     }
 
     private void checkDuplicationOfEmail(String email) {

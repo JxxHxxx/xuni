@@ -1,4 +1,4 @@
-package com.jxx.xuni;
+package com.jxx.xuni.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jxx.xuni.group.presentation.GroupCreateController;
