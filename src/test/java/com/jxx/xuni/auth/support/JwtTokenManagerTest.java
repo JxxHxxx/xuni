@@ -2,7 +2,7 @@ package com.jxx.xuni.auth.support;
 
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
-import com.jxx.xuni.support.ServiceTest;
+import com.jxx.xuni.support.ServiceOnlyTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@ServiceTest
+@ServiceOnlyTest
 class JwtTokenManagerTest {
 
     @Autowired
