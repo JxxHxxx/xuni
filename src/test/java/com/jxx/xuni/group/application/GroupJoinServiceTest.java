@@ -6,7 +6,9 @@ import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.domain.GroupCreator;
 import com.jxx.xuni.group.domain.GroupRepository;
 import com.jxx.xuni.support.ServiceTest;
+import org.aspectj.lang.annotation.After;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,11 @@ class GroupJoinServiceTest {
     void beforeEach() {
         Group group = GroupCreator.receiveBasicSample();
         groupRepository.save(group);
+    }
+
+    @AfterEach
+    void afterEach() {
+        groupRepository.deleteAll();
     }
 
     @DisplayName("서비스 레이어 그룹 가입 성공 케이스")

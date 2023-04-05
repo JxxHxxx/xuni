@@ -17,8 +17,7 @@ class GroupRepositoryTest {
     @Test
     void saveAndFind() {
         //given
-        Group group = new Group(new Period(), new Time(), new Capacity(), new Study(), new Host());
-
+        Group group = GroupCreator.receiveBasicSample();
         //when
         Group saveGroup = groupRepository.save(group);
 
