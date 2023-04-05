@@ -30,6 +30,6 @@ public class GroupCreateController {
 
         MemberDetails memberDetails = jwtTokenManager.getMemberDetails(extractedToken);
         groupCreateService.create(memberDetails.getUserId(), groupCreateForm);
-        return new ResponseEntity(GroupApiSimpleResult.created(), CREATED);
+        return new ResponseEntity(GroupApiSimpleResult.createGroup(), CREATED);
     }
 }
