@@ -1,8 +1,10 @@
 package com.jxx.xuni.group.domain;
 
 import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
+import com.jxx.xuni.group.domain.exception.GroupJoinException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -49,11 +51,21 @@ public class Group {
         this.capacity = capacity;
         this.study = study;
         this.host = host;
+
+        addInGroup(new GroupMember(host.getHostId(), host.getHostName()));
     }
 
     public void verifyCreateRule() {
         isGroupState(GATHERING);
         checkCapacityRange();
+    }
+
+    public void join(GroupMember member) {
+        isAlreadyJoin(member);
+        checkLeftCapacity();
+        isAccessibleGroupStatus();
+
+        addInGroup(member);
     }
 
     protected void isGroupState(GroupStatus status) {
@@ -68,8 +80,22 @@ public class Group {
         }
     }
 
-    public boolean canJoinGroup() {
-        return capacity.isValidLeft();
+    private void addInGroup(GroupMember groupMember) {
+        groupMembers.add(groupMember);
+        this.capacity.subtractOneLeftCapacity();
     }
 
+    private void checkLeftCapacity() {
+        if (capacity.isNotLeftCapacity()) throw new GroupJoinException("남은 자리가 없습니다.");
+    }
+
+    private void isAlreadyJoin(GroupMember member) {
+         if (groupMembers.stream().anyMatch(groupMember -> groupMember.isSameMemberId(member.getGroupMemberId())))
+             throw new GroupJoinException("이미 들어가 있습니다.");
+    }
+
+    private void isAccessibleGroupStatus() {
+        if (!GATHERING.equals(groupStatus)) throw new GroupJoinException("입장 가능한 그룹이 아닙니다.");
+
+    }
 }
