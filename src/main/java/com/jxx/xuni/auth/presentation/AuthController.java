@@ -6,12 +6,13 @@ import com.jxx.xuni.auth.dto.request.LoginForm;
 import com.jxx.xuni.auth.dto.request.SignupForm;
 import com.jxx.xuni.auth.dto.response.LoginResponse;
 import com.jxx.xuni.auth.dto.response.AuthSimpleResult;
+import com.jxx.xuni.auth.support.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -20,7 +21,7 @@ import static org.springframework.http.HttpStatus.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final HttpSession httpSession;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/auth/signup-email")
     public ResponseEntity<AuthSimpleResult> SignupForEmail(@RequestBody @Validated SignupForm signupForm) {
@@ -29,15 +30,9 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<AuthSimpleResult> login(@RequestBody LoginForm loginForm) {
+    public ResponseEntity<AuthSimpleResult> loginV2(@RequestBody LoginForm loginForm, HttpServletResponse response) {
         MemberDetails memberDetails = authService.login(loginForm);
-        httpSession.setAttribute("loginMember", memberDetails);
+        response.addHeader("Authorization", jwtTokenProvider.issue(memberDetails));
         return ResponseEntity.ok(AuthSimpleResult.login(LoginResponse.from(memberDetails)));
-    }
-
-    @GetMapping("/auth/logout")
-    public ResponseEntity<AuthSimpleResult> logout() {
-        httpSession.removeAttribute("loginMember");
-        return ResponseEntity.ok(AuthSimpleResult.logout());
     }
 }
