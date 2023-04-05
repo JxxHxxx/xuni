@@ -1,18 +1,17 @@
 package com.jxx.xuni.auth.support;
 
 import com.jxx.xuni.auth.application.MemberDetails;
-import com.jxx.xuni.auth.application.SimpleMemberDetails;
+import com.jxx.xuni.common.support.ServiceOnly;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@Service
+@ServiceOnly
 public class JwtTokenProvider {
 
     @Value("${jwt.secret.key}")
