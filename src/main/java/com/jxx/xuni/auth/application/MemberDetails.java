@@ -1,16 +1,11 @@
 package com.jxx.xuni.auth.application;
 
-import lombok.Getter;
+/**
+ * 추후 확장성을 위해 인터페이스화
+ */
 
-@Getter
-public class MemberDetails {
-    private Long userId;
-    private String email;
-    private String name;
-
-    public MemberDetails(Long userId, String email, String name) {
-        this.userId = userId;
-        this.email = email;
-        this.name = name;
-    }
+public interface MemberDetails {
+    String getName();
+    String getEmail();
+    Long getUserId();
 }
