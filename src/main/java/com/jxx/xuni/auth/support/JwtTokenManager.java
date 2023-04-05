@@ -2,17 +2,17 @@ package com.jxx.xuni.auth.support;
 
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
+import com.jxx.xuni.common.support.ServiceOnly;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
 
-@Service
+@ServiceOnly
 public class JwtTokenManager {
 
     @Value("${jwt.secret.key}")
