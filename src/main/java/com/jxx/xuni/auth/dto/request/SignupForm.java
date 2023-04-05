@@ -15,7 +15,7 @@ public class SignupForm {
     @Pattern(regexp = "^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
     private String email;
     @NotBlank
-    @Pattern(regexp = "^{4,12}$")
+    @Pattern(regexp = "^[0-9a-zA-Z]{4,12}$")
     private String password;
     @NotBlank
     @Pattern(regexp = "^[가-힣]{2,8}$")

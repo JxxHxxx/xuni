@@ -21,4 +21,8 @@ public class GroupMember {
         this.groupMemberId = groupMemberId;
         this.groupMemberName = groupMemberName;
     }
+
+    protected boolean isSameMemberId(Long groupMemberId) {
+        return this.groupMemberId.equals(groupMemberId);
+    }
 }

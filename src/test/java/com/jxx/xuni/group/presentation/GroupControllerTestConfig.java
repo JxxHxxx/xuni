@@ -18,11 +18,8 @@ public class GroupControllerTestConfig implements WebMvcConfigurer {
     GroupRepository groupRepository;
     @MockBean
     SimpleHostCreator simpleHostCreator;
-
-    @Bean
-    GroupCreateService groupCreateService() {
-        return new GroupCreateService(groupRepository, simpleHostCreator);
-    }
+    @MockBean
+    GroupCreateService groupCreateService;
 
     @Bean
     JwtTokenProvider jwtTokenProvider() {

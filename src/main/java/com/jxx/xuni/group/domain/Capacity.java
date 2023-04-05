@@ -20,8 +20,11 @@ public class Capacity {
         this.totalCapacity = capacity;
         this.leftCapacity = capacity;
     }
+    protected void subtractOneLeftCapacity() {
+        this.leftCapacity -= 1;
+    }
 
-    protected boolean isValidLeft() {
-        return this.leftCapacity > 0;
+    protected boolean isNotLeftCapacity() {
+        return this.leftCapacity <= 0;
     }
 }
