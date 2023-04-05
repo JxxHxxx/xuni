@@ -4,6 +4,7 @@ import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -43,6 +44,7 @@ public class Group {
     @CollectionTable(name = "group_member", joinColumns = @JoinColumn(name = "group_id"))
     private List<GroupMember> groupMembers = new ArrayList<>();
 
+    @Builder
     public Group(Period period, Time time, Capacity capacity, Study study, Host host) {
         this.groupStatus = GATHERING;
         this.period = period;
