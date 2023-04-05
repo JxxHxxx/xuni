@@ -30,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<AuthSimpleResult> loginV2(@RequestBody LoginForm loginForm, HttpServletResponse response) {
+    public ResponseEntity<AuthSimpleResult> login(@RequestBody LoginForm loginForm, HttpServletResponse response) {
         MemberDetails memberDetails = authService.login(loginForm);
         response.addHeader("Authorization", jwtTokenProvider.issue(memberDetails));
         return ResponseEntity.ok(AuthSimpleResult.login(LoginResponse.from(memberDetails)));
