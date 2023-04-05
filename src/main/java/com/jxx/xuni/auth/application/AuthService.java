@@ -8,30 +8,36 @@ import com.jxx.xuni.auth.dto.request.SignupForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.EXISTED_EMAIL;
+import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void signup(SignupForm signupForm) {
-        Member member = new Member(LoginInfo.of(signupForm.getEmail(), signupForm.getPassword()), signupForm.getName());
-        checkDuplicationOfEmail(signupForm.getEmail());
+        Member member = new Member(LoginInfo.of(signupForm.getEmail(), passwordEncoder.encrypt(signupForm.getPassword())),
+                signupForm.getName());
 
+        checkDuplicationOfEmail(signupForm.getEmail());
         memberRepository.save(member);
     }
 
     public SimpleMemberDetails login(LoginForm loginForm) {
         Member member = memberRepository.findByLoginInfoEmail(loginForm.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일 입니다."));
-        member.matches(loginForm.getPassword());
+                .orElseThrow(() -> new IllegalArgumentException(LOGIN_FAIL));
+
+        member.matches(passwordEncoder.encrypt(loginForm.getPassword()));
 
         return new SimpleMemberDetails(member.getId(), member.receiveEmail(), member.getName());
     }
 
     private void checkDuplicationOfEmail(String email) {
         if (memberRepository.findByLoginInfoEmail(email).isPresent()) {
-            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+            throw new IllegalArgumentException(EXISTED_EMAIL);
         }
     }
 }
