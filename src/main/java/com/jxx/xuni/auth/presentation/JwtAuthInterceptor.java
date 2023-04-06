@@ -14,9 +14,17 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (isGetMethod(request)) {
+            return true;
+        }
+
         String token = extractAuthorizationHeader(request);
         jwtTokenManager.validateAccessToken(token);
         return true;
+    }
+
+    private boolean isGetMethod(HttpServletRequest request) {
+        return "GET".equals(request.getMethod());
     }
 
     private String extractAuthorizationHeader(HttpServletRequest request) {
