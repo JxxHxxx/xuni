@@ -1,16 +1,22 @@
 package com.jxx.xuni.group.domain;
 
+import com.jxx.xuni.common.exception.NotPermissionException;
 import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
+import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
 import com.jxx.xuni.subject.domain.Category;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import static com.jxx.xuni.group.dto.response.GroupApiMessage.NOT_PERMISSION;
+import static com.jxx.xuni.group.dto.response.GroupApiMessage.Not_APPROPRIATE_GROUP_STATUS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -41,17 +47,6 @@ class GroupTest {
         Group group = makeTestGroup(capacity);
         assertThatThrownBy(() -> group.checkCapacityRange()).isInstanceOf(CapacityOutOfBoundException.class);
     }
-
-    protected static Group makeTestGroup(Integer capacity) {
-        Group group = new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
-                Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
-                new Capacity(capacity),
-                Study.of("자바의 정석", Category.JAVA),
-                new Host(1l, "재헌"));
-
-        return group;
-    }
-
     // 그룹 입장 규칙
     @DisplayName("이미 들어가 있는 사용자가 그룹에 참여를 시도할 경우 " +
             "GroupJoinException 예외 발생 " +
@@ -77,5 +72,55 @@ class GroupTest {
 
         assertThatThrownBy(() -> group.join(groupMember)).isInstanceOf(GroupJoinException.class)
                 .hasMessage("남은 자리가 없습니다.");
+    }
+
+    @DisplayName("모집 중 상태가 아닌 그룹에 참여할 수 없습니다. " +
+            "GroupJoinException 예외 발생 " +
+            "예외 메시지 발생 ")
+    @Test
+    void join_group_fail_cause_group_status_not_gathering() {
+        //given
+        Group group = makeTestGroup(2);
+        group.closeRecruitment(1l);
+
+        //when - then
+        GroupMember groupMember = new GroupMember(2l, "유니");
+        Assertions.assertThatThrownBy(() -> group.join(groupMember))
+                .isInstanceOf(GroupJoinException.class);
+    }
+
+    @DisplayName("그룹 호스트가 아닌 사람은 그룹 모집을 마감하려 할 경우 " +
+            "권한 없음 예외가 발생합니다.")
+    @Test
+    void close_recruitment_of_group_fail_cause_is_not_host() {
+        Group group = makeTestGroup(2);
+        
+        Assertions.assertThatThrownBy(() -> group.closeRecruitment(2l))
+                .isInstanceOf(NotPermissionException.class)
+                .hasMessage(NOT_PERMISSION);
+    }
+
+    @DisplayName("그룹 상태가 GATHERING 이 아닐 경우 그룹 모집을 마감할 수 없습니다. " +
+            "권한 없음 예외가 발생합니다.")
+    @ParameterizedTest
+    @EnumSource(names = {"GATHER_COMPLETE", "START", "END"})
+    void close_recruitment_of_group_fail_cause_inappropriate(GroupStatus groupStatus) {
+        Group group = Group.builder()
+                .capacity(new Capacity(5))
+                .host(new Host(1l, "재헌"))
+                .groupStatus(groupStatus)
+                .build();
+
+        Assertions.assertThatThrownBy(() -> group.closeRecruitment(1l))
+                .isInstanceOf(NotAppropriateGroupStatusException.class)
+                .hasMessage(Not_APPROPRIATE_GROUP_STATUS);
+    }
+
+    protected static Group makeTestGroup(Integer capacity) {
+        return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
+                Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
+                new Capacity(capacity),
+                Study.of("자바의 정석", Category.JAVA),
+                new Host(1l, "재헌"));
     }
 }

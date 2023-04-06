@@ -49,4 +49,14 @@ class GroupJoinControllerTest extends ControllerTest {
                 .andExpect(jsonPath("$.message").value(GROUP_JOIN));
 
     }
+
+    @DisplayName("스터디 그룹 모집 마감 성공 요청")
+    @Test
+    void group_close_request() throws Exception {
+        //when - then
+        mockMvc.perform(post("/groups/{group-id}/close-recruitment",1l)
+                        .header("Authorization", testToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(GROUP_CLOSE_RECRUITMENT));
+    }
 }

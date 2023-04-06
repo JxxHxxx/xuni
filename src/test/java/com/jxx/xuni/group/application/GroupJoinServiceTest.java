@@ -57,4 +57,29 @@ class GroupJoinServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 그룹입니다.");
     }
+
+    @DisplayName("서비스 레이어 그룹 모집 완료 케이스")
+    @Test
+    void group_close_recruitment_success() {
+        //given
+        SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(2l);
+
+        //when - then
+        Assertions.assertThatCode(() -> groupJoinService.join(memberDetails, findGroup.getId()))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("서비스 레이어 그룹 모집 완료 실패 케이스 " +
+            "존재하지 않는 그룹 가입 시도")
+    @Test
+    void group_close_recruitment_fail() {
+        //given
+        SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(1l);
+
+        //when - then
+        Assertions.assertThatThrownBy(() -> groupJoinService.closeRecruitment(memberDetails, findGroup.getId() + 1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("존재하지 않는 그룹입니다.");
+    }
+
 }
