@@ -17,7 +17,7 @@ class GroupRepositoryTest {
     @Test
     void saveAndFind() {
         //given
-        Group group = GroupCreator.receiveBasicSample();
+        Group group = TestGroupServiceSupporter.receiveSampleGroup(1l);
         //when
         Group saveGroup = groupRepository.save(group);
 

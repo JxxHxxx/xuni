@@ -1,6 +1,5 @@
 package com.jxx.xuni.group.presentation;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jxx.xuni.support.ControllerTest;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
@@ -13,11 +12,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -28,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Import(GroupControllerTestConfig.class)
-public class GroupControllerTest extends ControllerTest{
+public class GroupCreateControllerTest extends ControllerTest{
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
@@ -48,6 +44,7 @@ public class GroupControllerTest extends ControllerTest{
 
     }
 
+    @DisplayName("스터디 그룹 생성 성공 케이스")
     @Test
     void create_success() throws Exception {
         //given

@@ -3,6 +3,7 @@ package com.jxx.xuni.group.presentation;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.auth.support.JwtTokenManager;
 import com.jxx.xuni.group.application.GroupCreateService;
+import com.jxx.xuni.group.application.GroupJoinService;
 import com.jxx.xuni.group.domain.GroupRepository;
 import com.jxx.xuni.group.domain.SimpleHostCreator;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,8 @@ public class GroupControllerTestConfig implements WebMvcConfigurer {
     SimpleHostCreator simpleHostCreator;
     @MockBean
     GroupCreateService groupCreateService;
+    @MockBean
+    GroupJoinService groupJoinService;
 
     @Bean
     JwtTokenProvider jwtTokenProvider() {
