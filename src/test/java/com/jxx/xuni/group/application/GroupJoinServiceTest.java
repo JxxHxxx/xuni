@@ -1,16 +1,15 @@
 package com.jxx.xuni.group.application;
 
-import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.group.domain.Group;
-import com.jxx.xuni.group.domain.GroupCreator;
+import com.jxx.xuni.group.domain.TestGroupServiceSupporter;
 import com.jxx.xuni.group.domain.GroupRepository;
 import com.jxx.xuni.support.ServiceTest;
-import org.aspectj.lang.annotation.After;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @ServiceTest
@@ -21,10 +20,13 @@ class GroupJoinServiceTest {
     @Autowired
     GroupRepository groupRepository;
 
+    Group findGroup;
+
     @BeforeEach
     void beforeEach() {
-        Group group = GroupCreator.receiveBasicSample();
+        Group group = TestGroupServiceSupporter.receiveSampleGroup(1l);
         groupRepository.save(group);
+        findGroup = groupRepository.findAll().get(0);
     }
 
     @AfterEach
@@ -33,24 +35,26 @@ class GroupJoinServiceTest {
     }
 
     @DisplayName("서비스 레이어 그룹 가입 성공 케이스")
+    @Test
     void group_join_success() {
         //given
-        MemberDetails memberDetails = new SimpleMemberDetails(2l, "leesin5498@naver.com", "재헌");
+        SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(2l);
 
         //when - then
-        Assertions.assertThatCode(() -> groupJoinService.join(memberDetails, 1l))
+        Assertions.assertThatCode(() -> groupJoinService.join(memberDetails, findGroup.getId()))
                 .doesNotThrowAnyException();
     }
 
-    @DisplayName("서비스 레이어 그룹 가입 성공 실패 케이스")
+    @DisplayName("서비스 레이어 그룹 가입 실패 케이스 " +
+            "존재하지 않는 그룹 가입 시도")
+    @Test
     void group_join_fail() {
         //given
-        MemberDetails memberDetails = new SimpleMemberDetails(2l, "leesin5498@naver.com", "재헌");
+        SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(1l);
 
         //when - then
-        Assertions.assertThatThrownBy(() -> groupJoinService.join(memberDetails, 2l))
+        Assertions.assertThatThrownBy(() -> groupJoinService.join(memberDetails, findGroup.getId() + 1))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 그룹입니다.");
     }
-
 }
