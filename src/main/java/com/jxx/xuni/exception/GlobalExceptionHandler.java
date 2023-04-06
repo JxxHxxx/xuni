@@ -1,6 +1,7 @@
 package com.jxx.xuni.exception;
 
 import com.jxx.xuni.auth.config.UnauthenticatedException;
+import com.jxx.xuni.common.exception.NotPermissionException;
 import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
@@ -9,8 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -33,4 +33,11 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = ExceptionResponse.of(400, exception.getMessage());
         return new ResponseEntity<>(response, BAD_REQUEST);
     }
+
+    @ExceptionHandler({NotPermissionException.class})
+    public ResponseEntity<ExceptionResponse> notPermissionExceptionHandler(SecurityException exception) {
+        ExceptionResponse response = ExceptionResponse.of(403, exception.getMessage());
+        return new ResponseEntity<>(response, FORBIDDEN);
+    }
+
 }
