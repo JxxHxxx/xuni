@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @ServiceTest
-class GroupJoinServiceTest {
+class GroupManagingServiceTest {
 
     @Autowired
-    GroupJoinService groupJoinService;
+    GroupManagingService groupManagingService;
     @Autowired
     GroupRepository groupRepository;
 
@@ -41,7 +41,7 @@ class GroupJoinServiceTest {
         SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(2l);
 
         //when - then
-        Assertions.assertThatCode(() -> groupJoinService.join(memberDetails, findGroup.getId()))
+        Assertions.assertThatCode(() -> groupManagingService.join(memberDetails, findGroup.getId()))
                 .doesNotThrowAnyException();
     }
 
@@ -53,7 +53,7 @@ class GroupJoinServiceTest {
         SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(1l);
 
         //when - then
-        Assertions.assertThatThrownBy(() -> groupJoinService.join(memberDetails, findGroup.getId() + 1))
+        Assertions.assertThatThrownBy(() -> groupManagingService.join(memberDetails, findGroup.getId() + 1))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 그룹입니다.");
     }
@@ -65,7 +65,7 @@ class GroupJoinServiceTest {
         SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(2l);
 
         //when - then
-        Assertions.assertThatCode(() -> groupJoinService.join(memberDetails, findGroup.getId()))
+        Assertions.assertThatCode(() -> groupManagingService.join(memberDetails, findGroup.getId()))
                 .doesNotThrowAnyException();
     }
 
@@ -77,7 +77,7 @@ class GroupJoinServiceTest {
         SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(1l);
 
         //when - then
-        Assertions.assertThatThrownBy(() -> groupJoinService.closeRecruitment(memberDetails, findGroup.getId() + 1))
+        Assertions.assertThatThrownBy(() -> groupManagingService.closeRecruitment(memberDetails, findGroup.getId() + 1))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 그룹입니다.");
     }

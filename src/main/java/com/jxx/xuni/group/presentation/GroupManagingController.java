@@ -2,7 +2,7 @@ package com.jxx.xuni.group.presentation;
 
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.support.JwtTokenManager;
-import com.jxx.xuni.group.application.GroupJoinService;
+import com.jxx.xuni.group.application.GroupManagingService;
 import com.jxx.xuni.group.dto.response.GroupApiSimpleResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
-public class GroupJoinController {
+public class GroupManagingController {
 
-    private final GroupJoinService groupJoinService;
+    private final GroupManagingService groupManagingService;
     private final JwtTokenManager jwtTokenManager;
 
     @PostMapping("/groups/{group-id}/join")
@@ -25,7 +25,7 @@ public class GroupJoinController {
         String extractedToken = request.getHeader("Authorization").substring(7);
         MemberDetails memberDetails = jwtTokenManager.getMemberDetails(extractedToken);
 
-        groupJoinService.join(memberDetails, groupId);
+        groupManagingService.join(memberDetails, groupId);
 
         return ResponseEntity.ok(GroupApiSimpleResult.join());
     }
@@ -35,7 +35,7 @@ public class GroupJoinController {
         String extractedToken = request.getHeader("Authorization").substring(7);
         MemberDetails memberDetails = jwtTokenManager.getMemberDetails(extractedToken);
 
-        groupJoinService.closeRecruitment(memberDetails, groupId);
+        groupManagingService.closeRecruitment(memberDetails, groupId);
 
         return ResponseEntity.ok(GroupApiSimpleResult.closeRecruitment());
     }
