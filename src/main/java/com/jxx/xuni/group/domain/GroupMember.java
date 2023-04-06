@@ -1,12 +1,10 @@
 package com.jxx.xuni.group.domain;
 
-import com.jxx.xuni.member.domain.Member;
+import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.persistence.Embeddable;
 
 @Slf4j
 @Getter

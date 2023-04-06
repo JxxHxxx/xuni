@@ -7,12 +7,11 @@ import com.jxx.xuni.auth.dto.request.SignupForm;
 import com.jxx.xuni.auth.dto.response.LoginResponse;
 import com.jxx.xuni.auth.dto.response.AuthSimpleResult;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.http.HttpStatus.*;
 
