@@ -22,4 +22,12 @@ public class GroupJoinService {
 
         group.join(groupMember);
     }
+
+    @Transactional
+    public void closeRecruitment(MemberDetails memberDetails, Long groupId) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
+
+        group.closeRecruitment(memberDetails.getUserId());
+    }
 }

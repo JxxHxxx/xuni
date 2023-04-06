@@ -29,4 +29,14 @@ public class GroupJoinController {
 
         return ResponseEntity.ok(GroupApiSimpleResult.join());
     }
+
+    @PostMapping("/groups/{group-id}/close-recruitment")
+    public ResponseEntity<GroupApiSimpleResult> close(@PathVariable ("group-id") Long groupId, HttpServletRequest request) {
+        String extractedToken = request.getHeader("Authorization").substring(7);
+        MemberDetails memberDetails = jwtTokenManager.getMemberDetails(extractedToken);
+
+        groupJoinService.closeRecruitment(memberDetails, groupId);
+
+        return ResponseEntity.ok(GroupApiSimpleResult.closeRecruitment());
+    }
 }

@@ -1,5 +1,6 @@
 package com.jxx.xuni.group.domain;
 
+import com.jxx.xuni.common.exception.NotPermissionException;
 import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
@@ -14,7 +15,7 @@ import java.util.List;
 
 import static com.jxx.xuni.group.domain.Capacity.*;
 import static com.jxx.xuni.group.domain.GroupStatus.*;
-import static com.jxx.xuni.group.dto.response.GroupApiMessage.GROUP_UNCREATED;
+import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
 import static javax.persistence.GenerationType.*;
 
 @Entity
@@ -44,7 +45,7 @@ public class Group {
     @CollectionTable(name = "group_member", joinColumns = @JoinColumn(name = "group_id"))
     private List<GroupMember> groupMembers = new ArrayList<>();
 
-    @Builder
+
     public Group(Period period, Time time, Capacity capacity, Study study, Host host) {
         this.groupStatus = GATHERING;
         this.period = period;
@@ -52,7 +53,18 @@ public class Group {
         this.capacity = capacity;
         this.study = study;
         this.host = host;
+        addInGroup(new GroupMember(host.getHostId(), host.getHostName()));
+    }
 
+    @Builder
+    protected Group(Long id, GroupStatus groupStatus, Period period, Time time, Capacity capacity, Study study, Host host) {
+        this.id = id;
+        this.groupStatus = groupStatus;
+        this.period = period;
+        this.time = time;
+        this.capacity = capacity;
+        this.study = study;
+        this.host = host;
         addInGroup(new GroupMember(host.getHostId(), host.getHostName()));
     }
 
@@ -69,15 +81,26 @@ public class Group {
         addInGroup(member);
     }
 
+    public void closeRecruitment(Long memberId) {
+        isHost(memberId);
+        isGroupState(GATHERING);
+        this.groupStatus = GATHER_COMPLETE;
+    }
+
+    private void isHost(Long memberId) {
+        if (this.host.isNotHost(memberId)) throw new NotPermissionException(NOT_PERMISSION);
+    }
+
+
     protected void isGroupState(GroupStatus status) {
         if (!this.groupStatus.equals(status)){
-            throw new NotAppropriateGroupStatusException(GROUP_UNCREATED);
+            throw new NotAppropriateGroupStatusException(Not_APPROPRIATE_GROUP_STATUS);
         }
     }
 
     protected void checkCapacityRange() {
         if (this.capacity.getTotalCapacity() > CAPACITY_MAX || this.capacity.getTotalCapacity() < CAPACITY_MIN) {
-            throw new CapacityOutOfBoundException(GROUP_UNCREATED);
+            throw new CapacityOutOfBoundException(Not_APPROPRIATE_GROUP_STATUS);
         }
     }
 
