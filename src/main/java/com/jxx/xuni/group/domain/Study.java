@@ -1,6 +1,6 @@
 package com.jxx.xuni.group.domain;
 
-import com.jxx.xuni.subject.domain.Category;
+import com.jxx.xuni.studyproduct.domain.Category;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
