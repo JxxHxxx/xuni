@@ -1,9 +1,9 @@
 package com.jxx.xuni.group.domain;
 
+import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Embeddable;
 import java.time.LocalTime;
 
 @Getter

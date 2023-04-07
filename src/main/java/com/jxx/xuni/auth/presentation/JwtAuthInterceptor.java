@@ -4,8 +4,8 @@ import com.jxx.xuni.auth.support.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
 public class JwtAuthInterceptor implements HandlerInterceptor {
@@ -14,9 +14,17 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (isGetMethod(request)) {
+            return true;
+        }
+
         String token = extractAuthorizationHeader(request);
         jwtTokenManager.validateAccessToken(token);
         return true;
+    }
+
+    private boolean isGetMethod(HttpServletRequest request) {
+        return "GET".equals(request.getMethod());
     }
 
     private String extractAuthorizationHeader(HttpServletRequest request) {

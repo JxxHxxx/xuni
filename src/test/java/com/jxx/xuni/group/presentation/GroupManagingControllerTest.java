@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Import(GroupControllerTestConfig.class)
-class GroupJoinControllerTest extends ControllerTest {
+class GroupManagingControllerTest extends ControllerTest {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 

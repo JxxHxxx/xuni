@@ -1,13 +1,12 @@
 package com.jxx.xuni.group.domain;
 
 import com.jxx.xuni.subject.domain.Category;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 
 @Getter
 @Embeddable
