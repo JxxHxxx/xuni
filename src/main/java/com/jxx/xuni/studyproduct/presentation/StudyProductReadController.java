@@ -25,7 +25,7 @@ public class StudyProductReadController {
         return ResponseEntity.ok(new StudyProductApiReadResult("전체 조회 완료",responses));
     }
 
-    @GetMapping("/study-products")
+    @GetMapping("/study-products/cond")
     public ResponseEntity<StudyProductApiReadResult> readAllBy(@RequestParam Category category) {
         List<StudyProductReadResponse> responses = studyProductReadService.readBy(category);
 
