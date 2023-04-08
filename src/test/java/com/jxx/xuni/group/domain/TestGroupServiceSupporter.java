@@ -1,7 +1,7 @@
 package com.jxx.xuni.group.domain;
 
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
-import com.jxx.xuni.subject.domain.Category;
+import com.jxx.xuni.studyproduct.domain.Category;
 import java.time.LocalDate;
 import java.time.LocalTime;
 

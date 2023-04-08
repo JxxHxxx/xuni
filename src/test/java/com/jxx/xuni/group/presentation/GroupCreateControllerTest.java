@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static com.jxx.xuni.subject.domain.Category.JAVA;
+import static com.jxx.xuni.studyproduct.domain.Category.JAVA;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
