@@ -16,15 +16,16 @@ public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
-
     @Embedded
     private LoginInfo loginInfo;
-
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
     private String name;
 
     public Member(LoginInfo loginInfo, String name) {
         this.loginInfo = loginInfo;
         this.name = name;
+        this.authority = Authority.USER;
     }
 
     @Builder

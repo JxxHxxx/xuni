@@ -3,15 +3,20 @@ package com.jxx.xuni.auth.support;
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.common.support.ServiceOnly;
+import com.jxx.xuni.member.domain.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+import static com.jxx.xuni.member.domain.Authority.*;
+
+@Slf4j
 @ServiceOnly
 public class JwtTokenManager {
 
@@ -59,9 +64,18 @@ public class JwtTokenManager {
         LinkedHashMap<String, Object> claimsElements = (LinkedHashMap) claims;
         Long userId = castToLongId(claimsElements);
         String email = (String) claimsElements.get("email");
-        String name = (String)claimsElements.get("name");
+        String name = (String) claimsElements.get("name");
+        Authority authority = castToStringAuthority(claimsElements);
 
-        return new SimpleMemberDetails(userId, email, name);
+        return new SimpleMemberDetails(userId, email, name, authority);
+    }
+
+    private Authority castToStringAuthority(LinkedHashMap<String, Object> claimsElements) {
+        String stringAuthority = (String) claimsElements.get("authority");
+        if(ADMIN.toString().equals(stringAuthority)) {
+            return ADMIN;
+        }
+        return USER;
     }
 
 

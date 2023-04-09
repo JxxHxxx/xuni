@@ -32,7 +32,7 @@ public class AuthService {
 
         member.matches(passwordEncoder.encrypt(loginForm.getPassword()));
 
-        return new SimpleMemberDetails(member.getId(), member.receiveEmail(), member.getName());
+        return new SimpleMemberDetails(member.getId(), member.receiveEmail(), member.getName(), member.getAuthority());
     }
 
     private void checkDuplicationOfEmail(String email) {
