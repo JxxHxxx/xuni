@@ -5,6 +5,9 @@ import com.jxx.xuni.studyproduct.domain.Category;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import static com.jxx.xuni.member.domain.Authority.ADMIN;
+import static com.jxx.xuni.member.domain.Authority.USER;
+
 public class TestGroupServiceSupporter {
 
     public static Group receiveSampleGroup(Long hostId) {
@@ -17,5 +20,13 @@ public class TestGroupServiceSupporter {
 
     public static SimpleMemberDetails receiveSampleMemberDetails(Long memberId) {
         return new SimpleMemberDetails(memberId, "leesin5498@naver.com", "재헌");
+    }
+
+    public static SimpleMemberDetails AdminMemberDetails(Long memberId) {
+        return new SimpleMemberDetails(memberId, "jsmtmt@naver.com", "유니", ADMIN);
+    }
+
+    public static SimpleMemberDetails UserMemberDetails(Long memberId) {
+        return new SimpleMemberDetails(memberId, "leesin5498@naver.com", "재헌", USER);
     }
 }

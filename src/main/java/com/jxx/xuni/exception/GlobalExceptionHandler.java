@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({NotPermissionException.class})
-    public ResponseEntity<ExceptionResponse> notPermissionExceptionHandler(SecurityException exception) {
+    public ResponseEntity<ExceptionResponse> notPermissionExceptionHandler(RuntimeException exception) {
         ExceptionResponse response = ExceptionResponse.of(403, exception.getMessage());
         return new ResponseEntity<>(response, FORBIDDEN);
     }
