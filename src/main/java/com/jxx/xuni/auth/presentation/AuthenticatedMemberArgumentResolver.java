@@ -19,8 +19,6 @@ public class AuthenticatedMemberArgumentResolver implements HandlerMethodArgumen
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        log.info("supportParameter 실행");
-
         boolean hasLoginMemberAnnotation = parameter.hasParameterAnnotation(AuthenticatedMember.class);
         boolean hasMemberDetailsType = MemberDetails.class.isAssignableFrom(parameter.getParameterType());
 
@@ -29,7 +27,6 @@ public class AuthenticatedMemberArgumentResolver implements HandlerMethodArgumen
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        log.info("resolveArgument 실행");
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
         String token = request.getHeader("Authorization");
