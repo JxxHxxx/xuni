@@ -2,6 +2,8 @@ package com.jxx.xuni.studyproduct.application;
 
 import com.jxx.xuni.studyproduct.domain.Category;
 import com.jxx.xuni.studyproduct.domain.StudyProduct;
+import com.jxx.xuni.studyproduct.domain.StudyProductDetail;
+import com.jxx.xuni.studyproduct.dto.response.StudyProductDetailReadResponse;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;
 import com.jxx.xuni.studyproduct.query.StudyProductReadRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +37,16 @@ public class StudyProductReadService {
                 studyProduct.getTopic().getContent(),
                 studyProduct.getTopic().getAuthor(),
                 studyProduct.getTopic().getImage())).collect(Collectors.toList());
+    }
+
+    public StudyProductDetailReadResponse readDetails(String studyProductId) {
+        StudyProduct studyProduct = studyProductReadRepository.readDetailWithFetch(studyProductId);
+        List<StudyProductDetail> studyProductDetails = studyProduct.getStudyProductDetail();
+
+        return new StudyProductDetailReadResponse(
+                studyProduct.getName(),
+                studyProduct.getCategory(),
+                studyProduct.getTopic(),
+                studyProductDetails);
     }
 }

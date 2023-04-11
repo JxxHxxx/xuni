@@ -6,9 +6,11 @@ import com.jxx.xuni.member.domain.Authority;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ActuatorFilter implements Filter {
 
@@ -21,13 +23,20 @@ public class ActuatorFilter implements Filter {
         if (isActuatorEndpoint(httpRequest)) {
             checkAdminAuthority(httpRequest);
             chain.doFilter(request, response);
+            return;
         }
 
         chain.doFilter(request, response);
     }
 
     private void checkAdminAuthority(HttpServletRequest httpRequest) {
-        String token = httpRequest.getHeader("Authorization").substring(7);
+        String token = null;
+        try {
+            token = httpRequest.getHeader("Authorization").substring(7);
+        }
+        catch (NullPointerException e) {
+            throw new NullPointerException("토큰 없음");
+        }
         if (!Authority.ADMIN.equals(jwtTokenManager.getMemberDetails(token).getAuthority())) {
             throw new NotPermissionException("접근 권한이 존재하지 않습니다.");
         }
