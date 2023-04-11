@@ -3,9 +3,7 @@ package com.jxx.xuni.studyproduct.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import jakarta.persistence.*;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +11,6 @@ import java.util.UUID;
 
 @Getter
 @Entity
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyProduct {
 

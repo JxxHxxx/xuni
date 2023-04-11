@@ -2,11 +2,14 @@ package com.jxx.xuni.studyproduct.presentation;
 
 import com.jxx.xuni.studyproduct.application.StudyProductReadService;
 import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.studyproduct.domain.StudyProduct;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductApiReadResult;
+import com.jxx.xuni.studyproduct.dto.response.StudyProductDetailReadResponse;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,5 +33,12 @@ public class StudyProductReadController {
         List<StudyProductReadResponse> responses = studyProductReadService.readBy(category);
 
         return ResponseEntity.ok(new StudyProductApiReadResult(category.name() + " 전체 조회 완료", responses));
+    }
+
+    @GetMapping("/study-products/{study-product-id}")
+    public ResponseEntity<StudyProductApiReadResult> readDetails(@PathVariable("study-product-id") String studyProductId) {
+        StudyProductDetailReadResponse response = studyProductReadService.readDetails(studyProductId);
+
+        return ResponseEntity.ok(new StudyProductApiReadResult("상세 조회 완료", response));
     }
 }
