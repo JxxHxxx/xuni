@@ -16,7 +16,7 @@ public class GroupManagingService {
 
     @Transactional
     public void join(MemberDetails memberDetails, Long groupId) {
-        Group group = groupRepository.findById(groupId)
+        Group group = groupRepository.readWithOptimisticLock(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹입니다."));
         GroupMember groupMember = new GroupMember(memberDetails.getUserId(), memberDetails.getName());
 

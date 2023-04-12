@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Capacity {
-    protected static final Integer CAPACITY_MAX = 5;
+    protected static final Integer CAPACITY_MAX = 20;
     protected static final Integer CAPACITY_MIN = 1;
 
     private Integer totalCapacity;

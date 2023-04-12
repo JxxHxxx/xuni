@@ -40,6 +40,8 @@ public class Group {
     private Study study;
     @Embedded
     private Host host;
+    @Version
+    private long version;
 
     @ElementCollection
     @CollectionTable(name = "group_member", joinColumns = @JoinColumn(name = "group_id"))
@@ -53,6 +55,7 @@ public class Group {
         this.capacity = capacity;
         this.study = study;
         this.host = host;
+        this.version = 0l;
         addInGroup(new GroupMember(host.getHostId(), host.getHostName()));
     }
 
