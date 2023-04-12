@@ -39,10 +39,10 @@ class GroupTest {
                 .anyMatch(groupMember -> groupMember.isSameMemberId(group.getHost().getHostId()))).isTrue();
     }
 
-    @DisplayName("스터디 그룹의 인원은 최소 1인에서 최대 5인 까지 가능합니다. " +
+    @DisplayName("스터디 그룹의 인원은 최소 1인에서 최대 20인 까지 가능합니다. " +
             "이외의 값을 입력할 경우 CapacityOutOfBoundException 발생합니다.")
     @ParameterizedTest(name = "[{index}] capacity = {0}")
-    @ValueSource(ints = {-1, 0, 6})
+    @ValueSource(ints = {-1, 0, 21})
     void check_group_capacity(Integer capacity) {
         Group group = makeTestGroup(capacity);
         assertThatThrownBy(() -> group.checkCapacityRange()).isInstanceOf(CapacityOutOfBoundException.class);
