@@ -3,6 +3,7 @@ package com.jxx.xuni.group.presentation;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.auth.support.JwtTokenManager;
 import com.jxx.xuni.group.application.GroupCreateService;
+import com.jxx.xuni.group.application.GroupJoinFacade;
 import com.jxx.xuni.group.application.GroupManagingService;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.domain.GroupRepository;
@@ -26,6 +27,8 @@ public class GroupControllerTestConfig implements WebMvcConfigurer {
     GroupManagingService groupManagingService;
     @MockBean
     GroupReadService groupReadService;
+    @MockBean
+    GroupJoinFacade groupJoinFacade;
 
     @Bean
     JwtTokenProvider jwtTokenProvider() {

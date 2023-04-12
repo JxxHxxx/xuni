@@ -29,4 +29,12 @@ public class TestGroupServiceSupporter {
     public static SimpleMemberDetails UserMemberDetails(Long memberId) {
         return new SimpleMemberDetails(memberId, "leesin5498@naver.com", "재헌", USER);
     }
+
+    public static Group sampleGroup(Long hostId, Integer capacity) {
+        return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
+                Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
+                new Capacity(capacity),
+                Study.of("자바의 정석", Category.JAVA),
+                new Host(hostId, "재헌"));
+    }
 }
