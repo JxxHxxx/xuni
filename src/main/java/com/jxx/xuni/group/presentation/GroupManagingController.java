@@ -2,6 +2,7 @@ package com.jxx.xuni.group.presentation;
 
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.presentation.AuthenticatedMember;
+import com.jxx.xuni.group.application.GroupJoinFacade;
 import com.jxx.xuni.group.application.GroupManagingService;
 import com.jxx.xuni.group.dto.response.GroupApiSimpleResult;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class GroupManagingController {
 
     private final GroupManagingService groupManagingService;
+    private final GroupJoinFacade groupJoinFacade;
 
     @PostMapping("/groups/{group-id}/join")
     public ResponseEntity<GroupApiSimpleResult> join(@PathVariable("group-id") Long groupId,
                                                      @AuthenticatedMember MemberDetails memberDetails) {
 
-        groupManagingService.join(memberDetails, groupId);
+        groupJoinFacade.join(memberDetails, groupId);
         return ResponseEntity.ok(GroupApiSimpleResult.join());
     }
 
