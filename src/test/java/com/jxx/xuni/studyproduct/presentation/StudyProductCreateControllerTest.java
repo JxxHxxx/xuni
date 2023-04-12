@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.group.domain.TestGroupServiceSupporter;
-import com.jxx.xuni.studyproduct.StudyProductControllerTestConfig;
 import com.jxx.xuni.studyproduct.domain.Category;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductForm;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,17 +12,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ActiveProfiles("default")
 @SpringBootTest
 @AutoConfigureMockMvc
 class StudyProductCreateControllerTest {
@@ -41,7 +39,6 @@ class StudyProductCreateControllerTest {
         StudyProductForm studyProductForm = new StudyProductForm("JAVA 스터디", Category.JAVA, "JAVA의 정석", "남궁성", "URL");
         requestForm = objectMapper.writeValueAsString(studyProductForm);
     }
-
 
     @DisplayName("상품 등록 성공")
     @Test
