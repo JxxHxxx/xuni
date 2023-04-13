@@ -4,6 +4,7 @@ import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -24,7 +25,7 @@ public class GroupJoinFacade {
                 throw exception;
             }
 
-            catch (Exception exception) {
+            catch (ObjectOptimisticLockingFailureException exception) {
                 try {
                     log.info("race condition!!!! retry");
                     Thread.sleep(50);
