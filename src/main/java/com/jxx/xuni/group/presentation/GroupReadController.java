@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.jxx.xuni.group.dto.response.GroupApiMessage.GROUP_ALL_READ;
+
 @RestController
 @RequiredArgsConstructor
 public class GroupReadController {
@@ -20,6 +22,6 @@ public class GroupReadController {
     public ResponseEntity<GroupApiReadResult> readAll() {
         List<GroupReadAllResponse> response = groupReadService.readAll();
 
-        return ResponseEntity.ok(new GroupApiReadResult("전체 그룹 조회 완료", response));
+        return ResponseEntity.ok(new GroupApiReadResult(GROUP_ALL_READ, response));
     }
 }

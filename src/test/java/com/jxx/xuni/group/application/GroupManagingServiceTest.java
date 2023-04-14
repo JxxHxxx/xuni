@@ -12,6 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
+
 @ServiceTest
 class GroupManagingServiceTest {
 
@@ -79,7 +81,7 @@ class GroupManagingServiceTest {
         //when - then
         Assertions.assertThatThrownBy(() -> groupManagingService.closeRecruitment(memberDetails, findGroup.getId() + 1))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("존재하지 않는 그룹입니다.");
+                .hasMessage(NOT_EXISTED_GROUP);
     }
 
 }

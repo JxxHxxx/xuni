@@ -15,8 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static com.jxx.xuni.group.dto.response.GroupApiMessage.NOT_PERMISSION;
-import static com.jxx.xuni.group.dto.response.GroupApiMessage.Not_APPROPRIATE_GROUP_STATUS;
+import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -59,7 +58,7 @@ class GroupTest {
 
         //when - then
         assertThatThrownBy(() -> group.join(groupMember)).isInstanceOf(GroupJoinException.class)
-                .hasMessage("이미 들어가 있습니다.");
+                .hasMessage(ALREADY_JOIN);
     }
 
     @DisplayName("남은 자리가 없는 그룹에 참여를 시도할 경우 " +
@@ -71,7 +70,7 @@ class GroupTest {
         GroupMember groupMember = new GroupMember(2l, "이재헌");
 
         assertThatThrownBy(() -> group.join(groupMember)).isInstanceOf(GroupJoinException.class)
-                .hasMessage("남은 자리가 없습니다.");
+                .hasMessage(NOT_LEFT_CAPACITY);
     }
 
     @DisplayName("모집 중 상태가 아닌 그룹에 참여할 수 없습니다. " +
@@ -113,7 +112,7 @@ class GroupTest {
 
         Assertions.assertThatThrownBy(() -> group.closeRecruitment(1l))
                 .isInstanceOf(NotAppropriateGroupStatusException.class)
-                .hasMessage(Not_APPROPRIATE_GROUP_STATUS);
+                .hasMessage(NOT_APPROPRIATE_GROUP_STATUS);
     }
 
     protected static Group makeTestGroup(Integer capacity) {
