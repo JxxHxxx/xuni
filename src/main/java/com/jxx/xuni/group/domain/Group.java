@@ -97,13 +97,13 @@ public class Group {
 
     protected void isGroupState(GroupStatus status) {
         if (!this.groupStatus.equals(status)){
-            throw new NotAppropriateGroupStatusException(Not_APPROPRIATE_GROUP_STATUS);
+            throw new NotAppropriateGroupStatusException(NOT_APPROPRIATE_GROUP_STATUS);
         }
     }
 
     protected void checkCapacityRange() {
         if (this.capacity.getTotalCapacity() > CAPACITY_MAX || this.capacity.getTotalCapacity() < CAPACITY_MIN) {
-            throw new CapacityOutOfBoundException(Not_APPROPRIATE_GROUP_STATUS);
+            throw new CapacityOutOfBoundException(NOT_APPROPRIATE_GROUP_CAPACITY);
         }
     }
 
@@ -113,16 +113,16 @@ public class Group {
     }
 
     private void checkLeftCapacity() {
-        if (capacity.isNotLeftCapacity()) throw new GroupJoinException("남은 자리가 없습니다.");
+        if (capacity.isNotLeftCapacity()) throw new GroupJoinException(NOT_LEFT_CAPACITY);
     }
 
     private void isAlreadyJoin(GroupMember member) {
          if (groupMembers.stream().anyMatch(groupMember -> groupMember.isSameMemberId(member.getGroupMemberId())))
-             throw new GroupJoinException("이미 들어가 있습니다.");
+             throw new GroupJoinException(ALREADY_JOIN);
     }
 
     private void isAccessibleGroupStatus() {
-        if (!GATHERING.equals(groupStatus)) throw new GroupJoinException("입장 가능한 그룹이 아닙니다.");
+        if (!GATHERING.equals(groupStatus)) throw new GroupJoinException(NOT_ACCESSIBLE_GROUP);
 
     }
 }
