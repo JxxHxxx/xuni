@@ -25,4 +25,8 @@ public class GroupApiSimpleResult {
     public static GroupApiSimpleResult closeRecruitment() {
         return new GroupApiSimpleResult(200, GROUP_CLOSE_RECRUITMENT);
     }
+
+    public static GroupApiSimpleResult start() {
+        return new GroupApiSimpleResult(200, GROUP_START);
+    }
 }
