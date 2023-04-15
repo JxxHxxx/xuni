@@ -17,5 +17,6 @@ public class GroupApiMessage {
     public static final String NOT_ACCESSIBLE_GROUP = "입장 가능한 그룹이 아닙니다.";
     public static final String NOT_EXISTED_GROUP = "존재하지 않는 그룹입니다.";
     public static final String GROUP_ALL_READ = "전체 그룹 조회 완료";
+    public static final String GROUP_START = "그룹 스터디를 시작합니다.";
 
 }

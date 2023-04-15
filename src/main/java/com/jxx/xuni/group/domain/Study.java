@@ -1,6 +1,7 @@
 package com.jxx.xuni.group.domain;
 
 import com.jxx.xuni.studyproduct.domain.Category;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,18 +13,22 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Study {
+
+    @Column(name = "study_product_id")
+    private String id;
     private String subject;
 
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    private Study(String subject, Category category) {
+    private Study(String id, String subject, Category category) {
+        this.id = id;
         this.subject = subject;
         this.category = category;
     }
 
-    public static Study of(String subject, Category category) {
-        return new Study(subject, category);
+    public static Study of(String id, String subject, Category category) {
+        return new Study(id, subject, category);
     }
 
 }
