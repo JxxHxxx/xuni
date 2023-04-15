@@ -14,7 +14,7 @@ public class TestGroupServiceSupporter {
         return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(5),
-                Study.of("자바의 정석", Category.JAVA),
+                Study.of("UUID","자바의 정석", Category.JAVA),
                 new Host(hostId, "재헌"));
     }
 
@@ -34,7 +34,7 @@ public class TestGroupServiceSupporter {
         return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(capacity),
-                Study.of("자바의 정석", Category.JAVA),
+                Study.of("UUID","자바의 정석", Category.JAVA),
                 new Host(hostId, "재헌"));
     }
 }
