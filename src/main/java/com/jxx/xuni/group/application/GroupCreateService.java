@@ -17,7 +17,7 @@ public class GroupCreateService {
         Group group = new Group(Period.of(form.getStartDate(), form.getEndDate()),
                                 Time.of(form.getStartTime(), form.getEndTime()),
                                 new Capacity(form.getCapacity()),
-                                Study.of(form.getSubject(), form.getCategory()),
+                                Study.of(form.getStudyProductId(), form.getSubject(), form.getCategory()),
                                 host);
 
         group.verifyCreateRule();

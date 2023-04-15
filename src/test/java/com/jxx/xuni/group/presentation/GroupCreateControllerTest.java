@@ -79,6 +79,6 @@ public class GroupCreateControllerTest extends ControllerTest{
 
     private GroupCreateForm makeGroupCreateForm(Integer capacity) {
         return new GroupCreateForm(LocalDate.now(), LocalDate.of(2023, 7, 15),
-                LocalTime.NOON, LocalTime.MIDNIGHT, capacity, "자바의 정석", JAVA);
+                LocalTime.NOON, LocalTime.MIDNIGHT, capacity,"UUID", "자바의 정석", JAVA);
     }
 }

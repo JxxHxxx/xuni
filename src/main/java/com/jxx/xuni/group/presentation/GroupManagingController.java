@@ -7,6 +7,7 @@ import com.jxx.xuni.group.application.GroupManagingService;
 import com.jxx.xuni.group.dto.response.GroupApiSimpleResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,5 +34,13 @@ public class GroupManagingController {
 
         groupManagingService.closeRecruitment(memberDetails, groupId);
         return ResponseEntity.ok(GroupApiSimpleResult.closeRecruitment());
+    }
+
+    @GetMapping("/groups/{group-id}/start")
+    public ResponseEntity<GroupApiSimpleResult> start(@PathVariable ("group-id") Long groupId,
+                                                      @AuthenticatedMember MemberDetails memberDetails) {
+
+        groupManagingService.start(memberDetails , groupId);
+        return ResponseEntity.ok(GroupApiSimpleResult.start());
     }
 }

@@ -43,10 +43,14 @@ public class Group {
     @Version
     private long version;
 
+
     @ElementCollection
     @CollectionTable(name = "group_member", joinColumns = @JoinColumn(name = "group_id"))
     private List<GroupMember> groupMembers = new ArrayList<>();
 
+    @ElementCollection
+    @CollectionTable(name = "study_check", joinColumns = @JoinColumn(name = "group_id"))
+    private List<StudyCheck> studyChecks = new ArrayList<>();
 
     public Group(Period period, Time time, Capacity capacity, Study study, Host host) {
         this.groupStatus = GATHERING;
@@ -88,6 +92,12 @@ public class Group {
         isHost(memberId);
         isGroupState(GATHERING);
         this.groupStatus = GATHER_COMPLETE;
+    }
+
+    public void start(Long memberId) {
+        isHost(memberId);
+        isGroupState(GATHER_COMPLETE);
+        this.groupStatus = START;
     }
 
     private void isHost(Long memberId) {
