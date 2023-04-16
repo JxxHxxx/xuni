@@ -98,7 +98,7 @@ public class Group {
     public void start(Long memberId, List<StudyCheckForm> studyCheckForms) {
         isHost(memberId);
         isGroupState(GATHER_COMPLETE);
-        checkEmpty(studyCheckForms);
+        checkNullAndEmpty(studyCheckForms);
         initStudyChecks(studyCheckForms);
         this.groupStatus = START;
     }
@@ -113,7 +113,8 @@ public class Group {
         }
     }
 
-    private void checkEmpty(List<StudyCheckForm> studyCheckForms) {
+    private void checkNullAndEmpty(List<StudyCheckForm> studyCheckForms) {
+        if (studyCheckForms == null) throw new GroupStartException("커리큘럼은 필수입니다.");
         if (studyCheckForms.isEmpty()) throw new GroupStartException("커리큘럼은 필수입니다.");
     }
 

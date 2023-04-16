@@ -3,18 +3,25 @@ package com.jxx.xuni.group.domain;
 import com.jxx.xuni.common.exception.NotPermissionException;
 import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
+import com.jxx.xuni.group.domain.exception.GroupStartException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
+import com.jxx.xuni.group.dto.request.StudyCheckForm;
 import com.jxx.xuni.studyproduct.domain.Category;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import static com.jxx.xuni.group.domain.GroupStatus.*;
 import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -113,6 +120,93 @@ class GroupTest {
         Assertions.assertThatThrownBy(() -> group.closeRecruitment(1l))
                 .isInstanceOf(NotAppropriateGroupStatusException.class)
                 .hasMessage(NOT_APPROPRIATE_GROUP_STATUS);
+    }
+
+    @DisplayName("그룹 시작이 성공적으로 작동했다면 " +
+            "GroupStatus == START, " +
+            "StudyChecks 에 memberId, chapterId, title, isDone 데이터가 추가 되어야 한다." +
+            "그리고 isDone 초기값은 false 이다.")
+    @Test
+    void start_success() {
+        //given
+        Group group = Group.builder()
+                .capacity(new Capacity(5))
+                .host(new Host(1l, "재헌"))
+                .groupStatus(GATHERING)
+                .build();
+
+        //given 그룹에 멤버 추가
+        group.join(new GroupMember(2l, "유니"));
+        //given 모집 마감
+        group.closeRecruitment(1l);
+
+        List<StudyCheckForm> studyCheckForms = new ArrayList<>();
+        studyCheckForms.add(new StudyCheckForm(1l, "객체 지향의 사실과 오해"));
+        //when
+        group.start(1l, studyCheckForms);
+        //then - 그룹 상태는 START 로 변경된다.
+        Assertions.assertThat(group.getGroupStatus()).isEqualTo(START);
+
+        Assertions.assertThat(group.getStudyChecks().get(0).getTitle()).isEqualTo("객체 지향의 사실과 오해");
+        Assertions.assertThat(group.getStudyChecks().get(0).getChapterId()).isEqualTo(1l);
+        //then studyChecks 는 그룹에 참여중인 MemberId를 모두 가지고 있다.
+        List<Long> members = group.getStudyChecks().stream().map(studyCheck -> studyCheck.getMemberId()).toList();
+        Assertions.assertThat(members).contains(1l, 2l);
+        //then studyChecks isDone 초기화 값은 false다.
+        List<Boolean> isDones = group.getStudyChecks().stream().map(studyCheck -> studyCheck.isDone()).toList();
+        Assertions.assertThat(isDones).containsOnly(false);
+
+    }
+
+    @DisplayName("그룹 호스트가 아닌 그룹 멤버가 그룹 시작을 할 경우 " +
+            "NotPermissionException 예외가 발생합니다.")
+    @Test
+    void start_fail_cause_is_not_host() {
+        Long hostId = 1l;
+        Long groupMemberId = 2l;
+
+        Group group = Group.builder()
+                .capacity(new Capacity(5))
+                .host(new Host(hostId, "재헌"))
+                .groupStatus(GATHER_COMPLETE)
+                .build();
+
+        Assertions.assertThatThrownBy(() -> group.start(groupMemberId, null))
+                .isInstanceOf(NotPermissionException.class)
+                .hasMessage(NOT_PERMISSION);
+    }
+
+    @DisplayName("그룹 상태가 GATHER_COMPLETE 가 아닌 상태에서 그룹 시작을 할 경우 " +
+            " NotAppropriateGroupStatusException 예외가 발생합니다.")
+    @ParameterizedTest
+    @EnumSource(names = {"GATHERING","START","END"})
+    void start_fail_cause_is_not_gather_complete_status(GroupStatus groupStatus) {
+        Group group = Group.builder()
+                .capacity(new Capacity(5))
+                .host(new Host(1l, "재헌"))
+                .groupStatus(groupStatus)
+                .build();
+
+        Assertions.assertThatThrownBy(() -> group.start(1l, null))
+                .isInstanceOf(NotAppropriateGroupStatusException.class)
+                .hasMessage(NOT_APPROPRIATE_GROUP_STATUS);
+    }
+
+    @DisplayName("그룹 호스트가 아닌 그룹 멤버가 그룹 시작을 할 경우 " +
+            "NotPermissionException 예외가 발생합니다.")
+    @ParameterizedTest
+    @NullSource
+    @EmptySource
+    void start_fail_cause_is_empty_or_null_study_check_form(List<StudyCheckForm> studyCheckForms) {
+        Group group = Group.builder()
+                .capacity(new Capacity(5))
+                .host(new Host(1l, "재헌"))
+                .groupStatus(GATHER_COMPLETE)
+                .build();
+
+        Assertions.assertThatThrownBy(() -> group.start(1l, studyCheckForms))
+                .isInstanceOf(GroupStartException.class);
+
     }
 
     protected static Group makeTestGroup(Integer capacity) {
