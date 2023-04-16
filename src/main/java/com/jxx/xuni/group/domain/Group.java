@@ -3,7 +3,9 @@ package com.jxx.xuni.group.domain;
 import com.jxx.xuni.common.exception.NotPermissionException;
 import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
+import com.jxx.xuni.group.domain.exception.GroupStartException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
+import com.jxx.xuni.group.dto.request.StudyCheckForm;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -42,7 +44,6 @@ public class Group {
     private Host host;
     @Version
     private long version;
-
 
     @ElementCollection
     @CollectionTable(name = "group_member", joinColumns = @JoinColumn(name = "group_id"))
@@ -94,10 +95,26 @@ public class Group {
         this.groupStatus = GATHER_COMPLETE;
     }
 
-    public void start(Long memberId) {
+    public void start(Long memberId, List<StudyCheckForm> studyCheckForms) {
         isHost(memberId);
         isGroupState(GATHER_COMPLETE);
+        checkEmpty(studyCheckForms);
+        initStudyChecks(studyCheckForms);
         this.groupStatus = START;
+    }
+
+    private void initStudyChecks(List<StudyCheckForm> studyCheckForms) {
+        for (GroupMember groupMember : groupMembers) {
+            List<StudyCheck> studyChecks = studyCheckForms.stream()
+                    .map(s -> StudyCheck.init(groupMember.getGroupMemberId(), s.chapterId(), s.title()))
+                    .toList();
+
+            this.studyChecks.addAll(studyChecks);
+        }
+    }
+
+    private void checkEmpty(List<StudyCheckForm> studyCheckForms) {
+        if (studyCheckForms.isEmpty()) throw new GroupStartException("커리큘럼은 필수입니다.");
     }
 
     private void isHost(Long memberId) {
