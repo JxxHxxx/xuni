@@ -4,19 +4,17 @@ import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.presentation.AuthenticatedMember;
 import com.jxx.xuni.group.application.GroupJoinFacade;
 import com.jxx.xuni.group.application.GroupManagingService;
+import com.jxx.xuni.group.dto.request.StudyCheckForm;
 import com.jxx.xuni.group.dto.response.GroupApiSimpleResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class GroupManagingController {
-
     private final GroupManagingService groupManagingService;
     private final GroupJoinFacade groupJoinFacade;
 
@@ -36,11 +34,12 @@ public class GroupManagingController {
         return ResponseEntity.ok(GroupApiSimpleResult.closeRecruitment());
     }
 
-    @GetMapping("/groups/{group-id}/start")
+    @PostMapping("/groups/{group-id}/start")
     public ResponseEntity<GroupApiSimpleResult> start(@PathVariable ("group-id") Long groupId,
-                                                      @AuthenticatedMember MemberDetails memberDetails) {
+                                                      @AuthenticatedMember MemberDetails memberDetails,
+                                                      @RequestBody List<StudyCheckForm> studyCheckForms) {
 
-        groupManagingService.start(memberDetails , groupId);
+        groupManagingService.start(groupId, memberDetails, studyCheckForms);
         return ResponseEntity.ok(GroupApiSimpleResult.start());
     }
 }
