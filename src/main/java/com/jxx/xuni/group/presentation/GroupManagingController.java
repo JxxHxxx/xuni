@@ -1,7 +1,6 @@
 package com.jxx.xuni.group.presentation;
 
 import com.jxx.xuni.auth.application.MemberDetails;
-import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.auth.presentation.AuthenticatedMember;
 import com.jxx.xuni.group.application.GroupJoinFacade;
 import com.jxx.xuni.group.application.GroupManagingService;
@@ -16,7 +15,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class GroupManagingController {
-
     private final GroupManagingService groupManagingService;
     private final GroupJoinFacade groupJoinFacade;
 
@@ -37,9 +35,9 @@ public class GroupManagingController {
     }
 
     @PostMapping("/groups/{group-id}/start")
-    public ResponseEntity<GroupApiSimpleResult> startV2(@PathVariable ("group-id") Long groupId,
-                                                        @AuthenticatedMember MemberDetails memberDetails,
-                                                        @RequestBody List<StudyCheckForm> studyCheckForms) {
+    public ResponseEntity<GroupApiSimpleResult> start(@PathVariable ("group-id") Long groupId,
+                                                      @AuthenticatedMember MemberDetails memberDetails,
+                                                      @RequestBody List<StudyCheckForm> studyCheckForms) {
 
         groupManagingService.start(groupId, memberDetails, studyCheckForms);
         return ResponseEntity.ok(GroupApiSimpleResult.start());
