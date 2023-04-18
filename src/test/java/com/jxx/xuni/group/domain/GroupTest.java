@@ -32,6 +32,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GroupTest {
 
+    protected static Group makeTestGroup(Integer capacity) {
+        return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
+                Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
+                new Capacity(capacity),
+                Study.of("UUID","자바의 정석", Category.JAVA),
+                new Host(1l, "재헌"));
+    }
+
     @DisplayName("초기화 된 Group 인스터스의 " +
             "Group Status 는 GATHERING" +
             "그룹을 만든 사람(Host)는 참여자 목록에 포함됩니다.")
@@ -53,6 +61,42 @@ class GroupTest {
         Group group = makeTestGroup(capacity);
         assertThatThrownBy(() -> group.checkCapacityRange()).isInstanceOf(CapacityOutOfBoundException.class);
     }
+
+    @DisplayName("초기 가입")
+    @Test
+    void join_group_success() {
+        //given
+        Group group = makeTestGroup(5);
+        GroupMember groupMember = new GroupMember(2l, "유니");
+        group.join(groupMember);
+
+
+        List<GroupMember> groupMembers = group.getGroupMembers();
+
+        Assertions.assertThat(groupMembers.contains(groupMember)).isTrue();
+        Assertions.assertThat(groupMembers.size()).isEqualTo(2);
+    }
+
+    @DisplayName("재가입")
+    @Test
+    void join_group_success_rejoin() {
+        //given
+        Group group = makeTestGroup(5);
+        GroupMember groupMember = new GroupMember(2l, "유니");
+        group.join(groupMember);
+
+        GroupMember findGroupMember = group.getGroupMembers().stream()
+                .filter(g -> g.isSameMemberId(2l)).findFirst().get();
+
+        findGroupMember.leave();
+
+        //when - then
+        Assertions.assertThatCode(() -> group.join(findGroupMember)).doesNotThrowAnyException();
+        Assertions.assertThat(findGroupMember.isNotLeft()).isTrue();
+        Assertions.assertThat(group.getGroupMembers().size()).isEqualTo(2);
+
+    }
+
     // 그룹 입장 규칙
     @DisplayName("이미 들어가 있는 사용자가 그룹에 참여를 시도할 경우 " +
             "GroupJoinException 예외 발생 " +
@@ -209,11 +253,24 @@ class GroupTest {
 
     }
 
-    protected static Group makeTestGroup(Integer capacity) {
-        return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
-                Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
-                new Capacity(capacity),
-                Study.of("UUID","자바의 정석", Category.JAVA),
-                new Host(1l, "재헌"));
+    @DisplayName("그룹 탈퇴는 탈퇴 플래그를 통해 구현하였다. " +
+            "GroupMembers 프로퍼티 isLeft는 false -> true로 변경 " +
+            "실제로 GroupMembers 에서 사라지지는 않는다.")
+    @Test
+    void leave_group_success() {
+        //given
+        Group group = makeTestGroup(5);
+        GroupMember groupMember = new GroupMember(2l, "유니");
+        group.join(groupMember);
+        //when
+        groupMember.leave();
+
+        GroupMember findGroupMember = group.getGroupMembers().stream()
+                .filter(g -> g.isSameMemberId(2l))
+                .findAny().get();
+
+        //then
+        Assertions.assertThat(findGroupMember.getIsLeft()).isTrue();
+        Assertions.assertThat(group.getGroupMembers().size()).isEqualTo(2);
     }
 }
