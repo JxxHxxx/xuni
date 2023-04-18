@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.jxx.xuni.group.domain.Capacity.*;
 import static com.jxx.xuni.group.domain.GroupStatus.*;
@@ -50,7 +51,7 @@ public class Group {
     private List<GroupMember> groupMembers = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "study_check", joinColumns = @JoinColumn(name = "group_id"))
+    @CollectionTable(name = "group_study_check", joinColumns = @JoinColumn(name = "group_id"))
     private List<StudyCheck> studyChecks = new ArrayList<>();
 
     public Group(Period period, Time time, Capacity capacity, Study study, Host host) {
@@ -89,6 +90,29 @@ public class Group {
         addInGroup(member);
     }
 
+    public void leave(Long groupMemberId) {
+        if (isHostV2(groupMemberId)) throw new NotPermissionException(NOT_PERMISSION);
+        if (groupStatus.equals(END)) throw new NotAppropriateGroupStatusException(NOT_APPROPRIATE_GROUP_STATUS);
+
+        //그룹에서 제외
+        GroupMember findGroupMember = groupMembers.stream()
+                .filter(groupMember -> groupMember.getGroupMemberId().equals(groupMemberId))
+                .findAny().orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹 멤버입니다."));
+
+        if (!findGroupMember.isNotLeft()) {
+            throw new IllegalArgumentException("이미 탈퇴한 멤버입니다.");
+        }
+        //나감 처리
+        findGroupMember.leave();
+
+        //수용 인원 + 1
+        capacity.addOneLeftCapacity();
+    }
+
+    private boolean isHostV2(Long groupMemberId) {
+        return this.host.getHostId().equals(groupMemberId);
+    }
+
     public void closeRecruitment(Long memberId) {
         isHost(memberId);
         isGroupState(GATHERING);
@@ -104,7 +128,8 @@ public class Group {
     }
 
     private void initStudyChecks(List<StudyCheckForm> studyCheckForms) {
-        for (GroupMember groupMember : groupMembers) {
+        List<GroupMember> realGroupMember = groupMembers.stream().filter(groupMember -> groupMember.isNotLeft()).toList();
+        for (GroupMember groupMember : realGroupMember) {
             List<StudyCheck> studyChecks = studyCheckForms.stream()
                     .map(s -> StudyCheck.init(groupMember.getGroupMemberId(), s.chapterId(), s.title()))
                     .toList();
@@ -135,8 +160,16 @@ public class Group {
         }
     }
 
-    private void addInGroup(GroupMember groupMember) {
-        groupMembers.add(groupMember);
+    private void addInGroup(GroupMember member) {
+        Optional<GroupMember> optionalGroupMember = groupMembers.stream().filter(g -> g.isLeftMember(member)).findFirst();
+        if (optionalGroupMember.isPresent()) {
+            GroupMember groupMember = optionalGroupMember.get();
+            groupMember.comeBack();
+        }
+        if (optionalGroupMember.isEmpty()) {
+            groupMembers.add(member);
+        }
+
         this.capacity.subtractOneLeftCapacity();
     }
 
@@ -145,7 +178,7 @@ public class Group {
     }
 
     private void isAlreadyJoin(GroupMember member) {
-         if (groupMembers.stream().anyMatch(groupMember -> groupMember.isSameMemberId(member.getGroupMemberId())))
+         if (groupMembers.stream().anyMatch(groupMember -> (groupMember.isSameMemberId(member.getGroupMemberId()) && groupMember.isNotLeft())))
              throw new GroupJoinException(ALREADY_JOIN);
     }
 
