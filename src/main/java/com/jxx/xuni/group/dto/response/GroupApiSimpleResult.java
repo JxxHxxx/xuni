@@ -29,4 +29,8 @@ public class GroupApiSimpleResult {
     public static GroupApiSimpleResult start() {
         return new GroupApiSimpleResult(200, GROUP_START);
     }
+
+    public static GroupApiSimpleResult leave() {
+        return new GroupApiSimpleResult(200, LEAVE_GROUP);
+    }
 }
