@@ -26,6 +26,14 @@ public class GroupManagingController {
         return ResponseEntity.ok(GroupApiSimpleResult.join());
     }
 
+    @PatchMapping("/groups/{group-id}/leave")
+    public ResponseEntity<GroupApiSimpleResult> leave(@PathVariable("group-id") Long groupId,
+                                                     @AuthenticatedMember MemberDetails memberDetails) {
+
+        groupManagingService.leave(memberDetails, groupId);
+        return ResponseEntity.ok(GroupApiSimpleResult.leave());
+    }
+
     @PostMapping("/groups/{group-id}/close-recruitment")
     public ResponseEntity<GroupApiSimpleResult> close(@PathVariable ("group-id") Long groupId,
                                                       @AuthenticatedMember MemberDetails memberDetails) {

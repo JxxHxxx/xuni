@@ -42,4 +42,12 @@ public class GroupManagingService {
         group.start(memberDetails.getUserId(), studyCheckForms);
 
     }
+
+    @Transactional
+    public void leave(MemberDetails memberDetails, Long groupId) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP));
+
+        group.leave(memberDetails.getUserId());
+    }
 }

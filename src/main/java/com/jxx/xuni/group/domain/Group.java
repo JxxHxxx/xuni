@@ -62,11 +62,14 @@ public class Group {
         this.study = study;
         this.host = host;
         this.version = 0l;
-        addInGroup(new GroupMember(host.getHostId(), host.getHostName()));
+
+        this.groupMembers.add(new GroupMember(host.getHostId(), host.getHostName()));
+        this.capacity.subtractOneLeftCapacity();
+
     }
 
     @Builder
-    protected Group(Long id, GroupStatus groupStatus, Period period, Time time, Capacity capacity, Study study, Host host) {
+    protected Group(Long id, GroupStatus groupStatus, Period period, Time time, Capacity capacity, Study study, Host host, List<GroupMember> groupMembers) {
         this.id = id;
         this.groupStatus = groupStatus;
         this.period = period;
@@ -74,6 +77,8 @@ public class Group {
         this.capacity = capacity;
         this.study = study;
         this.host = host;
+        this.groupMembers = groupMembers;
+
         addInGroup(new GroupMember(host.getHostId(), host.getHostName()));
     }
 
@@ -97,7 +102,7 @@ public class Group {
         //그룹에서 제외
         GroupMember findGroupMember = groupMembers.stream()
                 .filter(groupMember -> groupMember.getGroupMemberId().equals(groupMemberId))
-                .findAny().orElseThrow(() -> new IllegalArgumentException("존재하지 않는 그룹 멤버입니다."));
+                .findAny().orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP_MEMBER));
 
         if (!findGroupMember.isNotLeft()) {
             throw new IllegalArgumentException("이미 탈퇴한 멤버입니다.");

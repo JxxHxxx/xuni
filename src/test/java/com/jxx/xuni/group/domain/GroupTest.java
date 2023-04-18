@@ -8,6 +8,7 @@ import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
 import com.jxx.xuni.group.dto.request.StudyCheckForm;
 import com.jxx.xuni.studyproduct.domain.Category;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -73,8 +74,8 @@ class GroupTest {
 
         List<GroupMember> groupMembers = group.getGroupMembers();
 
-        Assertions.assertThat(groupMembers.contains(groupMember)).isTrue();
-        Assertions.assertThat(groupMembers.size()).isEqualTo(2);
+        assertThat(groupMembers.contains(groupMember)).isTrue();
+        assertThat(groupMembers.size()).isEqualTo(2);
     }
 
     @DisplayName("재가입")
@@ -88,12 +89,12 @@ class GroupTest {
         GroupMember findGroupMember = group.getGroupMembers().stream()
                 .filter(g -> g.isSameMemberId(2l)).findFirst().get();
 
-        findGroupMember.leave();
+        group.leave(2l);
 
         //when - then
         Assertions.assertThatCode(() -> group.join(findGroupMember)).doesNotThrowAnyException();
-        Assertions.assertThat(findGroupMember.isNotLeft()).isTrue();
-        Assertions.assertThat(group.getGroupMembers().size()).isEqualTo(2);
+        assertThat(findGroupMember.isNotLeft()).isTrue();
+        assertThat(group.getGroupMembers().size()).isEqualTo(2);
 
     }
 
@@ -135,7 +136,7 @@ class GroupTest {
 
         //when - then
         GroupMember groupMember = new GroupMember(2l, "유니");
-        Assertions.assertThatThrownBy(() -> group.join(groupMember))
+        assertThatThrownBy(() -> group.join(groupMember))
                 .isInstanceOf(GroupJoinException.class);
     }
 
@@ -145,7 +146,7 @@ class GroupTest {
     void close_recruitment_of_group_fail_cause_is_not_host() {
         Group group = makeTestGroup(2);
         
-        Assertions.assertThatThrownBy(() -> group.closeRecruitment(2l))
+        assertThatThrownBy(() -> group.closeRecruitment(2l))
                 .isInstanceOf(NotPermissionException.class)
                 .hasMessage(NOT_PERMISSION);
     }
@@ -158,10 +159,11 @@ class GroupTest {
         Group group = Group.builder()
                 .capacity(new Capacity(5))
                 .host(new Host(1l, "재헌"))
+                .groupMembers(new ArrayList<>())
                 .groupStatus(groupStatus)
                 .build();
 
-        Assertions.assertThatThrownBy(() -> group.closeRecruitment(1l))
+        assertThatThrownBy(() -> group.closeRecruitment(1l))
                 .isInstanceOf(NotAppropriateGroupStatusException.class)
                 .hasMessage(NOT_APPROPRIATE_GROUP_STATUS);
     }
@@ -169,7 +171,8 @@ class GroupTest {
     @DisplayName("그룹 시작이 성공적으로 작동했다면 " +
             "GroupStatus == START, " +
             "StudyChecks 에 memberId, chapterId, title, isDone 데이터가 추가 되어야 한다." +
-            "그리고 isDone 초기값은 false 이다.")
+            "그리고 isDone 초기값은 false 이다. " +
+            "그룹 시작 전에 탈퇴한 사용자의 StudyCheck 은 만들어지지 않는다.")
     @Test
     void start_success() {
         //given
@@ -177,10 +180,14 @@ class GroupTest {
                 .capacity(new Capacity(5))
                 .host(new Host(1l, "재헌"))
                 .groupStatus(GATHERING)
+                .groupMembers(new ArrayList<>())
                 .build();
 
         //given 그룹에 멤버 추가
         group.join(new GroupMember(2l, "유니"));
+        group.join(new GroupMember(3l, "지니"));
+        group.leave(3l);
+
         //given 모집 마감
         group.closeRecruitment(1l);
 
@@ -189,16 +196,16 @@ class GroupTest {
         //when
         group.start(1l, studyCheckForms);
         //then - 그룹 상태는 START 로 변경된다.
-        Assertions.assertThat(group.getGroupStatus()).isEqualTo(START);
+        assertThat(group.getGroupStatus()).isEqualTo(START);
 
-        Assertions.assertThat(group.getStudyChecks().get(0).getTitle()).isEqualTo("객체 지향의 사실과 오해");
-        Assertions.assertThat(group.getStudyChecks().get(0).getChapterId()).isEqualTo(1l);
-        //then studyChecks 는 그룹에 참여중인 MemberId를 모두 가지고 있다.
+        assertThat(group.getStudyChecks().get(0).getTitle()).isEqualTo("객체 지향의 사실과 오해");
+        assertThat(group.getStudyChecks().get(0).getChapterId()).isEqualTo(1l);
+        //then studyChecks 는 그룹에 참여중인 MemberId를 모두 가지고 있다. 탈퇴한 멤버는 가지고 있지 않다.
         List<Long> members = group.getStudyChecks().stream().map(studyCheck -> studyCheck.getMemberId()).toList();
-        Assertions.assertThat(members).contains(1l, 2l);
+        assertThat(members).containsExactly(1l, 2l);
         //then studyChecks isDone 초기화 값은 false다.
         List<Boolean> isDones = group.getStudyChecks().stream().map(studyCheck -> studyCheck.isDone()).toList();
-        Assertions.assertThat(isDones).containsOnly(false);
+        assertThat(isDones).containsOnly(false);
 
     }
 
@@ -213,9 +220,10 @@ class GroupTest {
                 .capacity(new Capacity(5))
                 .host(new Host(hostId, "재헌"))
                 .groupStatus(GATHER_COMPLETE)
+                .groupMembers(new ArrayList<>())
                 .build();
 
-        Assertions.assertThatThrownBy(() -> group.start(groupMemberId, null))
+        assertThatThrownBy(() -> group.start(groupMemberId, null))
                 .isInstanceOf(NotPermissionException.class)
                 .hasMessage(NOT_PERMISSION);
     }
@@ -229,9 +237,10 @@ class GroupTest {
                 .capacity(new Capacity(5))
                 .host(new Host(1l, "재헌"))
                 .groupStatus(groupStatus)
+                .groupMembers(new ArrayList<>())
                 .build();
 
-        Assertions.assertThatThrownBy(() -> group.start(1l, null))
+        assertThatThrownBy(() -> group.start(1l, null))
                 .isInstanceOf(NotAppropriateGroupStatusException.class)
                 .hasMessage(NOT_APPROPRIATE_GROUP_STATUS);
     }
@@ -246,31 +255,103 @@ class GroupTest {
                 .capacity(new Capacity(5))
                 .host(new Host(1l, "재헌"))
                 .groupStatus(GATHER_COMPLETE)
+                .groupMembers(new ArrayList<>())
                 .build();
 
-        Assertions.assertThatThrownBy(() -> group.start(1l, studyCheckForms))
+        assertThatThrownBy(() -> group.start(1l, studyCheckForms))
                 .isInstanceOf(GroupStartException.class);
 
     }
 
     @DisplayName("그룹 탈퇴는 탈퇴 플래그를 통해 구현하였다. " +
-            "GroupMembers 프로퍼티 isLeft는 false -> true로 변경 " +
-            "실제로 GroupMembers 에서 사라지지는 않는다.")
+            "GroupMembers 프로퍼티 isLeft는 false -> true 변경 " +
+            "탈퇴한 그룹 멤버는 GroupMembers 에는 여전히 존재 한다.(삭제 플래그 표시가 됐을 뿐) 고로 그룹 멤버 수는 탈퇴 전/후 동일하다." +
+            "그룹 멤버 탈퇴 시 Left-Capacity 는 기존보다 1 증가해야 한다.")
     @Test
     void leave_group_success() {
         //given
         Group group = makeTestGroup(5);
         GroupMember groupMember = new GroupMember(2l, "유니");
         group.join(groupMember);
+        
+        Integer beforeCapacity = group.getCapacity().getLeftCapacity();
+        int beforeGroupSize = group.getGroupMembers().size();
         //when
-        groupMember.leave();
-
+        group.leave(2l);
+        //then
         GroupMember findGroupMember = group.getGroupMembers().stream()
                 .filter(g -> g.isSameMemberId(2l))
                 .findAny().get();
+        assertThat(findGroupMember.getIsLeft()).isTrue();
+        // then
+        int afterGroupSize = group.getGroupMembers().size();
+        assertThat(afterGroupSize).isEqualTo(beforeGroupSize);
+        // then
+        Integer afterCapacity = group.getCapacity().getLeftCapacity();
+        assertThat(afterCapacity).isEqualTo(beforeCapacity + 1);
+    }
 
-        //then
-        Assertions.assertThat(findGroupMember.getIsLeft()).isTrue();
-        Assertions.assertThat(group.getGroupMembers().size()).isEqualTo(2);
+    @DisplayName("호스트는 그룹을 탈퇴할 수 없다. 호스트가 그룹을 탈퇴하려는 경우, NotPermissionException 예외가 발생한다.")
+    @Test
+    void leave_group_fail_cause_host_leave() {
+        //given
+        Group group = makeTestGroup(5);
+        long hostId = 1l;
+
+        //when - then
+        assertThatThrownBy(() -> group.leave(hostId))
+                .isInstanceOf(NotPermissionException.class)
+                .hasMessage(NOT_PERMISSION);
+
+    }
+
+    @DisplayName("그룹 상태가 END일 경우에는 그룹을 나가지 못한다. 시도할 경우 NotAppropriateGroupStatusException 예외가 발생한다.")
+    @Test
+    void leave_group_fail_cause_group_status_is_end() {
+        //given
+        List<GroupMember> groupMembers = new ArrayList<>();
+        groupMembers.add(new GroupMember(2l, "포도"));
+
+        Group group = Group.builder()
+                .groupStatus(END)
+                .host(new Host(1l, "자몽"))
+                .capacity(new Capacity(5))
+                .groupMembers(groupMembers)
+                .build();
+
+        //when - then
+        assertThatThrownBy(() -> group.leave(2l))
+                .isInstanceOf(NotAppropriateGroupStatusException.class)
+                .hasMessage(NOT_APPROPRIATE_GROUP_STATUS);
+
+    }
+
+    @DisplayName("그룹 멤버가 아닌 사용자가 그룹을 탈퇴하려는 경우 IllegalArgumentException 예외가 발생한다.")
+    @Test
+    void leave_group_fail_cause_not_group_member() {
+        //given
+        Group group = makeTestGroup(5);
+
+        //when - then
+        assertThatThrownBy(() -> group.leave(2l))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(NOT_EXISTED_GROUP_MEMBER);
+
+    }
+
+    @DisplayName("이미 그룹을 나간 멤버가 다시 그룹 탈퇴를 하려는 경우 IllegalArgumentException 예외가 발생한다.")
+    @Test
+    void leave_group_fail_cause_repeated_leave() {
+        //given
+        Group group = makeTestGroup(5);
+        GroupMember groupMember = new GroupMember(2l, "유니");
+        group.join(groupMember);
+        group.leave(2l);
+
+        //when - then
+        assertThatThrownBy(() -> group.leave(2l))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 탈퇴한 멤버입니다.");
+
     }
 }
