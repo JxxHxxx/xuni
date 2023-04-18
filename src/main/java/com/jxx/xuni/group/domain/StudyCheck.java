@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyCheck {
+    @Column(name = "group_member_id")
     private Long memberId;
     private Long chapterId;
     private String title;

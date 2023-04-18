@@ -24,6 +24,10 @@ public class Capacity {
         this.leftCapacity -= 1;
     }
 
+    protected void addOneLeftCapacity() {
+        this.leftCapacity += 1;
+    }
+
     protected boolean isNotLeftCapacity() {
         return this.leftCapacity <= 0;
     }
