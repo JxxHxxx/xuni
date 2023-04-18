@@ -171,7 +171,8 @@ class GroupTest {
     @DisplayName("그룹 시작이 성공적으로 작동했다면 " +
             "GroupStatus == START, " +
             "StudyChecks 에 memberId, chapterId, title, isDone 데이터가 추가 되어야 한다." +
-            "그리고 isDone 초기값은 false 이다.")
+            "그리고 isDone 초기값은 false 이다. " +
+            "그룹 시작 전에 탈퇴한 사용자의 StudyCheck 은 만들어지지 않는다.")
     @Test
     void start_success() {
         //given
@@ -184,6 +185,9 @@ class GroupTest {
 
         //given 그룹에 멤버 추가
         group.join(new GroupMember(2l, "유니"));
+        group.join(new GroupMember(3l, "지니"));
+        group.leave(3l);
+
         //given 모집 마감
         group.closeRecruitment(1l);
 
@@ -196,9 +200,9 @@ class GroupTest {
 
         assertThat(group.getStudyChecks().get(0).getTitle()).isEqualTo("객체 지향의 사실과 오해");
         assertThat(group.getStudyChecks().get(0).getChapterId()).isEqualTo(1l);
-        //then studyChecks 는 그룹에 참여중인 MemberId를 모두 가지고 있다.
+        //then studyChecks 는 그룹에 참여중인 MemberId를 모두 가지고 있다. 탈퇴한 멤버는 가지고 있지 않다.
         List<Long> members = group.getStudyChecks().stream().map(studyCheck -> studyCheck.getMemberId()).toList();
-        assertThat(members).contains(1l, 2l);
+        assertThat(members).containsExactly(1l, 2l);
         //then studyChecks isDone 초기화 값은 false다.
         List<Boolean> isDones = group.getStudyChecks().stream().map(studyCheck -> studyCheck.isDone()).toList();
         assertThat(isDones).containsOnly(false);
