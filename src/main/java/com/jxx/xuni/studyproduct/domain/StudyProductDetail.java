@@ -1,5 +1,6 @@
 package com.jxx.xuni.studyproduct.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyProductDetail {
 
+    @Column(unique = true)
     private Long chapterId;
     private String title;
 
