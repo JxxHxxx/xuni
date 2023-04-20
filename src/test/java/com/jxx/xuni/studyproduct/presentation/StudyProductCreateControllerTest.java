@@ -13,9 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.io.InputStream;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -32,12 +35,12 @@ class StudyProductCreateControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    String requestForm;
+    byte[] byteForm;
 
     @BeforeEach
     void beforeEach() throws JsonProcessingException {
-        StudyProductForm studyProductForm = new StudyProductForm("JAVA 스터디", Category.JAVA, "JAVA의 정석", "남궁성", "URL");
-        requestForm = objectMapper.writeValueAsString(studyProductForm);
+        StudyProductForm studyProductForm = new StudyProductForm("JAVA 스터디", Category.JAVA, "JAVA의 정석", "남궁성");
+        byteForm = objectMapper.writeValueAsBytes(studyProductForm);
     }
 
     @DisplayName("상품 등록 성공")
@@ -45,13 +48,11 @@ class StudyProductCreateControllerTest {
     void enroll_success() throws Exception {
         //given
         String AdminToken = jwtTokenProvider.issue(TestGroupServiceSupporter.AdminMemberDetails(1l));
-
-        //when - then
-        mockMvc.perform(MockMvcRequestBuilders.post("/study-products")
-                        .header("Authorization", AdminToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestForm))
-                .andExpect(content().string("스터디 상품 등록 완료"));
+        MockMultipartFile data = new MockMultipartFile("data", "data", "application/json", byteForm);
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/study-products")
+                        .file(data)
+                        .header("Authorization", AdminToken))
+                        .andExpect(content().string("스터디 상품 등록 완료"));
     }
 
 
@@ -62,10 +63,10 @@ class StudyProductCreateControllerTest {
         String userToken = jwtTokenProvider.issue(TestGroupServiceSupporter.UserMemberDetails(1l));
 
         //when - then
-        mockMvc.perform(MockMvcRequestBuilders.post("/study-products")
-                        .header("Authorization", userToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestForm))
+        MockMultipartFile data = new MockMultipartFile("data", "data", "application/json", byteForm);
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/study-products")
+                        .file(data)
+                        .header("Authorization", userToken))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.message").value("권한이 존재하지 않습니다."));
 
