@@ -13,8 +13,9 @@ public class StudyProductCreateService {
 
     private final StudyProductRepository studyProductRepository;
 
-    public void create(StudyProductForm form) {
-        StudyProduct studyProduct = new StudyProduct(form.name(),form.category(), Topic.of(form.content(), form.author(), form.image()));
+    public void create(StudyProductForm form, String imageURL) {
+        StudyProduct studyProduct = new StudyProduct(form.name(), form.category(),
+                Topic.of(form.content(), form.author(), imageURL));
         studyProductRepository.save(studyProduct);
     }
 }
