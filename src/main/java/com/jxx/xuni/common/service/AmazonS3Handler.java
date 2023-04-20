@@ -3,23 +3,20 @@ package com.jxx.xuni.common.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.UUID;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
-public class AmazonS3Service {
+public class AmazonS3Handler {
 
     private final S3Client s3Client;
 
@@ -28,6 +25,9 @@ public class AmazonS3Service {
 
     public String putS3Object(MultipartFile multipartFile) throws IOException {
 
+        if (multipartFile == null) {
+            return "";
+        }
         String objectKey = createObjectKey(multipartFile);
 
         try {

@@ -6,6 +6,5 @@ public record StudyProductForm(
         String name,
         Category category,
         String content,
-        String author,
-        String image
-) {}
+        String author
+){}
