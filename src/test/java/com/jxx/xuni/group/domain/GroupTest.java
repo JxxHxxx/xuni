@@ -93,7 +93,7 @@ class GroupTest {
 
         //when - then
         Assertions.assertThatCode(() -> group.join(findGroupMember)).doesNotThrowAnyException();
-        assertThat(findGroupMember.isNotLeft()).isTrue();
+        assertThat(findGroupMember.hasNotLeft()).isTrue();
         assertThat(group.getGroupMembers().size()).isEqualTo(2);
 
     }
@@ -125,7 +125,7 @@ class GroupTest {
                 .hasMessage(NOT_LEFT_CAPACITY);
     }
 
-    @DisplayName("모집 중 상태가 아닌 그룹에 참여할 수 없습니다. " +
+    @DisplayName("모집 중 상태가 아닌 그룹에 참여를 시도할 경우 " +
             "GroupJoinException 예외 발생 " +
             "예외 메시지 발생 ")
     @Test
@@ -351,7 +351,7 @@ class GroupTest {
         //when - then
         assertThatThrownBy(() -> group.leave(2l))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미 탈퇴한 멤버입니다.");
+                .hasMessage(NOT_EXISTED_GROUP_MEMBER);
 
     }
 }
