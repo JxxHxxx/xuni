@@ -28,7 +28,7 @@ public class Capacity {
         this.leftCapacity += 1;
     }
 
-    protected boolean isNotLeftCapacity() {
+    protected boolean hasNotLeftCapacity() {
         return this.leftCapacity <= 0;
     }
 }

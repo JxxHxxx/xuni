@@ -21,4 +21,5 @@ public class GroupApiMessage {
     public static final String LEAVE_GROUP = "그룹을 떠납니다.";
     public static final String NOT_EXISTED_GROUP_MEMBER = "해당 사용자는 그룹 멤버가 아닙니다.";
 
+
 }

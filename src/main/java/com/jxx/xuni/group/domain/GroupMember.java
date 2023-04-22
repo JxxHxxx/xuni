@@ -30,7 +30,7 @@ public class GroupMember {
         this.isLeft = true;
     }
 
-    protected boolean isNotLeft() {
+    protected boolean hasNotLeft() {
         return !isLeft;
     }
 

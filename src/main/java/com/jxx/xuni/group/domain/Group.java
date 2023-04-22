@@ -83,57 +83,67 @@ public class Group {
     }
 
     public void verifyCreateRule() {
-        isGroupState(GATHERING);
+        checkGroupState(GATHERING);
         checkCapacityRange();
     }
 
     public void join(GroupMember member) {
-        isAlreadyJoin(member);
+        checkAlreadyJoin(member);
         checkLeftCapacity();
-        isAccessibleGroupStatus();
+        checkAccessibleGroupStatus();
 
         addInGroup(member);
     }
 
     public void leave(Long groupMemberId) {
-        if (isHostV2(groupMemberId)) throw new NotPermissionException(NOT_PERMISSION);
-        if (groupStatus.equals(END)) throw new NotAppropriateGroupStatusException(NOT_APPROPRIATE_GROUP_STATUS);
+        checkNotHost(groupMemberId);
+        checkAbleToLeaveGroupStatus();
 
-        //그룹에서 제외
-        GroupMember findGroupMember = groupMembers.stream()
-                .filter(groupMember -> groupMember.getGroupMemberId().equals(groupMemberId))
-                .findAny().orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP_MEMBER));
-
-        if (!findGroupMember.isNotLeft()) {
-            throw new IllegalArgumentException("이미 탈퇴한 멤버입니다.");
-        }
-        //나감 처리
-        findGroupMember.leave();
-
-        //수용 인원 + 1
-        capacity.addOneLeftCapacity();
-    }
-
-    private boolean isHostV2(Long groupMemberId) {
-        return this.host.getHostId().equals(groupMemberId);
+        GroupMember leavableMember = validateAbleToLeaveMember(groupMemberId);
+        exceptInGroup(leavableMember);
     }
 
     public void closeRecruitment(Long memberId) {
-        isHost(memberId);
-        isGroupState(GATHERING);
-        this.groupStatus = GATHER_COMPLETE;
+        checkHost(memberId);
+        checkGroupState(GATHERING);
+        groupStatus = GATHER_COMPLETE;
     }
 
     public void start(Long memberId, List<StudyCheckForm> studyCheckForms) {
-        isHost(memberId);
-        isGroupState(GATHER_COMPLETE);
-        checkNullAndEmpty(studyCheckForms);
+        checkHost(memberId);
+        checkGroupState(GATHER_COMPLETE);
+        checkNullAndEmptyStudyCheckForm(studyCheckForms);
         initStudyChecks(studyCheckForms);
-        this.groupStatus = START;
+        groupStatus = START;
+    }
+
+    private GroupMember validateAbleToLeaveMember(Long groupMemberId) {
+        return groupMembers.stream()
+                .filter(g -> g.getGroupMemberId().equals(groupMemberId))
+                .filter(g -> g.hasNotLeft())
+                .findAny().orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP_MEMBER));
+    }
+
+    private void exceptInGroup(GroupMember groupMember) {
+        groupMember.leave();
+        capacity.addOneLeftCapacity();
+    }
+
+    private void checkAbleToLeaveGroupStatus() {
+        if (groupStatus.equals(END)) throw new NotAppropriateGroupStatusException(NOT_APPROPRIATE_GROUP_STATUS);
+    }
+
+    private void checkNotHost(Long memberId) {
+        if (host.isHost(memberId)) throw new NotPermissionException(NOT_PERMISSION);
+    }
+
+    // 호스트인지 검증 - 호스트라면 통과 아니면 예외
+    private void checkHost(Long memberId) {
+        if (host.isNotHost(memberId)) throw new NotPermissionException(NOT_PERMISSION);
     }
 
     private void initStudyChecks(List<StudyCheckForm> studyCheckForms) {
-        List<GroupMember> realGroupMember = groupMembers.stream().filter(groupMember -> groupMember.isNotLeft()).toList();
+        List<GroupMember> realGroupMember = groupMembers.stream().filter(groupMember -> groupMember.hasNotLeft()).toList();
         for (GroupMember groupMember : realGroupMember) {
             List<StudyCheck> studyChecks = studyCheckForms.stream()
                     .map(s -> StudyCheck.init(groupMember.getGroupMemberId(), s.chapterId(), s.title()))
@@ -143,24 +153,17 @@ public class Group {
         }
     }
 
-    private void checkNullAndEmpty(List<StudyCheckForm> studyCheckForms) {
-        if (studyCheckForms == null) throw new GroupStartException("커리큘럼은 필수입니다.");
-        if (studyCheckForms.isEmpty()) throw new GroupStartException("커리큘럼은 필수입니다.");
+    private void checkNullAndEmptyStudyCheckForm(List<StudyCheckForm> studyCheckForms) {
+        if (studyCheckForms == null || studyCheckForms.isEmpty()) throw new GroupStartException("커리큘럼은 필수입니다.");
     }
 
-    private void isHost(Long memberId) {
-        if (this.host.isNotHost(memberId)) throw new NotPermissionException(NOT_PERMISSION);
-    }
+    protected void checkGroupState(GroupStatus status) {
+        if (!groupStatus.equals(status)) throw new NotAppropriateGroupStatusException(NOT_APPROPRIATE_GROUP_STATUS);
 
-
-    protected void isGroupState(GroupStatus status) {
-        if (!this.groupStatus.equals(status)){
-            throw new NotAppropriateGroupStatusException(NOT_APPROPRIATE_GROUP_STATUS);
-        }
     }
 
     protected void checkCapacityRange() {
-        if (this.capacity.getTotalCapacity() > CAPACITY_MAX || this.capacity.getTotalCapacity() < CAPACITY_MIN) {
+        if (capacity.getTotalCapacity() > CAPACITY_MAX || capacity.getTotalCapacity() < CAPACITY_MIN) {
             throw new CapacityOutOfBoundException(NOT_APPROPRIATE_GROUP_CAPACITY);
         }
     }
@@ -168,8 +171,7 @@ public class Group {
     private void addInGroup(GroupMember member) {
         Optional<GroupMember> optionalGroupMember = groupMembers.stream().filter(g -> g.isLeftMember(member)).findFirst();
         if (optionalGroupMember.isPresent()) {
-            GroupMember groupMember = optionalGroupMember.get();
-            groupMember.comeBack();
+            optionalGroupMember.get().comeBack();
         }
         if (optionalGroupMember.isEmpty()) {
             groupMembers.add(member);
@@ -179,16 +181,16 @@ public class Group {
     }
 
     private void checkLeftCapacity() {
-        if (capacity.isNotLeftCapacity()) throw new GroupJoinException(NOT_LEFT_CAPACITY);
+        if (capacity.hasNotLeftCapacity()) throw new GroupJoinException(NOT_LEFT_CAPACITY);
     }
 
-    private void isAlreadyJoin(GroupMember member) {
-         if (groupMembers.stream().anyMatch(groupMember -> (groupMember.isSameMemberId(member.getGroupMemberId()) && groupMember.isNotLeft())))
+    // 그룹 내 존재, 탈퇴 플래그 false(그룹에 나간 상태가 아니다.) -> 이미 소속되어 있는 상태이니 예외를 던져라.
+    private void checkAlreadyJoin(GroupMember member) {
+         if (groupMembers.stream().anyMatch(groupMember -> (groupMember.isSameMemberId(member.getGroupMemberId()) && groupMember.hasNotLeft())))
              throw new GroupJoinException(ALREADY_JOIN);
     }
 
-    private void isAccessibleGroupStatus() {
+    private void checkAccessibleGroupStatus() {
         if (!GATHERING.equals(groupStatus)) throw new GroupJoinException(NOT_ACCESSIBLE_GROUP);
-
     }
 }

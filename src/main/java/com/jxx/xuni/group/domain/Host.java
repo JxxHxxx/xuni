@@ -1,9 +1,12 @@
 package com.jxx.xuni.group.domain;
 
+import com.jxx.xuni.common.exception.NotPermissionException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import static com.jxx.xuni.group.dto.response.GroupApiMessage.NOT_PERMISSION;
 
 @Getter
 @Embeddable
@@ -20,4 +23,12 @@ public class Host {
     protected boolean isNotHost(Long memberId) {
         return !this.hostId.equals(memberId);
     }
+
+    protected boolean isHost(Long memberId) {
+        return this.hostId.equals(memberId);
+    }
+//
+//    protected void isHost(Long memberId) {
+//        if (this.hostId.equals(memberId)) throw new NotPermissionException(NOT_PERMISSION);
+//    }
 }
