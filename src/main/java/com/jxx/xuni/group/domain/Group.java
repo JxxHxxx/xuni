@@ -24,7 +24,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "study_group")
+@Table(name = "study_group",indexes = @Index(name = "study_group_category", columnList = "category"))
 public class Group {
 
     @Id @GeneratedValue(strategy = IDENTITY)

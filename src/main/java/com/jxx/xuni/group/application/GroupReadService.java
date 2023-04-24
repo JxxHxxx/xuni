@@ -3,6 +3,7 @@ package com.jxx.xuni.group.application;
 import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
 import com.jxx.xuni.group.query.GroupReadRepository;
+import com.jxx.xuni.studyproduct.domain.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,31 @@ public class GroupReadService {
 
     public List<GroupReadAllResponse> readAll() {
         List<Group> groups = groupReadRepository.readAllWithFetch();
+
+        return groups.stream().map(group -> new GroupReadAllResponse(
+                group.getId(),
+                group.getCapacity(),
+                group.getGroupStatus(),
+                group.getHost(),
+                group.getTime(),
+                group.getPeriod(),
+                group.getGroupMembers())).collect(Collectors.toList());
+    }
+
+    public GroupReadAllResponse readOne(Long groupId) {
+        Group group = groupReadRepository.findById(groupId).get();
+
+        return new GroupReadAllResponse(group.getId(),
+                group.getCapacity(),
+                group.getGroupStatus(),
+                group.getHost(),
+                group.getTime(),
+                group.getPeriod(),
+                group.getGroupMembers());
+    }
+
+    public List<GroupReadAllResponse> readByCategory(Category category) {
+        List<Group> groups = groupReadRepository.readByCategoryWithFetch(category);
 
         return groups.stream().map(group -> new GroupReadAllResponse(
                 group.getId(),
