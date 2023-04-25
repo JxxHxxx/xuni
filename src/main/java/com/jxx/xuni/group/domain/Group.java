@@ -193,4 +193,8 @@ public class Group {
     private void checkAccessibleGroupStatus() {
         if (!GATHERING.equals(groupStatus)) throw new GroupJoinException(NOT_ACCESSIBLE_GROUP);
     }
+
+    protected void changeGroupStatusTo(GroupStatus groupStatus) {
+        this.groupStatus = groupStatus;
+    }
 }
