@@ -1,17 +1,16 @@
 package com.jxx.xuni.group.application;
 
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
+import com.jxx.xuni.common.exception.CommonExceptionMessage;
 import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.domain.TestGroupServiceSupporter;
 import com.jxx.xuni.group.domain.GroupRepository;
 import com.jxx.xuni.support.ServiceTest;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.*;
 import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
 
 @ServiceTest
@@ -23,12 +22,14 @@ class GroupManagingServiceTest {
     GroupRepository groupRepository;
 
     Group findGroup;
+    SimpleMemberDetails memberDetails;
 
     @BeforeEach
     void beforeEach() {
         Group group = TestGroupServiceSupporter.receiveSampleGroup(1l);
         groupRepository.save(group);
         findGroup = groupRepository.findAll().get(0);
+        memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(1l);
     }
 
     @AfterEach
@@ -39,11 +40,9 @@ class GroupManagingServiceTest {
     @DisplayName("서비스 레이어 그룹 가입 성공 케이스")
     @Test
     void group_join_success() {
-        //given
-        SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(2l);
-
         //when - then
-        Assertions.assertThatCode(() -> groupManagingService.join(memberDetails, findGroup.getId()))
+        SimpleMemberDetails anotherMemberDetails = TestGroupServiceSupporter.UserMemberDetails(2l);
+        Assertions.assertThatCode(() -> groupManagingService.join(anotherMemberDetails, findGroup.getId()))
                 .doesNotThrowAnyException();
     }
 
@@ -51,9 +50,6 @@ class GroupManagingServiceTest {
             "존재하지 않는 그룹 가입 시도")
     @Test
     void group_join_fail() {
-        //given
-        SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(1l);
-
         //when - then
         Assertions.assertThatThrownBy(() -> groupManagingService.join(memberDetails, findGroup.getId() + 1))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -63,11 +59,8 @@ class GroupManagingServiceTest {
     @DisplayName("서비스 레이어 그룹 모집 완료 케이스")
     @Test
     void group_close_recruitment_success() {
-        //given
-        SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(2l);
-
         //when - then
-        Assertions.assertThatCode(() -> groupManagingService.join(memberDetails, findGroup.getId()))
+        Assertions.assertThatCode(() -> groupManagingService.closeRecruitment(memberDetails, findGroup.getId()))
                 .doesNotThrowAnyException();
     }
 
@@ -75,13 +68,49 @@ class GroupManagingServiceTest {
             "존재하지 않는 그룹 가입 시도")
     @Test
     void group_close_recruitment_fail() {
-        //given
-        SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(1l);
-
         //when - then
         Assertions.assertThatThrownBy(() -> groupManagingService.closeRecruitment(memberDetails, findGroup.getId() + 1))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(NOT_EXISTED_GROUP);
     }
 
+    @DisplayName("서비스 레이어 스터디 챕터 체크 기능 성공 케이스")
+    @Test
+    void study_chapter_check_success() {
+        Group saveGroup = groupRepository.save(TestGroupServiceSupporter.sampleGroup(memberDetails.getUserId(), 5));
+
+        //when
+        Long chapterId = saveGroup.getStudyChecks().get(0).getChapterId();
+        //then
+        Assertions.assertThatCode(() -> groupManagingService.checkStudyChapter(memberDetails, saveGroup.getId(), chapterId))
+                        .doesNotThrowAnyException();
+
+    }
+
+    @DisplayName("서비스 레이어 스터디 챕터 체크 기능 실패 케이스 - 존재하지 않는 그룹")
+    @Test
+    void study_chapter_check_fail_cause_not_exist_group() {
+        //given
+        Group saveGroup = groupRepository.save(TestGroupServiceSupporter.sampleGroup(memberDetails.getUserId(), 5));
+        //when - then
+        Long notExistGroupId = saveGroup.getId() + 1;
+        Assertions.assertThatThrownBy(() -> groupManagingService.checkStudyChapter(memberDetails, notExistGroupId,
+                        saveGroup.getStudyChecks().get(0).getChapterId()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(NOT_EXISTED_GROUP);
+    }
+
+    @DisplayName("서비스 레이어 스터디 챕터 체크 기능 실패 케이스 - 존재하지 않는 스터디 챕터")
+    @Test
+    void study_chapter_check_fail_cause_not_exist_chapter() {
+        //given
+        Group saveGroup = groupRepository.save(TestGroupServiceSupporter.sampleGroup(memberDetails.getUserId(), 5));
+        //when - then
+        int lastIndex = saveGroup.getGroupMembers().size();
+        Long notExistChapterId = saveGroup.getStudyChecks().get(lastIndex).getChapterId() + 1;
+        Assertions.assertThatThrownBy(() -> groupManagingService.checkStudyChapter(memberDetails, saveGroup.getId(),
+                        notExistChapterId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(BAD_REQUEST);
+    }
 }

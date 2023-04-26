@@ -25,4 +25,23 @@ public class StudyCheck {
     public static StudyCheck init(Long memberId, Long chapterId, String title) {
         return new StudyCheck(memberId, chapterId, title, false);
     }
+
+    public void check() {
+        if (!isDone) {
+            isDone = true;
+            return;
+        }
+
+        if (isDone) {
+            isDone = false;
+        }
+    }
+
+    public boolean isSameChapter(Long chapterId) {
+        return this.chapterId.equals(chapterId);
+    }
+
+    public boolean isSameMember(Long memberId) {
+        return this.memberId.equals(memberId);
+    }
 }

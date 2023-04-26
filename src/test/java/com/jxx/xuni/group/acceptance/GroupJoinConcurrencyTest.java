@@ -56,7 +56,7 @@ public class GroupJoinConcurrencyTest {
 
         memberRepository.saveAll(members);
 
-        Group group = TestGroupServiceSupporter.sampleGroup(20l, 20);
+        Group group = TestGroupServiceSupporter.receiveSampleGroup(20l, 20);
         groupRepository.save(group);
     }
 

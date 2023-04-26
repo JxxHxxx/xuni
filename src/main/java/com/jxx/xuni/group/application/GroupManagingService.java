@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.BAD_REQUEST;
 import static com.jxx.xuni.group.dto.response.GroupApiMessage.NOT_EXISTED_GROUP;
 
 @Service
@@ -49,5 +50,19 @@ public class GroupManagingService {
                 .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP));
 
         group.leave(memberDetails.getUserId());
+    }
+
+    @Transactional
+    public void checkStudyChapter(MemberDetails memberDetails, Long groupId, Long chapterId) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP));
+
+        List<StudyCheck> groupStudyChecks = group.getStudyChecks();
+        StudyCheck studyCheck = groupStudyChecks.stream().findAny()
+                .filter(s -> s.isSameChapter(chapterId))
+                .filter(s -> s.isSameMember(memberDetails.getUserId()))
+                .orElseThrow(() -> new IllegalArgumentException(BAD_REQUEST));
+
+        studyCheck.check();
     }
 }
