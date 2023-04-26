@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Slf4j
@@ -38,5 +39,13 @@ public class GroupControllerTestConfig implements WebMvcConfigurer {
     @Bean
     JwtTokenManager jwtTokenManager() {
         return new JwtTokenManager();
+    }
+
+    @Bean
+    CharacterEncodingFilter characterEncodingFilter() {
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("UTF-8");
+        characterEncodingFilter.setForceEncoding(true);
+        return characterEncodingFilter;
     }
 }

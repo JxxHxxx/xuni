@@ -5,10 +5,12 @@ import com.jxx.xuni.group.presentation.GroupCreateController;
 import com.jxx.xuni.group.presentation.GroupManagingController;
 import com.jxx.xuni.group.presentation.GroupReadController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest({GroupCreateController.class, GroupManagingController.class, GroupReadController.class})
+@AutoConfigureRestDocs
 public class ControllerTest {
     @Autowired
     protected MockMvc mockMvc;

@@ -14,11 +14,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static com.jxx.xuni.studyproduct.domain.Category.JAVA;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,7 +34,7 @@ public class GroupCreateControllerTest extends ControllerTest{
     JwtTokenProvider jwtTokenProvider;
 
     Long memberId = null;
-    String testToken;
+    String authToken;
 
     @BeforeEach
     void beforeEach() {
@@ -40,8 +45,41 @@ public class GroupCreateControllerTest extends ControllerTest{
                 .build();
 
         memberId = member.getId();
-        testToken = jwtTokenProvider.issue(new SimpleMemberDetails(memberId, member.receiveEmail(), member.getName()));
+        authToken = jwtTokenProvider.issue(new SimpleMemberDetails(memberId, member.receiveEmail(), member.getName()));
 
+    }
+
+    @Test
+    void group_create_docs() throws Exception {
+        //given
+        GroupCreateForm groupCreateForm = makeGroupCreateForm(5);
+        //when
+        ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.post("/groups")
+                .header("Authorization", authToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(groupCreateForm)));
+
+        //then
+        result.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message").value(GroupApiMessage.GROUP_CREATED))
+                    .andDo(MockMvcRestDocumentation.document("group/create",
+                        requestFields(
+                                fieldWithPath("subject").type(JsonFieldType.STRING).description("스터디 주제"),
+                                fieldWithPath("startDate").type(JsonFieldType.STRING).description("스터디 시작일"),
+                                fieldWithPath("endDate").type(JsonFieldType.STRING).description("스터디 종료일"),
+                                fieldWithPath("startTime").type(JsonFieldType.STRING).description("스터디 시작 시간"),
+                                fieldWithPath("endTime").type(JsonFieldType.STRING).description("스터디 종료 시간"),
+                                fieldWithPath("capacity").type(JsonFieldType.NUMBER).description("그룹 정원"),
+                                fieldWithPath("studyProductId").type(JsonFieldType.STRING).description("스터디 주제 식별자"),
+                                fieldWithPath("category").type(JsonFieldType.STRING).description("스터디 카테고리")
+                        ),
+
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지")
+                        )
+
+                ));
     }
 
     @DisplayName("스터디 그룹 생성 성공 케이스")
@@ -51,7 +89,7 @@ public class GroupCreateControllerTest extends ControllerTest{
         GroupCreateForm groupCreateForm = makeGroupCreateForm(5);
         //when
         mockMvc.perform(post("/groups")
-                        .header("Authorization", testToken)
+                        .header("Authorization", authToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(groupCreateForm)))
                 // then
@@ -71,7 +109,7 @@ public class GroupCreateControllerTest extends ControllerTest{
         //when - then
         String requestBody = objectMapper.writeValueAsString(groupCreateForm);
         mockMvc.perform(post("/groups")
-                        .header("Authorization", testToken)
+                        .header("Authorization", authToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(jsonPath("$.message").value(GroupApiMessage.GROUP_UNCREATED));
