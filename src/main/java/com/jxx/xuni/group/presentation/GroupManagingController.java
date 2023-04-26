@@ -35,7 +35,7 @@ public class GroupManagingController {
         return ResponseEntity.ok(GroupApiSimpleResult.leave());
     }
 
-    @PostMapping("/groups/{group-id}/close-recruitment")
+    @PatchMapping("/groups/{group-id}/close-recruitment")
     public ResponseEntity<GroupApiSimpleResult> close(@PathVariable ("group-id") Long groupId,
                                                       @AuthenticatedMember MemberDetails memberDetails) {
 
@@ -53,7 +53,7 @@ public class GroupManagingController {
     }
 
     @PatchMapping("/groups/{group-id}/chapters/{chapter-id}")
-    public ResponseEntity<GroupApiSimpleResult> start(@PathVariable ("group-id") Long groupId,
+    public ResponseEntity<GroupApiSimpleResult> check(@PathVariable ("group-id") Long groupId,
                                                       @PathVariable ("chapter-id") Long chapterId,
                                                       @AuthenticatedMember MemberDetails memberDetails) {
 
