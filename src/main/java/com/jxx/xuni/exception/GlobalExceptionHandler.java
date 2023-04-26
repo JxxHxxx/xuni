@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.*;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({CapacityOutOfBoundException.class, NotAppropriateGroupStatusException.class,
-                       GroupJoinException.class})
+                       GroupJoinException.class, IllegalArgumentException.class})
     public ResponseEntity<ExceptionResponse> groupCreateExceptionsHandler(RuntimeException exception) {
         ExceptionResponse response = ExceptionResponse.of(400, exception.getMessage());
         return ResponseEntity.badRequest().body(response);

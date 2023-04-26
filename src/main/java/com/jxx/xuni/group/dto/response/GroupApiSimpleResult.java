@@ -33,4 +33,8 @@ public class GroupApiSimpleResult {
     public static GroupApiSimpleResult leave() {
         return new GroupApiSimpleResult(200, LEAVE_GROUP);
     }
+
+    public static GroupApiSimpleResult check() {
+        return new GroupApiSimpleResult(200, DO_CHECK);
+    }
 }

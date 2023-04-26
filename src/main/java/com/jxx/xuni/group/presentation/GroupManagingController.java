@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class GroupManagingController {
+
     private final GroupManagingService groupManagingService;
     private final GroupJoinFacade groupJoinFacade;
 
@@ -49,5 +50,14 @@ public class GroupManagingController {
 
         groupManagingService.start(groupId, memberDetails, studyCheckForms);
         return ResponseEntity.ok(GroupApiSimpleResult.start());
+    }
+
+    @PatchMapping("/groups/{group-id}/chapters/{chapter-id}")
+    public ResponseEntity<GroupApiSimpleResult> start(@PathVariable ("group-id") Long groupId,
+                                                      @PathVariable ("chapter-id") Long chapterId,
+                                                      @AuthenticatedMember MemberDetails memberDetails) {
+
+        groupManagingService.checkStudyChapter(memberDetails, groupId, chapterId);
+        return ResponseEntity.ok(GroupApiSimpleResult.check());
     }
 }
