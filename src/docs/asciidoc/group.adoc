@@ -1,0 +1,67 @@
+:doctype: book
+:icons: font
+:toc: left
+:toclevels: 3
+
+
+== 그룹 생성
+=== HTTP request
+include::{snippets}/group/create/http-request.adoc[]
+
+=== HTTP response
+include::{snippets}/group/create/response-body.adoc[]
+
+== 그룹 가입
+=== HTTP request
+include::{snippets}/group/join/http-request.adoc[]
+=== Parameter Information
+include::{snippets}/group/join/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/group/join/response-body.adoc[]
+
+== 그룹 탈퇴
+=== HTTP request
+include::{snippets}/group/leave/http-request.adoc[]
+=== Parameter Information
+include::{snippets}/group/leave/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/group/leave/response-body.adoc[]
+
+== 그룹 모집 마감
+=== HTTP request
+include::{snippets}/group/close/http-request.adoc[]
+=== Parameter Information
+include::{snippets}/group/close/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/group/close/response-body.adoc[]
+
+== 그룹 시작
+=== HTTP request
+include::{snippets}/group/start/http-request.adoc[]
+=== Parameter Information
+include::{snippets}/group/start/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/group/start/response-body.adoc[]
+
+== 스터디 챕터 체크
+그룹 내 스터디 진행 시 수행한 스터디 챕터를 체크하도록 요청하는 API
+
+=== HTTP request
+include::{snippets}/group/check/http-request.adoc[]
+=== Parameter Information
+include::{snippets}/group/check/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/group/check/response-body.adoc[]
+
+== 그룹 전체 조회
+
+=== HTTP request
+include::{snippets}/group/query/readAll/http-request.adoc[]
+
+=== HTTP response
+include::{snippets}/group/query/readAll/response-body.adoc[]
