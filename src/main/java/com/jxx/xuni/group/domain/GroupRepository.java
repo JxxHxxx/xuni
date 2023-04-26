@@ -24,7 +24,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE study_group g SET g.group_status = 'END' " +
-            "WHERE g.end_date <= DATE_SUB(CURDATE(), INTERVAL 3 DAY) " +
+            "WHERE g.end_date = DATE_SUB(CURDATE(), INTERVAL 3 DAY) " +
             "AND g.group_status = 'START'",
             nativeQuery = true)
     void updateGroupStatusToEnd();
