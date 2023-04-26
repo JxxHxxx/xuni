@@ -15,7 +15,7 @@ public class Host {
     private Long hostId;
     private String hostName;
 
-    protected Host(Long hostId, String hostName) {
+    public Host(Long hostId, String hostName) {
         this.hostId = hostId;
         this.hostName = hostName;
     }
@@ -27,8 +27,4 @@ public class Host {
     protected boolean isHost(Long memberId) {
         return this.hostId.equals(memberId);
     }
-//
-//    protected void isHost(Long memberId) {
-//        if (this.hostId.equals(memberId)) throw new NotPermissionException(NOT_PERMISSION);
-//    }
 }
