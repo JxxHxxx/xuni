@@ -3,6 +3,8 @@ plugins {
     id 'org.springframework.boot' version '3.0.5'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'jacoco'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
+
 }
 
 group = 'com.jxx'
@@ -12,6 +14,29 @@ sourceCompatibility = '17'
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
+    }
+
+    asciidoctorExt
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor // (3)
+    from ("${asciidoctor.outputDir}") { // (4)
+        into 'static/docs'
     }
 }
 
@@ -48,6 +73,9 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
     compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+
+    testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
 }
 
