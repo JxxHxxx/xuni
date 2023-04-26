@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
-import static com.jxx.xuni.group.dto.response.GroupApiMessage.GROUP_CLOSE_RECRUITMENT;
-import static com.jxx.xuni.group.dto.response.GroupApiMessage.GROUP_JOIN;
+import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,7 +23,7 @@ class GroupManagingControllerTest extends ControllerTest {
 
     Long memberId = null;
     //given
-    String testToken;
+    String authToken;
 
     @BeforeEach
     void beforeEach() {
@@ -35,7 +34,7 @@ class GroupManagingControllerTest extends ControllerTest {
                 .build();
 
         memberId = member.getId();
-        testToken = jwtTokenProvider.issue(new SimpleMemberDetails(memberId, member.receiveEmail(), member.getName()));
+        authToken = jwtTokenProvider.issue(new SimpleMemberDetails(memberId, member.receiveEmail(), member.getName()));
 
     }
 
@@ -44,7 +43,7 @@ class GroupManagingControllerTest extends ControllerTest {
     void group_join_request() throws Exception {
         //when - then
         mockMvc.perform(post("/groups/{group-id}/join",1l)
-                .header("Authorization", testToken))
+                .header("Authorization", authToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(GROUP_JOIN));
 
@@ -55,8 +54,18 @@ class GroupManagingControllerTest extends ControllerTest {
     void group_close_request() throws Exception {
         //when - then
         mockMvc.perform(post("/groups/{group-id}/close-recruitment",1l)
-                        .header("Authorization", testToken))
+                        .header("Authorization", authToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(GROUP_CLOSE_RECRUITMENT));
+    }
+
+    @DisplayName("스터디 챕터 체크 성공 요청")
+    @Test
+    void group_check_study_chapter() throws Exception {
+        //when - then
+            mockMvc.perform(patch("/groups/{group-id}/chapters/{chapter-id}",1l, 1l)
+                        .header("Authorization", authToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(DO_CHECK));
     }
 }
