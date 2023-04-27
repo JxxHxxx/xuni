@@ -117,6 +117,19 @@ public class Group {
         groupStatus = START;
     }
 
+    public void verifyCheckRule(Long chapterId, Long groupMemberId) {
+        checkGroupState(START);
+        StudyCheck studyCheck = validateAbleToCheckStudyCheck(chapterId, groupMemberId);
+        studyCheck.check();
+    }
+
+    private StudyCheck validateAbleToCheckStudyCheck(Long chapterId, Long groupMemberId) {
+        return studyChecks.stream()
+                .filter(s -> s.isSameChapter(chapterId))
+                .filter(s -> s.isSameMember(groupMemberId))
+                .findAny().orElseThrow(() -> new IllegalArgumentException(BAD_REQUEST));
+    }
+
     private GroupMember validateAbleToLeaveMember(Long groupMemberId) {
         return groupMembers.stream()
                 .filter(g -> g.getGroupMemberId().equals(groupMemberId))
