@@ -26,7 +26,7 @@ public class StudyCheck {
         return new StudyCheck(memberId, chapterId, title, false);
     }
 
-    public void check() {
+    protected void check() {
         if (!isDone) {
             isDone = true;
             return;

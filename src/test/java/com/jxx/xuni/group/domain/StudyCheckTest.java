@@ -12,7 +12,7 @@ class StudyCheckTest {
             "현재 isDone 상태가 false 라면 true 로 변경되고 " +
             "                 true 라면 false 로 변견된다.")
     @Test
-    void name() {
+    void check() {
         //given
         StudyCheck studyCheck = StudyCheck.init(1l, 1l, "spring loc");
         Assertions.assertThat(studyCheck.isDone()).isFalse();
