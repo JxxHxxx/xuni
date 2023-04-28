@@ -7,23 +7,20 @@ import com.jxx.xuni.group.domain.exception.GroupStartException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
 import com.jxx.xuni.group.dto.request.StudyCheckForm;
 import com.jxx.xuni.studyproduct.domain.Category;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EmptySource;
-import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.BAD_REQUEST;
 import static com.jxx.xuni.group.domain.GroupStatus.*;
 import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -92,7 +89,7 @@ class GroupTest {
         group.leave(2l);
 
         //when - then
-        Assertions.assertThatCode(() -> group.join(findGroupMember)).doesNotThrowAnyException();
+        assertThatCode(() -> group.join(findGroupMember)).doesNotThrowAnyException();
         assertThat(findGroupMember.hasNotLeft()).isTrue();
         assertThat(group.getGroupMembers().size()).isEqualTo(2);
 
@@ -273,20 +270,22 @@ class GroupTest {
         Group group = makeTestGroup(5);
         GroupMember groupMember = new GroupMember(2l, "유니");
         group.join(groupMember);
-        
+
+
         Integer beforeCapacity = group.getCapacity().getLeftCapacity();
         int beforeGroupSize = group.getGroupMembers().size();
         //when
         group.leave(2l);
-        //then
+        //then - isLeft 프로퍼티가 True 로 변경되었는지 검증
         GroupMember findGroupMember = group.getGroupMembers().stream()
                 .filter(g -> g.isSameMemberId(2l))
                 .findAny().get();
         assertThat(findGroupMember.getIsLeft()).isTrue();
-        // then
+
+        // then - 그룹 멤버 수에 변경이 없다는 것을 검증
         int afterGroupSize = group.getGroupMembers().size();
         assertThat(afterGroupSize).isEqualTo(beforeGroupSize);
-        // then
+        // then - 탈퇴 후, 가입 가능 정원이 1 증가한다는 것을 검증
         Integer afterCapacity = group.getCapacity().getLeftCapacity();
         assertThat(afterCapacity).isEqualTo(beforeCapacity + 1);
     }
@@ -353,5 +352,54 @@ class GroupTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(NOT_EXISTED_GROUP_MEMBER);
 
+    }
+
+    @DisplayName("그룹 체크 성공 케이스")
+    @Test
+    void verify_check_rule_success() {
+        //given - 그룹 시작 상태로 변경
+        Group group = makeTestGroup(5);
+        group.closeRecruitment(1l);
+        group.start(1l, TestGroupServiceSupporter.studyCheckForms);
+        //when
+        group.verifyCheckRule(2l, 1l);
+
+        StudyCheck studyCheckAfterVerifyCheckRule = group.getStudyChecks().stream()
+                .filter(s -> s.isSameMember(1l))
+                .filter(s -> s.isSameChapter(2l)).findAny().get();
+        //then
+        assertThat(studyCheckAfterVerifyCheckRule.isDone()).isTrue();
+    }
+
+    @DisplayName("그룹 상태가 START가 아닌 상태(GATHERING, GATHER_COMPLETE, END)에서 그룹 체크 시 " +
+            "NotAppropriateGroupStatusException 예외가 발생한다.")
+    @ParameterizedTest
+    @EnumSource(names = {"GATHERING","GATHER_COMPLETE", "END"})
+    void verify_check_rule_fail_cause_not_appropriate_group_status(GroupStatus status) {
+        //given - 그룹 시작 상태로 변경
+        Group group = makeTestGroup(5);
+        group.changeGroupStatusTo(status);
+        group.initStudyChecks(TestGroupServiceSupporter.studyCheckForms);
+
+        //when - then
+        assertThatThrownBy(() -> group.verifyCheckRule(2l, 1l))
+                .isInstanceOf(NotAppropriateGroupStatusException.class)
+                .hasMessage(NOT_APPROPRIATE_GROUP_STATUS);
+    }
+
+    @DisplayName("그룹 체크 성공 케이스")
+    @ParameterizedTest(name = "실패 원인 : {2} | 챕터 식별자 {0} | 그룹 멤버 식별자 {1}")
+    @CsvSource(value = {"4, 1, 존재하지 않는 챕터", "1, 2, 존재하지 않는 그룹 멤버"})
+    void verify_check_rule_fail_cause_not_exist_member_or_chapter(Long chapterId, Long groupMemberId) {
+        //given - 그룹 시작 상태로 변경
+        Group group = makeTestGroup(5);
+        group.changeGroupStatusTo(START);
+        group.initStudyChecks(TestGroupServiceSupporter.studyCheckForms); // chapter 는 1,2,3 까지 존재합니다.
+
+        //when - then
+        //
+        assertThatThrownBy(() -> group.verifyCheckRule(chapterId, groupMemberId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(BAD_REQUEST);
     }
 }

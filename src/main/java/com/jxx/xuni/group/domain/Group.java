@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.BAD_REQUEST;
 import static com.jxx.xuni.group.domain.Capacity.*;
 import static com.jxx.xuni.group.domain.GroupStatus.*;
 import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
@@ -24,7 +25,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "study_group",indexes = @Index(name = "study_group_category", columnList = "category"))
+@Table(name = "study_group", indexes = @Index(name = "study_group_category", columnList = "category"))
 public class Group {
 
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -106,7 +107,8 @@ public class Group {
     public void closeRecruitment(Long memberId) {
         checkHost(memberId);
         checkGroupState(GATHERING);
-        groupStatus = GATHER_COMPLETE;
+
+        changeGroupStatusTo(GATHER_COMPLETE);
     }
 
     public void start(Long memberId, List<StudyCheckForm> studyCheckForms) {
@@ -114,7 +116,21 @@ public class Group {
         checkGroupState(GATHER_COMPLETE);
         checkNullAndEmptyStudyCheckForm(studyCheckForms);
         initStudyChecks(studyCheckForms);
-        groupStatus = START;
+
+        changeGroupStatusTo(START);
+    }
+
+    public void verifyCheckRule(Long chapterId, Long groupMemberId) {
+        checkGroupState(START);
+        StudyCheck studyCheck = validateAbleToCheckStudyCheck(chapterId, groupMemberId);
+        studyCheck.check();
+    }
+
+    private StudyCheck validateAbleToCheckStudyCheck(Long chapterId, Long groupMemberId) {
+        return studyChecks.stream()
+                .filter(s -> s.isSameChapter(chapterId))
+                .filter(s -> s.isSameMember(groupMemberId))
+                .findAny().orElseThrow(() -> new IllegalArgumentException(BAD_REQUEST));
     }
 
     private GroupMember validateAbleToLeaveMember(Long groupMemberId) {
@@ -142,7 +158,7 @@ public class Group {
         if (host.isNotHost(memberId)) throw new NotPermissionException(NOT_PERMISSION);
     }
 
-    private void initStudyChecks(List<StudyCheckForm> studyCheckForms) {
+    protected void initStudyChecks(List<StudyCheckForm> studyCheckForms) {
         List<GroupMember> realGroupMember = groupMembers.stream().filter(groupMember -> groupMember.hasNotLeft()).toList();
         for (GroupMember groupMember : realGroupMember) {
             List<StudyCheck> studyChecks = studyCheckForms.stream()
@@ -186,8 +202,8 @@ public class Group {
 
     // 그룹 내 존재, 탈퇴 플래그 false(그룹에 나간 상태가 아니다.) -> 이미 소속되어 있는 상태이니 예외를 던져라.
     private void checkAlreadyJoin(GroupMember member) {
-         if (groupMembers.stream().anyMatch(groupMember -> (groupMember.isSameMemberId(member.getGroupMemberId()) && groupMember.hasNotLeft())))
-             throw new GroupJoinException(ALREADY_JOIN);
+        if (groupMembers.stream().anyMatch(groupMember -> (groupMember.isSameMemberId(member.getGroupMemberId()) && groupMember.hasNotLeft())))
+            throw new GroupJoinException(ALREADY_JOIN);
     }
 
     private void checkAccessibleGroupStatus() {

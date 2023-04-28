@@ -46,7 +46,7 @@ public class TestGroupServiceSupporter {
             new StudyCheckForm(2l, "타입"),
             new StudyCheckForm(3l, "인터페이스"));
 
-    public static Group sampleGroup(Long hostId, Integer capacity) {
+    public static Group startedGroupSample(Long hostId, Integer capacity) {
         Group group = new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(capacity),
