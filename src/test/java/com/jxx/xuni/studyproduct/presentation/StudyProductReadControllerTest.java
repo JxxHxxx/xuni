@@ -126,7 +126,7 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
         result
                 .andExpect(status().isOk())
 
-                .andDo(MockMvcRestDocumentation.document("studyproduct/query/readAll",
+                .andDo(MockMvcRestDocumentation.document("studyproduct/query/readOne",
                         getDocumentRequest(), getDocumentResponse(),
                         pathParameters(
                                 RequestDocumentation.parameterWithName("study-product-id").description("스터디 상품 식별자")
