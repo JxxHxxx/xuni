@@ -9,7 +9,9 @@ import java.util.List;
 public record StudyProductDetailReadResponse(
         String name,
         Category category,
-        Topic topic,
+        String content,
+        String author,
+        String image,
         List<StudyProductDetail> studyProductDetail
 )
 { }

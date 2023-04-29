@@ -18,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Slf4j
-@Profile("default")
+//@Profile("default")
 @Configuration
 public class AuthInterceptorConfig implements WebMvcConfigurer{
 

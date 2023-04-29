@@ -1,17 +1,14 @@
-package com.jxx.xuni.support;
+package com.jxx.xuni.studyproduct.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jxx.xuni.group.presentation.GroupCreateController;
-import com.jxx.xuni.group.presentation.GroupManagingController;
-import com.jxx.xuni.group.presentation.GroupReadController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest({GroupCreateController.class, GroupManagingController.class, GroupReadController.class})
+@WebMvcTest({StudyProductCreateController.class, StudyProductReadController.class})
 @AutoConfigureRestDocs
-public class ControllerTest {
+public class StudyProductCommon {
     @Autowired
     protected MockMvc mockMvc;
     @Autowired
