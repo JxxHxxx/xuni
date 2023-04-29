@@ -3,7 +3,6 @@ package com.jxx.xuni.group.presentation;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.domain.*;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
-import com.jxx.xuni.support.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -13,8 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.request.RequestDocumentation;
-import org.springframework.restdocs.snippet.AbstractDescriptor;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
@@ -28,11 +25,10 @@ import static com.jxx.xuni.group.dto.response.GroupApiMessage.GROUP_ALL_READ;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Import(GroupControllerTestConfig.class)
-class GroupReadControllerTest extends ControllerTest {
+class GroupReadControllerTest extends GroupCommon {
 
     @Autowired
     GroupReadService groupReadService;

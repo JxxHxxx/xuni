@@ -6,7 +6,6 @@ import com.jxx.xuni.group.domain.TestGroupServiceSupporter;
 import com.jxx.xuni.group.dto.request.StudyCheckForm;
 import com.jxx.xuni.member.domain.LoginInfo;
 import com.jxx.xuni.member.domain.Member;
-import com.jxx.xuni.support.ControllerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -34,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Import(GroupControllerTestConfig.class)
-class GroupManagingControllerTest extends ControllerTest {
+class GroupManagingControllerTest extends GroupCommon {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 

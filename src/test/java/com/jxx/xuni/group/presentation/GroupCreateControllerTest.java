@@ -1,6 +1,5 @@
 package com.jxx.xuni.group.presentation;
 
-import com.jxx.xuni.support.ControllerTest;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.group.dto.request.GroupCreateForm;
@@ -29,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Import(GroupControllerTestConfig.class)
-public class GroupCreateControllerTest extends ControllerTest{
+public class GroupCreateControllerTest extends GroupCommon {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
