@@ -46,7 +46,9 @@ public class StudyProductReadService {
         return new StudyProductDetailReadResponse(
                 studyProduct.getName(),
                 studyProduct.getCategory(),
-                studyProduct.getTopic(),
+                studyProduct.getTopic().getContent(),
+                studyProduct.getTopic().getAuthor(),
+                studyProduct.getTopic().getImage(),
                 studyProductDetails);
     }
 }
