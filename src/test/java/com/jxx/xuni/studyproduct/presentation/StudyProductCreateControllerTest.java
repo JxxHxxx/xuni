@@ -24,10 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("default")
-@SpringBootTest
-@AutoConfigureMockMvc
-class StudyProductCreateControllerTest {
+
+@Import(StudyProductControllerTestConfig.class)
+class StudyProductCreateControllerTest extends StudyProductCommon{
     @Autowired
     JwtTokenProvider jwtTokenProvider;
     @Autowired
