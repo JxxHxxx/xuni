@@ -66,7 +66,6 @@ class StudyProductCreateControllerTest extends StudyProductCommon{
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(STUDY_PRODUCT_CREATED))
 
                 .andDo(MockMvcRestDocumentation.document("studyproduct/create/self",
-                        getDocumentRequest(),
                         PayloadDocumentation.requestPartFields("data",
                                 fieldWithPath("name").type(JsonFieldType.STRING).description("스터디 이름"),
                                 fieldWithPath("category").type(JsonFieldType.STRING).description("스터디 상품 카테고리"),
