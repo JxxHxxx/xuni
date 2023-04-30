@@ -15,11 +15,14 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
 import static com.jxx.xuni.ApiDocumentUtils.getDocumentRequest;
 import static com.jxx.xuni.ApiDocumentUtils.getDocumentResponse;
+import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_DETAIL_READ;
+import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_READ;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -48,6 +51,7 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
 
         result
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(STUDY_PRODUCT_READ))
 
                 .andDo(MockMvcRestDocumentation.document("studyproduct/query/readAll",
                         getDocumentRequest(), getDocumentResponse(),
@@ -81,6 +85,7 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
 
         result
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(Category.JAVA.name() + " " + STUDY_PRODUCT_READ))
 
                 .andDo(MockMvcRestDocumentation.document("studyproduct/query/readCond",
                         getDocumentRequest(), getDocumentResponse(),
@@ -125,8 +130,9 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
 
         result
                 .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(STUDY_PRODUCT_DETAIL_READ))
 
-                .andDo(MockMvcRestDocumentation.document("studyproduct/query/readAll",
+                .andDo(MockMvcRestDocumentation.document("studyproduct/query/readOne",
                         getDocumentRequest(), getDocumentResponse(),
                         pathParameters(
                                 RequestDocumentation.parameterWithName("study-product-id").description("스터디 상품 식별자")

@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyProductDetail {
 
-    @Column(unique = true)
     private Long chapterId;
     private String title;
 

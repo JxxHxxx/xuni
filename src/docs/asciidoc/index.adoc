@@ -7,6 +7,7 @@
 == API Documents
 
 * link:group.html[group]
+* link:study-product.html[study-product]
 
 |===
 | 상태 코드 | 설명
@@ -15,16 +16,16 @@
 | 요청 성공
 
 | `201 Created`
-| 요청 성공 및 새로운 리소스가 생성
-
-| `204 No content`
-| 요청 성공했지만 응답으로 보낼 데이터는 없음
+| 요청 성공 및 새로운 리소스 생성
 
 | `400 Bad Request`
 | 잘못된 요청
 
 | `401 Unauthorized`
 | 비인증 상태
+
+| `403 Forbidden`
+| 비인가 상태
 
 | `404 Not Found`
 | 존재하지 않는 요청 리소스
