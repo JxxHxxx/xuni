@@ -5,10 +5,17 @@
 
 == 스터디 상품 등록
 === HTTP request
-include::{snippets}/studyproduct/create/http-request.adoc[]
+include::{snippets}/studyproduct/create/self/http-request.adoc[]
 
 === HTTP response
-include::{snippets}/studyproduct/create/response-body.adoc[]
+include::{snippets}/studyproduct/create/self/response-body.adoc[]
+
+== 스터디 상품 상세 등록
+=== HTTP request
+include::{snippets}/studyproduct/create/detail/http-request.adoc[]
+
+=== HTTP response
+include::{snippets}/studyproduct/create/detail/response-body.adoc[]
 
 == 스터디 상품 전체 조회
 
