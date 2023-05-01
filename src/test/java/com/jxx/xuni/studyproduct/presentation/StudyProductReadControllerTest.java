@@ -27,6 +27,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -90,6 +92,10 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
                 .andDo(MockMvcRestDocumentation.document("studyproduct/query/readCond",
                         getDocumentRequest(), getDocumentResponse(),
 
+                        queryParameters(
+                                parameterWithName("category").description("스터디 상품 카테고리")
+                        ),
+
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
@@ -135,7 +141,7 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
                 .andDo(MockMvcRestDocumentation.document("studyproduct/query/readOne",
                         getDocumentRequest(), getDocumentResponse(),
                         pathParameters(
-                                RequestDocumentation.parameterWithName("study-product-id").description("스터디 상품 식별자")
+                                parameterWithName("study-product-id").description("스터디 상품 식별자")
                         ),
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),

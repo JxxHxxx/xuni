@@ -3,6 +3,8 @@
 :toc: left
 :toclevels: 3
 
+== 홈으로
+* link:index.html[index]
 
 == 그룹 생성
 === HTTP request
@@ -23,7 +25,7 @@ include::{snippets}/group/join/response-body.adoc[]
 == 그룹 탈퇴
 === HTTP request
 include::{snippets}/group/leave/http-request.adoc[]
-=== Parameter Information
+===== path parameters
 include::{snippets}/group/leave/path-parameters.adoc[]
 
 === HTTP response
@@ -32,7 +34,7 @@ include::{snippets}/group/leave/response-body.adoc[]
 == 그룹 모집 마감
 === HTTP request
 include::{snippets}/group/close/http-request.adoc[]
-=== Parameter Information
+===== path parameters
 include::{snippets}/group/close/path-parameters.adoc[]
 
 === HTTP response
@@ -41,7 +43,7 @@ include::{snippets}/group/close/response-body.adoc[]
 == 그룹 시작
 === HTTP request
 include::{snippets}/group/start/http-request.adoc[]
-=== Parameter Information
+===== path parameters
 include::{snippets}/group/start/path-parameters.adoc[]
 
 === HTTP response
@@ -52,7 +54,7 @@ include::{snippets}/group/start/response-body.adoc[]
 
 === HTTP request
 include::{snippets}/group/check/http-request.adoc[]
-=== Parameter Information
+===== path parameters
 include::{snippets}/group/check/path-parameters.adoc[]
 
 === HTTP response
@@ -65,3 +67,23 @@ include::{snippets}/group/query/readAll/http-request.adoc[]
 
 === HTTP response
 include::{snippets}/group/query/readAll/response-body.adoc[]
+
+== 그룹 단건 조회
+
+=== HTTP request
+include::{snippets}/group/query/readOne/http-request.adoc[]
+===== path parameters
+include::{snippets}/group/query/readOne/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/group/query/readOne/response-body.adoc[]
+
+== 그룹 카테고리 별 조회
+
+=== HTTP request
+include::{snippets}/group/query/readCond/http-request.adoc[]
+==== query parameter
+include::{snippets}/group/query/readCond/query-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/group/query/readCond/response-body.adoc[]
