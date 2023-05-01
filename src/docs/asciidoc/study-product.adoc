@@ -3,6 +3,9 @@
 :toc: left
 :toclevels: 3
 
+== 홈으로
+* link:index.html[index]
+
 == 스터디 상품 등록
 === HTTP request
 include::{snippets}/studyproduct/create/self/http-request.adoc[]
@@ -29,6 +32,8 @@ include::{snippets}/studyproduct/query/readAll/response-body.adoc[]
 
 === HTTP request
 include::{snippets}/studyproduct/query/readCond/http-request.adoc[]
+==== query parameters
+include::{snippets}/studyproduct/query/readCond/query-parameters.adoc[]
 
 === HTTP response
 include::{snippets}/studyproduct/query/readCond/response-body.adoc[]
@@ -37,6 +42,8 @@ include::{snippets}/studyproduct/query/readCond/response-body.adoc[]
 
 === HTTP request
 include::{snippets}/studyproduct/query/readOne/http-request.adoc[]
+===== path parameters
+include::{snippets}/studyproduct/query/readOne/path-parameters.adoc[]
 
 === HTTP response
 include::{snippets}/studyproduct/query/readOne/response-body.adoc[]
