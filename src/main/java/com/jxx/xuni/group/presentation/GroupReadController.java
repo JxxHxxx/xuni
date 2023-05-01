@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.jxx.xuni.group.dto.response.GroupApiMessage.GROUP_ALL_READ;
+import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
 
 @Slf4j
 @RestController
@@ -35,12 +35,12 @@ public class GroupReadController {
     public ResponseEntity<GroupApiReadResult> readOne(@PathVariable("group-id") Long groupId) {
         GroupReadOneResponse response = groupReadService.readOne(groupId);
 
-        return ResponseEntity.ok(new GroupApiReadResult(GROUP_ALL_READ, response));
+        return ResponseEntity.ok(new GroupApiReadResult(GROUP_ONE_READ, response));
     }
 
     @GetMapping("/groups/cond")
     public ResponseEntity<GroupApiReadResult> readCond(@RequestParam("category") Category category) {
         List<GroupReadAllResponse> response = groupReadService.readByCategory(category);
-        return ResponseEntity.ok(new GroupApiReadResult(GROUP_ALL_READ, response));
+        return ResponseEntity.ok(new GroupApiReadResult(GROUP_CATEGORY_READ, response));
     }
 }
