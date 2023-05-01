@@ -2,6 +2,7 @@ package com.jxx.xuni.group.presentation;
 
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.dto.response.GroupApiReadResult;
+import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
 import com.jxx.xuni.studyproduct.domain.Category;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class GroupReadController {
 
     @GetMapping("/groups/{group-id}")
     public ResponseEntity<GroupApiReadResult> readOne(@PathVariable("group-id") Long groupId) {
-        GroupReadAllResponse response = groupReadService.readOne(groupId);
+        GroupReadOneResponse response = groupReadService.readOne(groupId);
 
         return ResponseEntity.ok(new GroupApiReadResult(GROUP_ALL_READ, response));
     }

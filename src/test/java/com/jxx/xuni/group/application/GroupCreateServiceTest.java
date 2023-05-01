@@ -1,5 +1,6 @@
 package com.jxx.xuni.group.application;
 
+import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.domain.GroupRepository;
 import com.jxx.xuni.group.dto.request.GroupCreateForm;
 import com.jxx.xuni.member.domain.LoginInfo;
@@ -42,7 +43,7 @@ class GroupCreateServiceTest {
 
     @DisplayName("그룹 생성 서비스 성공 케이스")
     @Test
-    void name() {
+    void create_success() {
         //given
         GroupCreateForm groupCreateForm = new GroupCreateForm(LocalDate.now(), LocalDate.of(2099, 12, 31),
                 LocalTime.MIDNIGHT, LocalTime.NOON, 10, "Request Product API", "JAVA 스터디", Category.JAVA);
@@ -50,5 +51,7 @@ class GroupCreateServiceTest {
         //when - then
         Assertions.assertThatCode(() -> groupCreateService.create(MemberId, groupCreateForm))
                 .doesNotThrowAnyException();
+
+        Assertions.assertThat(groupRepository.findAll().get(0)).isNotNull();
     }
 }
