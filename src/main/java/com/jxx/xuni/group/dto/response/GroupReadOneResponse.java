@@ -3,8 +3,10 @@ package com.jxx.xuni.group.dto.response;
 import com.jxx.xuni.group.domain.*;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
-public class GroupReadAllResponse {
+public class GroupReadOneResponse {
     private Long groupId;
     private Capacity capacity;
     private GroupStatus groupStatus;
@@ -12,8 +14,9 @@ public class GroupReadAllResponse {
     private Study study;
     private Time time;
     private Period period;
+    private List<GroupMember> groupMembers;
 
-    public GroupReadAllResponse(Long groupId, Capacity capacity, GroupStatus groupStatus, Host host, Study study, Time time, Period period) {
+    public GroupReadOneResponse(Long groupId, Capacity capacity, GroupStatus groupStatus, Host host, Study study, Time time, Period period, List<GroupMember> groupMembers) {
         this.groupId = groupId;
         this.capacity = capacity;
         this.groupStatus = groupStatus;
@@ -21,5 +24,6 @@ public class GroupReadAllResponse {
         this.study = study;
         this.time = time;
         this.period = period;
+        this.groupMembers = groupMembers;
     }
 }

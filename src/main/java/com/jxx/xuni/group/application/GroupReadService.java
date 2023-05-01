@@ -1,6 +1,7 @@
 package com.jxx.xuni.group.application;
 
 import com.jxx.xuni.group.domain.Group;
+import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
 import com.jxx.xuni.group.query.GroupReadRepository;
 import com.jxx.xuni.studyproduct.domain.Category;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,18 +24,20 @@ public class GroupReadService {
                 group.getCapacity(),
                 group.getGroupStatus(),
                 group.getHost(),
+                group.getStudy(),
                 group.getTime(),
-                group.getPeriod(),
-                group.getGroupMembers())).collect(Collectors.toList());
+                group.getPeriod())).toList();
     }
 
-    public GroupReadAllResponse readOne(Long groupId) {
+    public GroupReadOneResponse readOne(Long groupId) {
         Group group = groupReadRepository.findById(groupId).get();
 
-        return new GroupReadAllResponse(group.getId(),
+        return new GroupReadOneResponse(
+                group.getId(),
                 group.getCapacity(),
                 group.getGroupStatus(),
                 group.getHost(),
+                group.getStudy(),
                 group.getTime(),
                 group.getPeriod(),
                 group.getGroupMembers());
@@ -49,8 +51,8 @@ public class GroupReadService {
                 group.getCapacity(),
                 group.getGroupStatus(),
                 group.getHost(),
+                group.getStudy(),
                 group.getTime(),
-                group.getPeriod(),
-                group.getGroupMembers())).collect(Collectors.toList());
+                group.getPeriod())).toList();
     }
 }

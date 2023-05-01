@@ -3,6 +3,7 @@ package com.jxx.xuni.group.presentation;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.domain.*;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
+import com.jxx.xuni.studyproduct.domain.Category;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -44,9 +45,9 @@ class GroupReadControllerTest extends GroupCommon {
                 new Capacity(10),
                 GroupStatus.GATHERING,
                 new Host(1l, "xuni-member"),
+                Study.of("UUID", "JAVA의 정석", Category.JAVA),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
-                Period.of(LocalDate.now(), LocalDate.of(2123, 12, 31)),
-                groupMembers);
+                Period.of(LocalDate.now(), LocalDate.of(2123, 12, 31)));
 
         BDDMockito.given(groupReadService.readAll()).willReturn(List.of(response));
 
@@ -85,10 +86,10 @@ class GroupReadControllerTest extends GroupCommon {
                                 fieldWithPath("response[].host.hostId").type(JsonFieldType.NUMBER).description("호스트 식별자"),
                                 fieldWithPath("response[].host.hostName").type(JsonFieldType.STRING).description("호스트 이름"),
 
-                                fieldWithPath("response[].groupMembers").type(JsonFieldType.ARRAY).description("그룹 멤버"),
-                                fieldWithPath("response[].groupMembers[].groupMemberId").type(JsonFieldType.NUMBER).description("그룹 멤버 식별자"),
-                                fieldWithPath("response[].groupMembers[].groupMemberName").type(JsonFieldType.STRING).description("그룹 멤버 이름"),
-                                fieldWithPath("response[].groupMembers[].isLeft").type(JsonFieldType.BOOLEAN).description("탈퇴 여부")
+                                fieldWithPath("response[].study").type(JsonFieldType.OBJECT).description("스터디"),
+                                fieldWithPath("response[].study.id").type(JsonFieldType.STRING).description("스터디 상품 식별자"),
+                                fieldWithPath("response[].study.subject").type(JsonFieldType.STRING).description("스터디 이름"),
+                                fieldWithPath("response[].study.category").type(JsonFieldType.STRING).description("스터디 카테고리")
                             )
                 ));
     }
