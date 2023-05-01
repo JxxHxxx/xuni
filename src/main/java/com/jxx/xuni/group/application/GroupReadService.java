@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +24,9 @@ public class GroupReadService {
                 group.getCapacity(),
                 group.getGroupStatus(),
                 group.getHost(),
+                group.getStudy(),
                 group.getTime(),
-                group.getPeriod(),
-                group.getGroupMembers())).collect(Collectors.toList());
+                group.getPeriod())).toList();
     }
 
     public GroupReadOneResponse readOne(Long groupId) {
@@ -52,8 +51,8 @@ public class GroupReadService {
                 group.getCapacity(),
                 group.getGroupStatus(),
                 group.getHost(),
+                group.getStudy(),
                 group.getTime(),
-                group.getPeriod(),
-                group.getGroupMembers())).collect(Collectors.toList());
+                group.getPeriod())).toList();
     }
 }
