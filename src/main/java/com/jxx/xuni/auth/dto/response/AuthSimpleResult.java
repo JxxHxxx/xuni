@@ -22,6 +22,10 @@ public class AuthSimpleResult {
         return new AuthSimpleResult(200, "welcome xuni", response);
     }
 
+    public static AuthSimpleResult verified() {
+        return new AuthSimpleResult(200, "인증되었습니다.", null);
+    }
+
     public static AuthSimpleResult logout() {
         return new AuthSimpleResult(200, "good-bye", null);
     }

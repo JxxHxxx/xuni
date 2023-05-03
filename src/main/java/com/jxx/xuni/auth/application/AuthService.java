@@ -6,7 +6,9 @@ import com.jxx.xuni.member.domain.MemberRepository;
 import com.jxx.xuni.auth.dto.request.LoginForm;
 import com.jxx.xuni.auth.dto.request.SignupForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.EXISTED_EMAIL;
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
@@ -18,18 +20,20 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void signup(SignupForm signupForm) {
+    @Transactional(noRollbackFor = MailException.class)
+    public Member signup(SignupForm signupForm) {
         Member member = new Member(LoginInfo.of(signupForm.getEmail(), passwordEncoder.encrypt(signupForm.getPassword())),
                 signupForm.getName());
 
         checkDuplicationOfEmail(signupForm.getEmail());
-        memberRepository.save(member);
+        return memberRepository.save(member);
     }
 
     public SimpleMemberDetails login(LoginForm loginForm) {
         Member member = memberRepository.findByLoginInfoEmail(loginForm.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException(LOGIN_FAIL));
 
+        member.checkAuthenticated();
         member.matches(passwordEncoder.encrypt(loginForm.getPassword()));
 
         return new SimpleMemberDetails(member.getId(), member.receiveEmail(), member.getName(), member.getAuthority());
