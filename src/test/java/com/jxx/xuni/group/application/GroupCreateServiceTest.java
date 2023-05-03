@@ -1,12 +1,12 @@
 package com.jxx.xuni.group.application;
 
-import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.domain.GroupRepository;
 import com.jxx.xuni.group.dto.request.GroupCreateForm;
 import com.jxx.xuni.member.domain.LoginInfo;
 import com.jxx.xuni.member.domain.Member;
 import com.jxx.xuni.member.domain.MemberRepository;
 import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @ServiceTest
-class GroupCreateServiceTest {
+class GroupCreateServiceTest extends ServiceCommon {
 
     @Autowired
     GroupCreateService groupCreateService;

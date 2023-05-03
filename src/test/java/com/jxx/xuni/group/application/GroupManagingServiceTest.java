@@ -4,6 +4,7 @@ import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.domain.GroupRepository;
 import com.jxx.xuni.group.domain.StudyCheck;
+import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
 import static org.assertj.core.api.Assertions.*;
 
 @ServiceTest
-class GroupManagingServiceTest {
+class GroupManagingServiceTest extends ServiceCommon {
 
     @Autowired
     GroupManagingService groupManagingService;
