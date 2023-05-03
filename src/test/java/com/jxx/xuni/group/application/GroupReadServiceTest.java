@@ -6,6 +6,7 @@ import com.jxx.xuni.group.domain.TestGroupServiceSupporter;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
 import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
 import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -19,7 +20,7 @@ import java.util.List;
 import static com.jxx.xuni.studyproduct.domain.Category.SPRING_FRAMEWORK;
 
 @ServiceTest
-class GroupReadServiceTest {
+class GroupReadServiceTest extends ServiceCommon {
 
     @Autowired
     GroupReadService groupReadService;

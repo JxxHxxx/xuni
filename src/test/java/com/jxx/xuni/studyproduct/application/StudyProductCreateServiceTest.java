@@ -2,6 +2,7 @@ package com.jxx.xuni.studyproduct.application;
 
 import com.jxx.xuni.studyproduct.domain.*;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductDetailForm;
+import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +14,7 @@ import java.util.List;
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.NOT_EXIST_STUDY_PRODUCT;
 
 @ServiceTest
-class StudyProductCreateServiceTest {
+class StudyProductCreateServiceTest extends ServiceCommon {
 
     @Autowired
     StudyProductRepository studyProductRepository;
