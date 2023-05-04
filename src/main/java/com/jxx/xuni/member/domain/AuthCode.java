@@ -1,12 +1,12 @@
 package com.jxx.xuni.member.domain;
 
+import com.jxx.xuni.common.persistence.Timestamp;
 import com.jxx.xuni.member.domain.exception.AuthCodeException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,7 +17,7 @@ import static com.jxx.xuni.member.domain.exception.ExceptionMessage.UNAUTHENTICA
 @Entity
 @Table(name = "member_auth_code")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AuthCode {
+public class AuthCode extends Timestamp {
 
     @Id
     private String authCodeId;
@@ -25,8 +25,6 @@ public class AuthCode {
     private String value;
     @Enumerated(EnumType.STRING)
     private UsageType usageType;
-    private LocalDateTime createdTime;
-    private LocalDateTime modifiedTime;
     private boolean isAuthenticated;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,8 +36,6 @@ public class AuthCode {
         this.value = generateValue();
         this.email = email;
         this.usageType = usageType;
-        this.createdTime = LocalDateTime.now();
-        this.modifiedTime = LocalDateTime.now();
         this.isAuthenticated = false;
     }
 
@@ -60,6 +56,10 @@ public class AuthCode {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+    public void regenerate() {
+        this.value = generateValue();
     }
 
     private void checkAuthenticated() {
