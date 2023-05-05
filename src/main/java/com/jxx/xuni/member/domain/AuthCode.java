@@ -1,28 +1,28 @@
 package com.jxx.xuni.member.domain;
 
-import com.jxx.xuni.common.persistence.Timestamp;
 import com.jxx.xuni.member.domain.exception.AuthCodeException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.INCORRECT_AUTH_CODE_VALUE;
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.UNAUTHENTICATED;
+import static com.jxx.xuni.member.domain.exception.ExceptionMessage.*;
 
 @Getter
 @Entity
 @Table(name = "member_auth_code")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AuthCode extends Timestamp {
+public class AuthCode {
 
     @Id
     private String authCodeId;
     private String email;
     private String value;
+    protected LocalDateTime valueCreatedTime;
     @Enumerated(EnumType.STRING)
     private UsageType usageType;
     private boolean isAuthenticated;
@@ -33,6 +33,7 @@ public class AuthCode extends Timestamp {
 
     public AuthCode(String email, UsageType usageType) {
         this.authCodeId = UUID.randomUUID().toString();
+        this.valueCreatedTime = LocalDateTime.now();
         this.value = generateValue();
         this.email = email;
         this.usageType = usageType;
@@ -45,8 +46,14 @@ public class AuthCode extends Timestamp {
     }
 
     public void verifyAuthCode(String value) {
+        checkValidTime();
         checkAuthCodeOf(value);
         authenticate();
+    }
+
+    private void checkValidTime() {
+        LocalDateTime nowTime = LocalDateTime.now();
+        if (this.valueCreatedTime.isBefore(nowTime.minusHours(1))) throw new AuthCodeException(VALID_TIME_OUT);
     }
 
     public Member createMember(String email, String password, String name) {
@@ -59,14 +66,19 @@ public class AuthCode extends Timestamp {
     }
 
     public void regenerate() {
+        updateValueCreatedTime();
         this.value = generateValue();
+    }
+
+    private void updateValueCreatedTime() {
+        this.valueCreatedTime = LocalDateTime.now();
     }
 
     private void checkAuthenticated() {
         if (this.isAuthenticated == false) throw new AuthCodeException(UNAUTHENTICATED);
     }
 
-    protected void authenticate() {
+    private void authenticate() {
         this.isAuthenticated = true;
     }
 

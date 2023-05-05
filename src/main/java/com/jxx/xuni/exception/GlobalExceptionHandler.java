@@ -5,6 +5,7 @@ import com.jxx.xuni.common.exception.NotPermissionException;
 import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
+import com.jxx.xuni.member.domain.exception.AuthCodeException;
 import io.jsonwebtoken.security.SecurityException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,7 +17,7 @@ import static org.springframework.http.HttpStatus.*;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({CapacityOutOfBoundException.class, NotAppropriateGroupStatusException.class,
-                       GroupJoinException.class, IllegalArgumentException.class})
+                       GroupJoinException.class, IllegalArgumentException.class, AuthCodeException.class})
     public ResponseEntity<ExceptionResponse> groupCreateExceptionsHandler(RuntimeException exception) {
         ExceptionResponse response = ExceptionResponse.of(400, exception.getMessage());
         return ResponseEntity.badRequest().body(response);

@@ -6,14 +6,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.INCORRECT_AUTH_CODE_VALUE;
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.UNAUTHENTICATED;
+import java.time.LocalDateTime;
+
+import static com.jxx.xuni.member.domain.exception.ExceptionMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AuthCodeTest {
 
     AuthCode authCode;
+
     @BeforeEach
     void beforeEach() {
         authCode = new AuthCode("test@naver.com", UsageType.SIGNUP);
@@ -29,7 +31,6 @@ class AuthCodeTest {
         assertThat(pureUUID.length()).isEqualTo(32);
         assertThat(authCode.getValue().length()).isEqualTo(12);
         assertThat(authCode.isAuthenticated()).isFalse();
-
     }
 
     @DisplayName("AuthCode 값과 동일한 값으로 코드 인증을 수행하면 인증은 정상적으로 수행된다" +
@@ -55,6 +56,32 @@ class AuthCodeTest {
         assertThatThrownBy(() -> authCode.verifyAuthCode(incorrectAuthCodeValue))
                 .isInstanceOf(AuthCodeException.class)
                 .hasMessage(INCORRECT_AUTH_CODE_VALUE);
+
+        assertThat(authCode.isAuthenticated()).isFalse();
+    }
+
+    class TestAuthCode extends AuthCode {
+        void modifyValueCreatedTime(LocalDateTime localDateTime) {
+            this.valueCreatedTime = localDateTime;
+        }
+
+        public TestAuthCode(String email, UsageType usageType) {
+            super(email, usageType);
+        }
+    }
+
+    @DisplayName("AuthCode Value 의 유효 시간이 지나 코드 인증을 시도할 경우" +
+            "AuthCodeException 예외 발생" +
+            "예외 메시지 VALID_TIME_OUT " +
+            "isAuthenticated 필드 값은 false 에서 변경되지 않는다")
+    @Test
+    void verify_auth_code_fail_cause_valid_time_is_over() {
+        TestAuthCode testAuthCode = new TestAuthCode("test@naver.com", UsageType.SIGNUP);
+        testAuthCode.modifyValueCreatedTime(LocalDateTime.of(2000,12,31, 12, 00));
+
+        assertThatThrownBy(() -> testAuthCode.verifyAuthCode(testAuthCode.getValue()))
+                .isInstanceOf(AuthCodeException.class)
+                .hasMessage(VALID_TIME_OUT);
 
         assertThat(authCode.isAuthenticated()).isFalse();
     }
