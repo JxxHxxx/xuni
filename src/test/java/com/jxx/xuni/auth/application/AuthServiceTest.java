@@ -13,8 +13,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.util.List;
 
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.EXISTED_EMAIL;
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
@@ -51,7 +54,7 @@ class AuthServiceTest extends ServiceCommon {
             "해당 객체에는 입력한 이메일을 가지고 있으며 value, authCodeId를 가져온다." +
             "또한 입력한 이메일을 가진 인증 코드 객체가 영속화되어야 한다.")
     @Test
-    void create_auth_code_success() {
+    void create_auth_code_success_first_request() {
         //given
         EmailForm emailForm = new EmailForm("create@naver.com");
         //when
@@ -61,6 +64,24 @@ class AuthServiceTest extends ServiceCommon {
         assertThat(createAuthCodeEvent.authCodeId()).isNotNull();
         assertThat(createAuthCodeEvent.email()).isEqualTo("create@naver.com");
         assertThat(authCodeRepository.findAll().stream().filter(a -> a.getEmail().equals("create@naver.com")).findFirst()).isPresent();
+    }
+
+    @DisplayName("동일한 용도, 동일한 이메일의 인증 코드가 이미 존재할 때 인증 코드를 요청하면 " +
+            "기존에 있는 인증 코드 객체에서 인증 코드 값만 변경된다.")
+    @Test
+    void create_auth_code_success_second_request() {
+        //given
+        EmailForm emailForm = new EmailForm("test@naver.com");
+
+        //when
+        authService.createAuthCode(emailForm);
+        List<AuthCode> authCodes = authCodeRepository.findAll().stream()
+                .filter(a -> a.getEmail().equals("test@naver.com")).toList();
+
+        //then
+        assertThat(authCodes.size()).isEqualTo(1);
+        String updateAuthCodeValue = authCodes.get(0).getValue();
+        assertThat(AuthCodeValue).isNotEqualTo(updateAuthCodeValue);
     }
 
     @DisplayName("이메일 중복 검증을 통과할 경우 어떠한 예외도 발생하지 않는다.")
@@ -135,8 +156,6 @@ class AuthServiceTest extends ServiceCommon {
                 .doesNotThrowAnyException();
 
         assertThat(memberRepository.findByLoginInfoEmail("test@naver.com").get()).isNotNull();
-
-
     }
     @DisplayName("존재하지 않는 인증 코드로 인증을 시도할 경우 " +
             "IllegalArgumentException 예외 발생" +

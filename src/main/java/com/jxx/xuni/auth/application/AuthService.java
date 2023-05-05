@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.EXISTED_EMAIL;
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
 import static com.jxx.xuni.member.domain.exception.ExceptionMessage.ALREADY_EXIST_EMAIL;
@@ -23,8 +25,14 @@ public class AuthService {
 
     @Transactional
     public CreateAuthCodeEvent createAuthCode(EmailForm form) {
-        AuthCode authCode = authCodeRepository.save(new AuthCode(form.email(), UsageType.SIGNUP));
+        Optional<AuthCode> optionalAuthCode = authCodeRepository.findByEmailAndUsageType(form.email(), UsageType.SIGNUP);
+        if (optionalAuthCode.isPresent()) {
+            AuthCode authCode = optionalAuthCode.get();
+            authCode.regenerate();
+            return new CreateAuthCodeEvent(authCode.getAuthCodeId(), authCode.getEmail(), authCode.getValue());
+        }
 
+        AuthCode authCode = authCodeRepository.save(new AuthCode(form.email(), UsageType.SIGNUP));
         return new CreateAuthCodeEvent(authCode.getAuthCodeId(), authCode.getEmail(), authCode.getValue());
     }
 

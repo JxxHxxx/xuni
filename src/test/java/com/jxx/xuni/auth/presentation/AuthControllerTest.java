@@ -1,6 +1,5 @@
 package com.jxx.xuni.auth.presentation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jxx.xuni.auth.application.AuthControllerTestConfig;
 import com.jxx.xuni.auth.application.AuthService;
 import com.jxx.xuni.auth.application.MemberDetails;
@@ -13,7 +12,6 @@ import com.jxx.xuni.auth.dto.response.CreateAuthCodeEvent;
 import com.jxx.xuni.auth.dto.response.VerifyAuthCodeEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
@@ -135,7 +133,7 @@ class AuthControllerTest extends AuthCommon{
     void login_docs() throws Exception {
         LoginForm form = new LoginForm("leesin5498@xuni.com", "0000");
 
-        MemberDetails memberDetails = new SimpleMemberDetails(any(), "leesin54982naver.com", "김유니");
+        MemberDetails memberDetails = new SimpleMemberDetails(any(), "leesin5498@xuni.com", "김유니");
         BDDMockito.given(authService.login(form)).willReturn(memberDetails);
 
         ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.post("/auth/login")

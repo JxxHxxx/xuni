@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.INCORRECT_AUTH_CODE_VALUE;
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.UNAUTHENTICATED;
+import static com.jxx.xuni.member.domain.exception.ExceptionMessage.*;
 
 @Getter
 @Entity
@@ -23,10 +22,9 @@ public class AuthCode {
     private String authCodeId;
     private String email;
     private String value;
+    protected LocalDateTime valueCreatedTime;
     @Enumerated(EnumType.STRING)
     private UsageType usageType;
-    private LocalDateTime createdTime;
-    private LocalDateTime modifiedTime;
     private boolean isAuthenticated;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,11 +33,10 @@ public class AuthCode {
 
     public AuthCode(String email, UsageType usageType) {
         this.authCodeId = UUID.randomUUID().toString();
+        this.valueCreatedTime = LocalDateTime.now();
         this.value = generateValue();
         this.email = email;
         this.usageType = usageType;
-        this.createdTime = LocalDateTime.now();
-        this.modifiedTime = LocalDateTime.now();
         this.isAuthenticated = false;
     }
 
@@ -49,8 +46,14 @@ public class AuthCode {
     }
 
     public void verifyAuthCode(String value) {
+        checkValidTime();
         checkAuthCodeOf(value);
         authenticate();
+    }
+
+    private void checkValidTime() {
+        LocalDateTime nowTime = LocalDateTime.now();
+        if (this.valueCreatedTime.isBefore(nowTime.minusHours(1))) throw new AuthCodeException(VALID_TIME_OUT);
     }
 
     public Member createMember(String email, String password, String name) {
@@ -62,11 +65,20 @@ public class AuthCode {
         this.member = member;
     }
 
+    public void regenerate() {
+        updateValueCreatedTime();
+        this.value = generateValue();
+    }
+
+    private void updateValueCreatedTime() {
+        this.valueCreatedTime = LocalDateTime.now();
+    }
+
     private void checkAuthenticated() {
         if (this.isAuthenticated == false) throw new AuthCodeException(UNAUTHENTICATED);
     }
 
-    protected void authenticate() {
+    private void authenticate() {
         this.isAuthenticated = true;
     }
 
