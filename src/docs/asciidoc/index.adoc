@@ -5,7 +5,7 @@
 :toclevels: 3
 
 == API Documents
-* link:auth.adoc[auth]
+* link:auth.html[auth]
 * link:group.html[group]
 * link:study-product.html[study-product]
 
