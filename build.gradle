@@ -33,11 +33,38 @@ asciidoctor {
     dependsOn test
 }
 
-bootJar {
-    dependsOn asciidoctor // (3)
-    from ("${asciidoctor.outputDir}") { // (4)
-        into 'static/docs'
+task configureBootJar {
+    dependsOn asciidoctor
+    dependsOn test
+
+    doLast {
+        bootJar {
+            from("${asciidoctor.outputDir}") {
+                into 'static/docs'
+            }
+
+            if (project.hasProperty('devProfile')) {
+                configurations.runtimeClasspath.getFiles().each { file ->
+                    from(zipTree(file)) {
+                        includeEmptyDirs = false
+                        include "application-dev.properties"
+                    }
+                }
+            } else {
+                configurations.runtimeClasspath.getFiles().each { file ->
+                    from(zipTree(file)) {
+                        includeEmptyDirs = false
+                        include "application.properties"
+                    }
+                }
+            }
+        }
     }
+}
+
+bootJar {
+    enabled = true
+    dependsOn configureBootJar
 }
 
 jacoco {
