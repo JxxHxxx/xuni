@@ -35,6 +35,7 @@ asciidoctor {
 
 task configureBootJar {
     dependsOn asciidoctor
+    dependsOn test
 
     doLast {
         bootJar {
@@ -62,7 +63,7 @@ task configureBootJar {
 }
 
 bootJar {
-    enabled = false
+    enabled = true
     dependsOn configureBootJar
 }
 
