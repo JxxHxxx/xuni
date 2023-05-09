@@ -32,7 +32,7 @@ pipeline {
                     sh "cat $TEST_PROPERTIES > ./src/test/resources/application.properties"
 
                     sh 'mkdir -p ./src/main/resources'
-                    sh "touch ./src/main/resources/application.properties"
+                    sh "touch ./src/main/resources/application-dev.properties"
                     sh "cat $DEV_PROPERTIES > ./src/main/resources/application-dev.properties"
                 }
             }
