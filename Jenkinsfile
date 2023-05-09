@@ -27,9 +27,11 @@ pipeline {
             steps {
                 echo 'Set Env'
                 dir('/var/lib/jenkins/workspace/xuni_ci_cd') {
+                    sh 'mkdir -p ./src/test/resources'
                     sh 'touch ./src/test/resources/application.properties'
                     sh "echo $TEST_PROPERTIES >> ./src/test/resources/application.properties"
 
+                    sh 'mkdir -p ./src/main/resources'
                     sh 'touch ./src/main/resources/application-dev.properties'
                     sh "echo $DEV_PROPERTIES >> ./src/main/resources/application-dev.properties"
                 }
