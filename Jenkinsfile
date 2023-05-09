@@ -24,7 +24,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Build'
-                dir('/var/lib/jenkins/workspace/practice') {
+                dir('/var/lib/jenkins/workspace/xuni_ci_cd') {
                     sh 'gradle build'
                 }
             }
@@ -33,7 +33,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'EC2-ACCESS', keyFileVariable: 'PEM_KEY')]) {
-                    dir('/var/lib/jenkins/workspace/practice/build/libs') {
+                    dir('/var/lib/jenkins/workspace/xuni_ci_cd/build/libs') {
                         sh "scp -o StrictHostKeyChecking=no -i $PEM_KEY xuni-0.0.1-SNAPSHOT.jar ubuntu@$API_REMOTE_SERVER_IP:/home/ubuntu"
                         sh "ssh -o StrictHostKeyChecking=no -i $PEM_KEY ubuntu@$API_REMOTE_SERVER_IP pkill -f xuni-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &"
                         sh "ssh -o StrictHostKeyChecking=no -i $PEM_KEY ubuntu@$API_REMOTE_SERVER_IP java -jar /home/ubuntu/xuni-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &"
