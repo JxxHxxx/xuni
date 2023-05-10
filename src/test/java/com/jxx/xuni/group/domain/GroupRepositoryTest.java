@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
-@Disabled(value = "H2에서 지원하지 않는 함수 이슈")
 class GroupRepositoryTest {
 
     @Autowired
@@ -111,6 +110,7 @@ class GroupRepositoryTest {
         Assertions.assertThat(findGroup.getGroupStatus()).isEqualTo(START);
     }
 
+    @Disabled("h2 미지원 함수")
     @DisplayName("updateGroupStatusToEnd() 메서드는 그룹 상태(GroupStatus)를 END로 변경한다. " +
             "조건 " +
             "1. 그룹 상태는 START 여야한다." +
@@ -133,6 +133,7 @@ class GroupRepositoryTest {
         Assertions.assertThat(findGroup.getGroupStatus()).isEqualTo(expectedStatus);
     }
 
+    @Disabled("h2 미지원 함수")
     @DisplayName("updateGroupStatusToEnd() 메서드 실행 시, " +
             "해당 메서드를 실행하는 시점이 정확히 그룹 스터디 종료일 + 3일이 아니라면 그룹 상태는 기존 상태로 유지된다. ")
     @ParameterizedTest(name = "[{index}]  그룹 종료일 {0} 일 후 메서드를 실행시켰을 때")

@@ -6,6 +6,7 @@ import com.jxx.xuni.auth.dto.request.LoginForm;
 import com.jxx.xuni.auth.dto.request.SignupForm;
 import com.jxx.xuni.auth.dto.response.CreateAuthCodeEvent;
 import com.jxx.xuni.auth.dto.response.VerifyAuthCodeEvent;
+import com.jxx.xuni.group.domain.GroupRepository;
 import com.jxx.xuni.member.domain.*;
 import com.jxx.xuni.support.ServiceCommon;
 import org.junit.jupiter.api.*;
@@ -13,7 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -29,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 @SpringBootTest
-@Disabled(value = "H2에서 지원하지 않는 함수 이슈")
 class AuthServiceTest extends ServiceCommon {
     @Autowired
     AuthService authService;

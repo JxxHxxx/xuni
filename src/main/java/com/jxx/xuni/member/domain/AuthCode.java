@@ -21,6 +21,7 @@ public class AuthCode {
     @Id
     private String authCodeId;
     private String email;
+    @Column(name = "auth_code_value")
     private String value;
     protected LocalDateTime valueCreatedTime;
     @Enumerated(EnumType.STRING)
