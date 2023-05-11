@@ -5,21 +5,35 @@ import com.jxx.xuni.common.exception.NotPermissionException;
 import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
+import com.jxx.xuni.member.domain.PasswordNotMatchedException;
 import com.jxx.xuni.member.domain.exception.AuthCodeException;
 import io.jsonwebtoken.security.SecurityException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({CapacityOutOfBoundException.class, NotAppropriateGroupStatusException.class,
-                       GroupJoinException.class, IllegalArgumentException.class, AuthCodeException.class})
+    @ExceptionHandler({CapacityOutOfBoundException.class, NotAppropriateGroupStatusException.class, GroupJoinException.class,
+            IllegalArgumentException.class, AuthCodeException.class, PasswordNotMatchedException.class})
     public ResponseEntity<ExceptionResponse> groupCreateExceptionsHandler(RuntimeException exception) {
         ExceptionResponse response = ExceptionResponse.of(400, exception.getMessage());
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionResponses> asd(MethodArgumentNotValidException exception) {
+        List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
+        List<String> errorMessages = fieldErrors.stream().map(fe -> fe.getDefaultMessage()).toList();
+
+        ExceptionResponses response = ExceptionResponses.of(400, errorMessages);
         return ResponseEntity.badRequest().body(response);
     }
 
