@@ -1,12 +1,12 @@
 package com.jxx.xuni.group.query;
 
 import com.jxx.xuni.studyproduct.domain.Category;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import java.util.List;
 
@@ -40,6 +40,7 @@ public class GroupQueryImpl implements GroupQuery {
                 )
                 .offset(pageable.getOffset())
                 .limit(QueryPolicy.LIMIT_OF_PAGE)
+                .orderBy(createOrderSpec(condition))
                 .fetch();
 
         long total = queryFactory
@@ -51,6 +52,21 @@ public class GroupQueryImpl implements GroupQuery {
                 .fetchCount();
 
         return new PageImpl(content, pageable, total);
+    }
+
+    private OrderSpecifier createOrderSpec(GroupSearchCondition condition) {
+        Order direction = condition.isAsc() ? Order.ASC : Order.DESC;
+        if (condition.getSortProperty() != null && !condition.getSortProperty().isBlank()) {
+
+            switch (condition.getSortProperty()) {
+                case "start-date":
+                    return new OrderSpecifier(direction, group.period.startDate);
+                case "created-date":
+                    return new OrderSpecifier(direction, group.createdDate);
+            }
+        }
+
+        return new OrderSpecifier(direction, group.period.startDate);
     }
 
     private BooleanExpression categoryEqual(Category category) {

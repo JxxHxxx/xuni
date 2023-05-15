@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class Group {
 
     @Enumerated(value = EnumType.STRING)
     private GroupStatus groupStatus;
+    private LocalDateTime createdDate;
     @Embedded
     private Period period;
     @Embedded
@@ -63,6 +65,7 @@ public class Group {
         this.study = study;
         this.host = host;
         this.version = 0l;
+        this.createdDate = LocalDateTime.now();
 
         this.groupMembers.add(new GroupMember(host.getHostId(), host.getHostName()));
         this.capacity.subtractOneLeftCapacity();
@@ -79,6 +82,7 @@ public class Group {
         this.study = study;
         this.host = host;
         this.groupMembers = groupMembers;
+        this.createdDate = LocalDateTime.now();
 
         addInGroup(new GroupMember(host.getHostId(), host.getHostName()));
     }
