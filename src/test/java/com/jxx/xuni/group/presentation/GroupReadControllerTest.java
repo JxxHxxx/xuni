@@ -4,16 +4,21 @@ import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.domain.*;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
 import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
+import com.jxx.xuni.group.dto.response.PageInfo;
+import com.jxx.xuni.group.query.GroupAllQueryResponse;
+import com.jxx.xuni.group.query.PageConverter;
 import com.jxx.xuni.studyproduct.domain.Category;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
@@ -24,6 +29,7 @@ import java.util.List;
 import static com.jxx.xuni.ApiDocumentUtils.getDocumentRequest;
 import static com.jxx.xuni.ApiDocumentUtils.getDocumentResponse;
 import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -36,6 +42,8 @@ class GroupReadControllerTest extends GroupCommon {
 
     @Autowired
     GroupReadService groupReadService;
+    @Autowired
+    PageConverter pageConverter;
 
     @DisplayName("스터디 그룹 전체 조회 요청 API")
     @Test
@@ -244,5 +252,100 @@ class GroupReadControllerTest extends GroupCommon {
                                 fieldWithPath("response[].study.category").type(JsonFieldType.STRING).description("스터디 카테고리")
                         )
                 ));
+    }
+
+    @DisplayName("스터디 그룹 조건 조회 API")
+    @Test
+    void search_group() throws Exception {
+        GroupAllQueryResponse response1 = new GroupAllQueryResponse(
+                1l,
+                new Capacity(5),
+                GroupStatus.GATHERING,
+                new Host(1l, "xuni-member"),
+                Study.of("UUID", "Real MySQL 8.0 (1권)", Category.MYSQL),
+                Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
+                Period.of(LocalDate.of(2123, 5, 1), LocalDate.of(2123, 12, 31)));
+
+        GroupAllQueryResponse response2 = new GroupAllQueryResponse(
+                1l,
+                new Capacity(5),
+                GroupStatus.GATHERING,
+                new Host(1l, "xuni-member"),
+                Study.of("UUID", "Real MySQL 8.0 (2권)", Category.MYSQL),
+                Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
+                Period.of(LocalDate.of(2123, 6, 1), LocalDate.of(2123, 12, 31)));
+        Pageable pageable = Pageable.ofSize(20);
+
+        List<GroupAllQueryResponse> content = List.of(response1, response2);
+
+        BDDMockito.given(groupReadService.searchGroup(any(), any()))
+                .willReturn(new PageImpl<>(content, pageable, content.size()));
+
+        BDDMockito.given(pageConverter.toPageInfo(any(), anyLong(), anyInt()))
+                .willReturn(PageInfo.of(0, 20, 1, 2, 1, true));
+
+        ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders
+                .get("/v2/groups")
+                .param("category", Category.MYSQL.name())
+                .param("readType", "default")
+                .param("isAsc", "true")
+                .param("sortProperty", "start-date")
+                .param("page", "0")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(SEARCH_GROUP_COND))
+
+                .andDo(MockMvcRestDocumentation.document("group/query/dynamic",
+                        getDocumentRequest(), getDocumentResponse(),
+
+                        queryParameters(
+                                RequestDocumentation.parameterWithName("category").description("스터디 주제"),
+                                RequestDocumentation.parameterWithName("readType").description("조회할 그룹 상태"),
+                                RequestDocumentation.parameterWithName("isAsc").description("오름차순 여부"),
+                                RequestDocumentation.parameterWithName("sortProperty").description("정렬 기준이 되는 속성"),
+                                RequestDocumentation.parameterWithName("page").description("현재 페이지")
+                                ),
+
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+
+                                fieldWithPath("response").type(JsonFieldType.ARRAY).description("조회 데이터"),
+                                fieldWithPath("response[].groupId").type(JsonFieldType.NUMBER).description("그룹 식별자"),
+
+                                fieldWithPath("response[].capacity").type(JsonFieldType.OBJECT).description("조회 데이터"),
+                                fieldWithPath("response[].capacity.totalCapacity").type(JsonFieldType.NUMBER).description("정원"),
+                                fieldWithPath("response[].capacity.leftCapacity").type(JsonFieldType.NUMBER).description("남은 자리"),
+
+                                fieldWithPath("response[].time").type(JsonFieldType.OBJECT).description("그룹 스터디 시간"),
+                                fieldWithPath("response[].time.startTime").type(JsonFieldType.STRING).description("시작 시간"),
+                                fieldWithPath("response[].time.endTime").type(JsonFieldType.STRING).description("종료 시간"),
+
+                                fieldWithPath("response[].period").type(JsonFieldType.OBJECT).description("그룹 스터디 기간"),
+                                fieldWithPath("response[].period.startDate").type(JsonFieldType.STRING).description("시작일"),
+                                fieldWithPath("response[].period.endDate").type(JsonFieldType.STRING).description("종료일"),
+
+                                fieldWithPath("response[].groupStatus").type(JsonFieldType.STRING).description("그룹 상태"),
+
+                                fieldWithPath("response[].host").type(JsonFieldType.OBJECT).description("호스트"),
+                                fieldWithPath("response[].host.hostId").type(JsonFieldType.NUMBER).description("호스트 식별자"),
+                                fieldWithPath("response[].host.hostName").type(JsonFieldType.STRING).description("호스트 이름"),
+
+                                fieldWithPath("response[].study").type(JsonFieldType.OBJECT).description("스터디"),
+                                fieldWithPath("response[].study.id").type(JsonFieldType.STRING).description("스터디 상품 식별자"),
+                                fieldWithPath("response[].study.subject").type(JsonFieldType.STRING).description("스터디 이름"),
+                                fieldWithPath("response[].study.category").type(JsonFieldType.STRING).description("스터디 카테고리"),
+
+                                fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
+                                fieldWithPath("pageInfo.offset").type(JsonFieldType.NUMBER).description("가져와야 할 레코드의 인덱스"),
+                                fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("한 페이지에 표시할 레코드 수"),
+                                fieldWithPath("pageInfo.pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("총 레코드 수"),
+                                fieldWithPath("pageInfo.totalPage").type(JsonFieldType.NUMBER).description("총 페이지 수"),
+                                fieldWithPath("pageInfo.last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부")
+                            )
+                    ));
     }
 }

@@ -16,9 +16,12 @@ public class GroupApiMessage {
     public static final String NOT_LEFT_CAPACITY = "남은 자리가 없습니다.";
     public static final String NOT_ACCESSIBLE_GROUP = "입장 가능한 그룹이 아닙니다.";
     public static final String NOT_EXISTED_GROUP = "존재하지 않는 그룹입니다.";
+
     public static final String GROUP_ALL_READ = "전체 그룹 조회 완료";
     public static final String GROUP_ONE_READ = "그룹 단일 조회 완료";
     public static final String GROUP_CATEGORY_READ = "그룹 카테고리 별 조회 완료";
+    public static final String SEARCH_GROUP_COND = "그룹 조건 조회 완료";
+
     public static final String GROUP_START = "그룹 스터디를 시작합니다.";
     public static final String LEAVE_GROUP = "그룹을 떠납니다.";
     public static final String NOT_EXISTED_GROUP_MEMBER = "해당 사용자는 그룹 멤버가 아닙니다.";
