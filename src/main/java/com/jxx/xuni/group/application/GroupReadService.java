@@ -3,9 +3,13 @@ package com.jxx.xuni.group.application;
 import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
+import com.jxx.xuni.group.query.GroupAllQueryResponse;
 import com.jxx.xuni.group.query.GroupReadRepository;
+import com.jxx.xuni.group.query.GroupSearchCondition;
 import com.jxx.xuni.studyproduct.domain.Category;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,5 +58,10 @@ public class GroupReadService {
                 group.getStudy(),
                 group.getTime(),
                 group.getPeriod())).toList();
+    }
+
+    public Page<GroupAllQueryResponse> searchGroup(GroupSearchCondition condition, Pageable pageable) {
+        condition.nullHandle();
+        return groupReadRepository.searchGroup(condition, pageable);
     }
 }
