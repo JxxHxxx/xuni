@@ -8,12 +8,16 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface GroupReadRepository extends JpaRepository<Group, Long> {
+public interface GroupReadRepository extends JpaRepository<Group, Long>, GroupQuery {
 
     @Query(value = "select g from Group g " +
-            "join fetch g.groupMembers gm")
+            "join fetch g.groupMembers gm " +
+            "where g.groupStatus <> 'END'")
     List<Group> readAllWithFetch();
 
-    @Query(value = "select g from Group g join fetch g.groupMembers gm where g.study.category =:category")
+    @Query(value = "select g from Group g " +
+            "join fetch g.groupMembers gm " +
+            "where g.study.category =:category " +
+            "and g.groupStatus <> 'END'")
     List<Group> readByCategoryWithFetch(@Param("category") Category category);
 }

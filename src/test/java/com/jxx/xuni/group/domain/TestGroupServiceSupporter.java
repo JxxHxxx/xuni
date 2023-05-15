@@ -37,6 +37,27 @@ public class TestGroupServiceSupporter {
                 new Host(hostId, "재헌"));
     }
 
+    public static Group receiveEndGroup(Category category) {
+        Group group = receiveSampleGroup(category);
+        group.changeGroupStatusTo(END);
+
+        return group;
+    }
+
+    public static Group receiveGatherCompleteGroup(Category category) {
+        Group group = receiveSampleGroup(category);
+        group.changeGroupStatusTo(GATHER_COMPLETE);
+
+        return group;
+    }
+
+    public static Group receiveStartGroup(Category category) {
+        Group group = receiveSampleGroup(category);
+        group.changeGroupStatusTo(START);
+
+        return group;
+    }
+
     public static SimpleMemberDetails receiveSampleMemberDetails(Long memberId) {
         return new SimpleMemberDetails(memberId, "leesin5498@naver.com", "재헌");
     }
