@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.jxx.xuni.group.domain.GroupStatus.*;
 import static com.jxx.xuni.group.domain.QGroup.group;
+import static com.jxx.xuni.group.domain.QGroupMember.*;
 
 public class GroupQueryImpl implements GroupQuery {
 
@@ -89,5 +90,26 @@ public class GroupQueryImpl implements GroupQuery {
         }
         // 클라이언트가 위 조건과 다른 표현을 사용할 경우 아래 조건이 적용된다.
         return group.groupStatus.in(GATHERING, GATHER_COMPLETE, START);
+    }
+
+    @Override
+    public List<GroupAllQueryResponse> readOwnWithFetch(Long groupMemberId, Boolean isLeft) {
+        return queryFactory
+                .select(new QGroupAllQueryResponse(
+                        group.id.as("groupId"),
+                        group.capacity,
+                        group.groupStatus,
+                        group.host,
+                        group.study,
+                        group.time,
+                        group.period
+                ))
+                .from(group)
+                .leftJoin(group.groupMembers, groupMember)
+                .where(
+                        groupMember.groupMemberId.eq(groupMemberId),
+                        groupMember.isLeft.eq(isLeft)
+                )
+                .fetch();
     }
 }

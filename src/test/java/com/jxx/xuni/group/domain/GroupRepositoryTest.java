@@ -1,8 +1,8 @@
 package com.jxx.xuni.group.domain;
 
-import com.jxx.xuni.member.domain.LoginInfo;
-import com.jxx.xuni.member.domain.Member;
-import com.jxx.xuni.member.domain.MemberRepository;
+import com.jxx.xuni.auth.domain.LoginInfo;
+import com.jxx.xuni.auth.domain.Member;
+import com.jxx.xuni.auth.domain.MemberRepository;
 import com.jxx.xuni.studyproduct.domain.Category;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;

@@ -1,6 +1,7 @@
-package com.jxx.xuni.member.domain;
+package com.jxx.xuni.auth.domain;
 
-import com.jxx.xuni.member.domain.exception.AuthCodeException;
+import com.jxx.xuni.auth.domain.exception.AuthCodeException;
+import com.jxx.xuni.auth.domain.exception.ExceptionMessage;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,8 +10,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.*;
 
 @Getter
 @Entity
@@ -54,7 +53,7 @@ public class AuthCode {
 
     private void checkValidTime() {
         LocalDateTime nowTime = LocalDateTime.now();
-        if (this.valueCreatedTime.isBefore(nowTime.minusHours(1))) throw new AuthCodeException(VALID_TIME_OUT);
+        if (this.valueCreatedTime.isBefore(nowTime.minusHours(1))) throw new AuthCodeException(ExceptionMessage.VALID_TIME_OUT);
     }
 
     public Member createMember(String email, String password, String name) {
@@ -76,7 +75,7 @@ public class AuthCode {
     }
 
     private void checkAuthenticated() {
-        if (this.isAuthenticated == false) throw new AuthCodeException(UNAUTHENTICATED);
+        if (this.isAuthenticated == false) throw new AuthCodeException(ExceptionMessage.UNAUTHENTICATED);
     }
 
     private void authenticate() {
@@ -84,6 +83,6 @@ public class AuthCode {
     }
 
     private void checkAuthCodeOf(String value) {
-        if (!this.value.equals(value)) throw new AuthCodeException(INCORRECT_AUTH_CODE_VALUE);
+        if (!this.value.equals(value)) throw new AuthCodeException(ExceptionMessage.INCORRECT_AUTH_CODE_VALUE);
     }
 }

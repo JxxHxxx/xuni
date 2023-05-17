@@ -8,8 +8,8 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static com.jxx.xuni.group.domain.GroupStatus.*;
-import static com.jxx.xuni.member.domain.Authority.ADMIN;
-import static com.jxx.xuni.member.domain.Authority.USER;
+import static com.jxx.xuni.auth.domain.Authority.ADMIN;
+import static com.jxx.xuni.auth.domain.Authority.USER;
 
 public class TestGroupServiceSupporter {
 

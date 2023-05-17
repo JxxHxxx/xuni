@@ -1,5 +1,8 @@
-package com.jxx.xuni.member.domain;
+package com.jxx.xuni.auth.domain;
 
+import com.jxx.xuni.auth.domain.LoginInfo;
+import com.jxx.xuni.auth.domain.Member;
+import com.jxx.xuni.auth.domain.PasswordNotMatchedException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,7 +11,7 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static com.jxx.xuni.member.domain.Authority.*;
+import static com.jxx.xuni.auth.domain.Authority.*;
 
 
 class MemberTest {
