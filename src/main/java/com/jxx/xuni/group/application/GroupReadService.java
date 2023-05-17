@@ -64,4 +64,8 @@ public class GroupReadService {
         condition.nullHandle();
         return groupReadRepository.searchGroup(condition, pageable);
     }
+
+    public List<GroupAllQueryResponse> readOwn(Long groupMemberId, Boolean isLeft) {
+        return groupReadRepository.readOwnWithFetch(groupMemberId, isLeft);
+    }
 }

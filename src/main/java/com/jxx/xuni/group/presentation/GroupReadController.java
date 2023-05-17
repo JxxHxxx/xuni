@@ -56,4 +56,11 @@ public class GroupReadController {
 
         return ResponseEntity.ok(new GroupPageApiResult(SEARCH_GROUP_COND, response, pageInfo));
     }
+
+    @GetMapping("/members/{member-id}/groups")
+    public ResponseEntity<GroupApiReadResult> readOwn(@PathVariable("member-id") Long groupMemberId,
+                                                      @RequestParam("left") Boolean isLeft) {
+        List<GroupAllQueryResponse> response = groupReadService.readOwn(groupMemberId, isLeft);
+        return ResponseEntity.ok(new GroupApiReadResult("자신의 일정 읽기", response));
+    }
 }

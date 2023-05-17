@@ -1,9 +1,9 @@
 package com.jxx.xuni.auth.application;
 
+import com.jxx.xuni.auth.domain.*;
 import com.jxx.xuni.auth.dto.request.*;
 import com.jxx.xuni.auth.dto.response.CreateAuthCodeEvent;
 import com.jxx.xuni.auth.dto.response.VerifyAuthCodeEvent;
-import com.jxx.xuni.member.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +12,8 @@ import java.util.Optional;
 
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.EXISTED_EMAIL;
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.ALREADY_EXIST_EMAIL;
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.NOT_EXIST_AUTH_CODE;
+import static com.jxx.xuni.auth.domain.exception.ExceptionMessage.ALREADY_EXIST_EMAIL;
+import static com.jxx.xuni.auth.domain.exception.ExceptionMessage.NOT_EXIST_AUTH_CODE;
 
 @Service
 @RequiredArgsConstructor

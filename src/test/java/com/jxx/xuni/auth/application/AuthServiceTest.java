@@ -1,20 +1,18 @@
 package com.jxx.xuni.auth.application;
 
+import com.jxx.xuni.auth.domain.*;
 import com.jxx.xuni.auth.dto.request.AuthCodeForm;
 import com.jxx.xuni.auth.dto.request.EmailForm;
 import com.jxx.xuni.auth.dto.request.LoginForm;
 import com.jxx.xuni.auth.dto.request.SignupForm;
 import com.jxx.xuni.auth.dto.response.CreateAuthCodeEvent;
 import com.jxx.xuni.auth.dto.response.VerifyAuthCodeEvent;
-import com.jxx.xuni.group.domain.GroupRepository;
-import com.jxx.xuni.member.domain.*;
 import com.jxx.xuni.support.ServiceCommon;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -22,8 +20,8 @@ import java.util.List;
 
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.EXISTED_EMAIL;
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.ALREADY_EXIST_EMAIL;
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.NOT_EXIST_AUTH_CODE;
+import static com.jxx.xuni.auth.domain.exception.ExceptionMessage.ALREADY_EXIST_EMAIL;
+import static com.jxx.xuni.auth.domain.exception.ExceptionMessage.NOT_EXIST_AUTH_CODE;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

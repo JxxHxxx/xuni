@@ -1,4 +1,4 @@
-package com.jxx.xuni.member.domain;
+package com.jxx.xuni.auth.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;

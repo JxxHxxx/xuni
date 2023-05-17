@@ -1,6 +1,6 @@
-package com.jxx.xuni.member.domain;
+package com.jxx.xuni.auth.domain;
 
-import com.jxx.xuni.member.domain.exception.AuthCodeException;
+import com.jxx.xuni.auth.domain.exception.AuthCodeException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static com.jxx.xuni.member.domain.exception.ExceptionMessage.*;
+import static com.jxx.xuni.auth.domain.exception.ExceptionMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

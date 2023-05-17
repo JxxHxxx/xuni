@@ -3,7 +3,7 @@ package com.jxx.xuni.auth.presentation;
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.support.JwtTokenManager;
 import com.jxx.xuni.common.exception.NotPermissionException;
-import com.jxx.xuni.member.domain.Authority;
+import com.jxx.xuni.auth.domain.Authority;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -3,7 +3,7 @@ package com.jxx.xuni.auth.support;
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.common.support.ServiceOnly;
-import com.jxx.xuni.member.domain.Authority;
+import com.jxx.xuni.auth.domain.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
-import static com.jxx.xuni.member.domain.Authority.*;
+import static com.jxx.xuni.auth.domain.Authority.*;
 
 @Slf4j
 @ServiceOnly

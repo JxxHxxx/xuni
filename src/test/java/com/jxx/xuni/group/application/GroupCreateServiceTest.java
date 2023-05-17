@@ -2,9 +2,9 @@ package com.jxx.xuni.group.application;
 
 import com.jxx.xuni.group.domain.GroupRepository;
 import com.jxx.xuni.group.dto.request.GroupCreateForm;
-import com.jxx.xuni.member.domain.LoginInfo;
-import com.jxx.xuni.member.domain.Member;
-import com.jxx.xuni.member.domain.MemberRepository;
+import com.jxx.xuni.auth.domain.LoginInfo;
+import com.jxx.xuni.auth.domain.Member;
+import com.jxx.xuni.auth.domain.MemberRepository;
 import com.jxx.xuni.studyproduct.domain.Category;
 import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
