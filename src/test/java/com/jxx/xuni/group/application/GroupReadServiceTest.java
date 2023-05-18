@@ -69,7 +69,8 @@ class GroupReadServiceTest extends ServiceCommon {
     @Test
     void read_one() {
         //when
-        GroupReadOneResponse response = groupReadService.readOne(savedGroupId);
+        Long anyUserId = 1l;
+        GroupReadOneResponse response = groupReadService.readOne(savedGroupId, anyUserId);
         //then
         assertThat(response.getGroupId()).isEqualTo(savedGroupId);
     }

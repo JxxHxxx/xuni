@@ -1,5 +1,7 @@
 package com.jxx.xuni.group.presentation;
 
+import com.jxx.xuni.auth.application.MemberDetails;
+import com.jxx.xuni.auth.presentation.OptionalAuthentication;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.dto.response.*;
 import com.jxx.xuni.group.query.GroupAllQueryResponse;
@@ -36,8 +38,10 @@ public class GroupReadController {
     }
 
     @GetMapping("/groups/{group-id}")
-    public ResponseEntity<GroupApiReadResult> readOne(@PathVariable("group-id") Long groupId) {
-        GroupReadOneResponse response = groupReadService.readOne(groupId);
+    public ResponseEntity<GroupApiReadResult> readOne(@PathVariable("group-id") Long groupId,
+                                                      @OptionalAuthentication MemberDetails memberDetails) {
+
+        GroupReadOneResponse response = groupReadService.readOne(groupId, memberDetails.getUserId());
 
         return ResponseEntity.ok(new GroupApiReadResult(GROUP_ONE_READ, response));
     }

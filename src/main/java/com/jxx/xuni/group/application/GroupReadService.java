@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,8 +34,10 @@ public class GroupReadService {
                 group.getPeriod())).toList();
     }
 
-    public GroupReadOneResponse readOne(Long groupId) {
+    @Transactional
+    public GroupReadOneResponse readOne(Long groupId, Long userId) {
         Group group = groupReadRepository.findById(groupId).get();
+        group.updateGroupMemberLastVisitedTime(userId);
 
         return new GroupReadOneResponse(
                 group.getId(),

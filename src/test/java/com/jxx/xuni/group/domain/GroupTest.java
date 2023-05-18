@@ -13,6 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -142,7 +143,7 @@ class GroupTest {
     @Test
     void close_recruitment_of_group_fail_cause_is_not_host() {
         Group group = makeTestGroup(2);
-        
+
         assertThatThrownBy(() -> group.closeRecruitment(2l))
                 .isInstanceOf(NotPermissionException.class)
                 .hasMessage(NOT_PERMISSION);
@@ -401,5 +402,48 @@ class GroupTest {
         assertThatThrownBy(() -> group.verifyCheckRule(chapterId, groupMemberId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(BAD_REQUEST);
+    }
+
+    @DisplayName("그룹 멤버가 updateGroupMemberLastVisitedTime를 호출할 경우 " +
+            "해당 groupMember의 LastVisitedTime 이 업데이트 된다." +
+            "그 결과 afterLastVisitedTime는 beforeLastVisitedTime보다 이후 시간을 가진다.")
+    @Test
+    void update_group_member_last_visited_time_case_myself() throws InterruptedException {
+        //given
+        Long groupMemberId = 1l;
+
+        Group group = TestGroupServiceSupporter.receiveSampleGroup(groupMemberId);
+        GroupMember groupMember = group.getGroupMembers().get(0);
+        LocalDateTime beforeLastVisitedTime = groupMember.getLastVisitedTime();
+        //when
+        Thread.sleep(100);
+        group.updateGroupMemberLastVisitedTime(groupMemberId);
+        //then
+        GroupMember updateGroupMember = group.getGroupMembers().get(0);
+        LocalDateTime afterLastVisitedTime = updateGroupMember.getLastVisitedTime();
+
+        assertThat(afterLastVisitedTime).isAfter(beforeLastVisitedTime);
+    }
+
+    @DisplayName("그룹 멤버가 아닌 사용자가 updateGroupMemberLastVisitedTime를 호출할 경우 " +
+            "해당 groupMember의 LastVisitedTime은 업데이트 되지 않고 유지된다. " +
+            "그 결과 afterLastVisitedTime 와 beforeLastVisitedTime는 동일하다.")
+    @Test
+    void update_group_member_last_visited_time_case_not_myself() throws InterruptedException {
+        //given
+        Long groupMemberId = 1l;
+        Long notGroupMemberId = 100l;
+
+        Group group = TestGroupServiceSupporter.receiveSampleGroup(groupMemberId);
+        GroupMember groupMember = group.getGroupMembers().get(0);
+        LocalDateTime beforeLastVisitedTime = groupMember.getLastVisitedTime();
+        //when
+        Thread.sleep(100);
+        group.updateGroupMemberLastVisitedTime(notGroupMemberId);
+        //then
+        GroupMember updateGroupMember = group.getGroupMembers().get(0);
+        LocalDateTime afterLastVisitedTime = updateGroupMember.getLastVisitedTime();
+
+        assertThat(afterLastVisitedTime).isEqualTo(beforeLastVisitedTime);
     }
 }
