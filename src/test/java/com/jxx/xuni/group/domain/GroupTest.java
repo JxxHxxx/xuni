@@ -446,4 +446,19 @@ class GroupTest {
 
         assertThat(afterLastVisitedTime).isEqualTo(beforeLastVisitedTime);
     }
+
+    @DisplayName("그룹 멤버가 스터디체크 조회 시, 그룹 멤버 자신의 스터디체크가 조회된다.")
+    @Test
+    void receive_study_checks_case_group_member() {
+        //given
+        Group group = TestGroupServiceSupporter.startedGroupSample(1l, 5);
+        //when
+        group.verifyCheckRule(1l, 1l);
+        List<StudyCheck> myStudyChecks = group.receiveStudyChecks(1l);
+
+        List<StudyCheck> otherMemberStudyChecks = group.receiveStudyChecks(2l);
+        //then
+        assertThat(myStudyChecks).extracting("isDone").containsExactly(true, false, false);
+        assertThat(otherMemberStudyChecks).extracting("isDone").containsExactly(false, false, false);
+    }
 }

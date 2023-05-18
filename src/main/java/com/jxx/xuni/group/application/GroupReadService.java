@@ -1,8 +1,10 @@
 package com.jxx.xuni.group.application;
 
 import com.jxx.xuni.group.domain.Group;
+import com.jxx.xuni.group.domain.StudyCheck;
 import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
+import com.jxx.xuni.group.dto.response.GroupStudyCheckResponse;
 import com.jxx.xuni.group.query.GroupAllQueryResponse;
 import com.jxx.xuni.group.query.GroupReadRepository;
 import com.jxx.xuni.group.query.GroupSearchCondition;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.BAD_REQUEST;
 
 @Service
 @RequiredArgsConstructor
@@ -70,5 +74,16 @@ public class GroupReadService {
 
     public List<GroupAllQueryResponse> readOwn(Long groupMemberId, Boolean isLeft) {
         return groupReadRepository.readOwnWithFetch(groupMemberId, isLeft);
+    }
+
+    public List<GroupStudyCheckResponse> readStudyCheck(Long groupId, Long userId) {
+        Group group = groupReadRepository.readStudyCheckWithFetch(groupId, userId)
+                .orElseThrow(() -> new IllegalArgumentException(BAD_REQUEST));
+        List<StudyCheck> studyChecks = group.receiveStudyChecks(userId);
+
+        return studyChecks.stream().map(s -> new GroupStudyCheckResponse(
+                s.getChapterId(),
+                s.getTitle(),
+                s.isDone())).toList();
     }
 }

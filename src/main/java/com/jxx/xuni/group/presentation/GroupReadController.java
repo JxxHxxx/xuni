@@ -1,6 +1,7 @@
 package com.jxx.xuni.group.presentation;
 
 import com.jxx.xuni.auth.application.MemberDetails;
+import com.jxx.xuni.auth.presentation.AuthenticatedMember;
 import com.jxx.xuni.auth.presentation.OptionalAuthentication;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.dto.response.*;
@@ -61,6 +62,23 @@ public class GroupReadController {
         return ResponseEntity.ok(new GroupPageApiResult(SEARCH_GROUP_COND, response, pageInfo));
     }
 
+    @GetMapping("/groups/{group-id}/chapters")
+    public ResponseEntity<GroupApiReadResult> readChapter(@PathVariable("group-id") Long groupId,
+                                                          @AuthenticatedMember MemberDetails memberDetails) {
+        List<GroupStudyCheckResponse> response = groupReadService.readStudyCheck(groupId, memberDetails.getUserId());
+
+        return ResponseEntity.ok(new GroupApiReadResult(STUDY_CHECK_OF_GROUP_MEMBER, response));
+    }
+
+    /** TODO : 아래 조건 만족해야 한다.
+     * 기본 정렬
+     * 	1. 그룹에 마지막으로 방문한 시간(last_visited_time) - 내림차순(DESC)
+     * 	2. 그룹 상태 - 상관 無
+     * 	3. 그룹 떠남(isLeft) 상태 - X
+     *
+     *  조건
+     * 	1. 그룹 상태 시작 전(GATHERING, GATHER_COMPLETE) , 시작(START) , 종료(END). 모두(ALL) 를 구분해서 볼 수 있어야함
+     */
     @GetMapping("/members/{member-id}/groups")
     public ResponseEntity<GroupApiReadResult> readOwn(@PathVariable("member-id") Long groupMemberId,
                                                       @RequestParam("left") Boolean isLeft) {
