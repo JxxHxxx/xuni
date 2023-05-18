@@ -207,7 +207,7 @@ class GroupReadControllerTest extends GroupCommon {
         BDDMockito.given(groupReadService.readByCategory(Category.MYSQL)).willReturn(List.of(response1, response2));
 
         ResultActions result = mockMvc.perform(
-                RestDocumentationRequestBuilders.get("/groups/cond")
+                RestDocumentationRequestBuilders.get("/groups/cd-sp")
                         .param("category", Category.MYSQL.name())
                         .contentType(MediaType.APPLICATION_JSON));
         result
@@ -285,7 +285,7 @@ class GroupReadControllerTest extends GroupCommon {
                 .willReturn(PageInfo.of(0, 20, 1, 2, 1, true));
 
         ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders
-                .get("/v2/groups")
+                .get("/groups/cd-cp")
                 .param("category", Category.MYSQL.name())
                 .param("readType", "default")
                 .param("isAsc", "true")

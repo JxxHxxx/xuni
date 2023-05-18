@@ -42,14 +42,14 @@ public class GroupReadController {
         return ResponseEntity.ok(new GroupApiReadResult(GROUP_ONE_READ, response));
     }
 
-    @GetMapping("/groups/cond")
+    @GetMapping("/groups/cd-sp")
     public ResponseEntity<GroupApiReadResult> readCond(@RequestParam("category") Category category) {
         List<GroupReadAllResponse> response = groupReadService.readByCategory(category);
         return ResponseEntity.ok(new GroupApiReadResult(GROUP_CATEGORY_READ, response));
     }
 
-    @GetMapping("/v2/groups")
-    public ResponseEntity<GroupPageApiResult> readCondV2(GroupSearchCondition condition, Pageable pageable) {
+    @GetMapping("/groups/cd-cp")
+    public ResponseEntity<GroupPageApiResult> searchCond(GroupSearchCondition condition, Pageable pageable) {
         Page<GroupAllQueryResponse> page = groupReadService.searchGroup(condition, pageable);
         List<GroupAllQueryResponse> response = page.getContent();
         PageInfo pageInfo = pageConverter.toPageInfo(page.getPageable(), page.getTotalElements(), page.getTotalPages());
