@@ -1,9 +1,13 @@
 package com.jxx.xuni.group.presentation;
 
+import com.jxx.xuni.auth.application.SimpleMemberDetails;
+import com.jxx.xuni.auth.support.JwtTokenManager;
+import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.domain.*;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
 import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
+import com.jxx.xuni.group.dto.response.GroupStudyCheckResponse;
 import com.jxx.xuni.group.dto.response.PageInfo;
 import com.jxx.xuni.group.query.GroupAllQueryResponse;
 import com.jxx.xuni.group.query.PageConverter;
@@ -15,11 +19,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.headers.HeaderDocumentation;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.RequestDocumentation;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -40,6 +48,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(GroupControllerTestConfig.class)
 class GroupReadControllerTest extends GroupCommon {
 
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
     @Autowired
     GroupReadService groupReadService;
     @Autowired
@@ -348,5 +358,48 @@ class GroupReadControllerTest extends GroupCommon {
                                 fieldWithPath("pageInfo.last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부")
                             )
                     ));
+    }
+
+    @DisplayName("그룹 스터디 체크 조회 API")
+    @Test
+    void read_chapter() throws Exception {
+        SimpleMemberDetails memberDetails = TestGroupServiceSupporter.UserMemberDetails(1l);
+
+        GroupStudyCheckResponse response1 = new GroupStudyCheckResponse(1l, "인터페이스", true);
+        GroupStudyCheckResponse response2 = new GroupStudyCheckResponse(2l, "객체 지향 설계", false);
+
+        BDDMockito.given(groupReadService.readStudyCheck(any(), any())).willReturn(List.of(response1, response2));
+
+        ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.get("/groups/{group-id}/chapters", 1l)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", jwtTokenProvider.issue(memberDetails)));
+
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(STUDY_CHECK_OF_GROUP_MEMBER))
+                .andDo(
+                        MockMvcRestDocumentation.document("group/query/studyCheck",
+                                getDocumentRequest(), getDocumentResponse(),
+
+                                HeaderDocumentation.requestHeaders(
+                                        HeaderDocumentation.headerWithName("Authorization").description("인증 토큰")
+                                ),
+
+                                RequestDocumentation.pathParameters(
+                                        RequestDocumentation.parameterWithName("group-id").description("그룹 식별자")
+                                ),
+
+                                PayloadDocumentation.responseFields(
+                                        fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+
+                                        fieldWithPath("response").type(JsonFieldType.ARRAY).description("조회 데이터"),
+                                        fieldWithPath("response[].chapterId").type(JsonFieldType.NUMBER).description("챕터 식별자"),
+                                        fieldWithPath("response[].title").type(JsonFieldType.STRING).description("챕터 제목"),
+                                        fieldWithPath("response[].done").type(JsonFieldType.BOOLEAN).description("수행 여부")
+                                )
+                        )
+                );
+
     }
 }
