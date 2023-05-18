@@ -14,7 +14,6 @@ import static com.jxx.xuni.common.exception.CommonExceptionMessage.REQUIRED_LOGI
 public class JwtAuthInterceptor implements HandlerInterceptor {
 
     private final JwtTokenManager jwtTokenManager;
-    private static final List<String> PRIVATE_ACCESS_URI_PREFIX = List.of("/members");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -28,18 +27,11 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
     }
 
     private boolean notRequiredAuthentication(HttpServletRequest request) {
-        return isGetMethod(request) && isPublicURIPrefix(request);
+        return isGetMethod(request);
     }
 
     private boolean isGetMethod(HttpServletRequest request) {
         return "GET".equals(request.getMethod());
-    }
-
-    private boolean isPublicURIPrefix(HttpServletRequest request) {
-        for (String domain : PRIVATE_ACCESS_URI_PREFIX) {
-            if (request.getRequestURI().startsWith(domain)) return false;
-        }
-        return true;
     }
 
     private String extractAuthorizationHeader(HttpServletRequest request) {
