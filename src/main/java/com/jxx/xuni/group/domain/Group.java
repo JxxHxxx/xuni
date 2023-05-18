@@ -124,6 +124,8 @@ public class Group {
         changeGroupStatusTo(START);
     }
 
+    // TODO : 메서드 명 좋지 못한 듯 Refactoring 고려해야 한다.
+
     public void verifyCheckRule(Long chapterId, Long groupMemberId) {
         checkGroupState(START);
         StudyCheck studyCheck = validateAbleToCheckStudyCheck(chapterId, groupMemberId);
@@ -135,6 +137,10 @@ public class Group {
         if (isGroupMember(requestMember)) {
             requestMember.get().updateLastVisitedTime();
         }
+    }
+
+    public List<StudyCheck> receiveStudyChecks(Long userId) {
+        return this.studyChecks.stream().filter(s -> s.isSameMember(userId)).toList();
     }
 
     private Optional<GroupMember> getRequestMember(Long userId) {

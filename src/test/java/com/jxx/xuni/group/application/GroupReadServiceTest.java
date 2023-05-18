@@ -6,20 +6,20 @@ import com.jxx.xuni.group.domain.GroupStatus;
 import com.jxx.xuni.group.domain.TestGroupServiceSupporter;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
 import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
+import com.jxx.xuni.group.dto.response.GroupStudyCheckResponse;
 import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.BAD_REQUEST;
 import static com.jxx.xuni.group.domain.GroupStatus.*;
 import static com.jxx.xuni.studyproduct.domain.Category.*;
 import static com.jxx.xuni.studyproduct.domain.Category.SPRING_FRAMEWORK;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ServiceTest
 class GroupReadServiceTest extends ServiceCommon {
@@ -88,5 +88,20 @@ class GroupReadServiceTest extends ServiceCommon {
         //then
         int totalGroupSize = 2;
         assertThat(responses.size()).isEqualTo(totalGroupSize);
+    }
+
+    @DisplayName("그룹 스터디 체크 조회 성공" +
+            "1. chapterId 기준으로 정렬된 상태로 나와야 한다.")
+    @Test
+    void read_study_check() {
+        //given
+        Group startGroup = TestGroupServiceSupporter.startedGroupSample(1l,5);
+        Group group = groupRepository.save(startGroup);
+        Long groupId = group.getId();
+        //when
+        List<GroupStudyCheckResponse> response = groupReadService.readStudyCheck(groupId, 1l);
+        //then
+        assertThat(response.get(0).getChapterId()).isLessThan(response.get(1).getChapterId());
+        assertThat(response.get(1).getChapterId()).isLessThan(response.get(2).getChapterId());
     }
 }

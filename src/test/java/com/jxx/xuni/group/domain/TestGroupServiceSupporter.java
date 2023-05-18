@@ -11,6 +11,8 @@ import static com.jxx.xuni.group.domain.GroupStatus.*;
 import static com.jxx.xuni.auth.domain.Authority.ADMIN;
 import static com.jxx.xuni.auth.domain.Authority.USER;
 
+// TODO : 원활한 테스트를 위해 꼭 필요한 클래스인 만큼 필요한 케이스 별로 잘 정리해서 작성하자. Refactoring 필요
+
 public class TestGroupServiceSupporter {
 
     public static Group receiveSampleGroup(Long hostId) {
@@ -82,6 +84,7 @@ public class TestGroupServiceSupporter {
                 Study.of("UUID", "자바의 정석", Category.JAVA),
                 new Host(hostId, "재헌"));
 
+        group.join(new GroupMember(2l, "지니"));
         group.changeGroupStatusTo(GATHER_COMPLETE);
         group.start(hostId, studyCheckForms);
         return group;

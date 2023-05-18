@@ -103,6 +103,19 @@ include::{snippets}/group/query/dynamic/query-parameters.adoc[]
 
 === HTTP response body
 include::{snippets}/group/query/dynamic/response-body.adoc[]
-== response body description
+=== response body description
 include::{snippets}/group/query/dynamic/response-fields.adoc[]
 
+== 그룹 체크 리스트 조회
+
+=== HTTP request
+include::{snippets}/group/query/studyCheck/http-request.adoc[]
+==== request header
+include::{snippets}/group/query/studyCheck/request-headers.adoc[]
+==== path parameter
+include::{snippets}/group/query/studyCheck/path-parameters.adoc[]
+
+=== HTTP response body
+include::{snippets}/group/query/studyCheck/response-body.adoc[]
+=== response body description
+include::{snippets}/group/query/studyCheck/response-fields.adoc[]
