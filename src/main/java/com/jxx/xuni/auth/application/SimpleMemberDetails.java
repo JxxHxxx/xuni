@@ -12,6 +12,10 @@ public class SimpleMemberDetails implements MemberDetails {
     private String name;
     private Authority authority;
 
+    public static final SimpleMemberDetails GUEST() {
+        return new SimpleMemberDetails(Long.MAX_VALUE, null, "guest");
+    }
+
     public SimpleMemberDetails(Long userId, String email, String name) {
         this.userId = userId;
         this.email = email;

@@ -1,29 +1,24 @@
 package com.jxx.xuni.auth.presentation;
 
 import com.jxx.xuni.auth.application.MemberDetails;
-import com.jxx.xuni.auth.config.UnauthenticatedException;
+import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.auth.support.JwtTokenManager;
-import io.jsonwebtoken.security.SecurityException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import static com.jxx.xuni.common.exception.CommonExceptionMessage.REQUIRED_LOGIN;
-
-@Slf4j
 @RequiredArgsConstructor
-public class AuthenticatedMemberArgumentResolver implements HandlerMethodArgumentResolver {
+public class OptionalAuthenticationArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final JwtTokenManager jwtTokenManager;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        boolean hasLoginMemberAnnotation = parameter.hasParameterAnnotation(AuthenticatedMember.class);
+        boolean hasLoginMemberAnnotation = parameter.hasParameterAnnotation(OptionalAuthentication.class);
         boolean hasMemberDetailsType = MemberDetails.class.isAssignableFrom(parameter.getParameterType());
 
         return hasLoginMemberAnnotation && hasMemberDetailsType;
@@ -35,13 +30,9 @@ public class AuthenticatedMemberArgumentResolver implements HandlerMethodArgumen
 
         try {
             String token = request.getHeader("Authorization");
-            String extractedToken = token.substring(7);
-
-            return jwtTokenManager.getMemberDetails(extractedToken);
+            return jwtTokenManager.getMemberDetails(token.substring(7));
         } catch (NullPointerException exception) {
-            throw new UnauthenticatedException(REQUIRED_LOGIN);
-        } catch (StringIndexOutOfBoundsException exception) {
-            throw new UnauthenticatedException(REQUIRED_LOGIN);
+            return SimpleMemberDetails.GUEST();
         }
     }
 }

@@ -130,6 +130,23 @@ public class Group {
         studyCheck.check();
     }
 
+    public void updateGroupMemberLastVisitedTime(Long userId) {
+        Optional<GroupMember> requestMember = getRequestMember(userId);
+        if (isGroupMember(requestMember)) {
+            requestMember.get().updateLastVisitedTime();
+        }
+    }
+
+    private Optional<GroupMember> getRequestMember(Long userId) {
+        return this.groupMembers.stream()
+                .filter(g -> g.isSameMemberId(userId))
+                .filter(g -> g.hasNotLeft()).findFirst();
+    }
+
+    private boolean isGroupMember(Optional<GroupMember> requestMember) {
+        return requestMember.isPresent();
+    }
+
     private StudyCheck validateAbleToCheckStudyCheck(Long chapterId, Long groupMemberId) {
         return studyChecks.stream()
                 .filter(s -> s.isSameChapter(chapterId))

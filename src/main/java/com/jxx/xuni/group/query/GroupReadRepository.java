@@ -20,10 +20,4 @@ public interface GroupReadRepository extends JpaRepository<Group, Long>, GroupQu
             "where g.study.category =:category " +
             "and g.groupStatus <> 'END'")
     List<Group> readByCategoryWithFetch(@Param("category") Category category);
-
-
-//    @Query(value = "select g from Group g " +
-//            "join fetch g.groupMembers gm " +
-//            "where gm.groupMemberId =:groupMemberId and gm.isLeft = false")
-//    List<Group> readOwnWithFetch(@Param("groupMemberId") Long groupMemberId);
 }
