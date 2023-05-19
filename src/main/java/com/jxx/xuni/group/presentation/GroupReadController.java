@@ -70,19 +70,10 @@ public class GroupReadController {
         return ResponseEntity.ok(new GroupApiReadResult(STUDY_CHECK_OF_GROUP_MEMBER, response));
     }
 
-    /** TODO : 아래 조건 만족해야 한다.
-     * 기본 정렬
-     * 	1. 그룹에 마지막으로 방문한 시간(last_visited_time) - 내림차순(DESC)
-     * 	2. 그룹 상태 - 상관 無
-     * 	3. 그룹 떠남(isLeft) 상태 - X
-     *
-     *  조건
-     * 	1. 그룹 상태 시작 전(GATHERING, GATHER_COMPLETE) , 시작(START) , 종료(END). 모두(ALL) 를 구분해서 볼 수 있어야함
-     */
     @GetMapping("/members/{member-id}/groups")
-    public ResponseEntity<GroupApiReadResult> readOwn(@PathVariable("member-id") Long groupMemberId,
-                                                      @RequestParam("left") Boolean isLeft) {
-        List<GroupAllQueryResponse> response = groupReadService.readOwn(groupMemberId, isLeft);
+    public ResponseEntity<GroupApiReadResult> readOwnBySelf(@PathVariable("member-id") Long groupMemberId,
+                                                            @AuthenticatedMember MemberDetails md) {
+        List<GroupAllQueryResponse> response = groupReadService.readOwn(groupMemberId);
         return ResponseEntity.ok(new GroupApiReadResult("자신의 일정 읽기", response));
     }
 }
