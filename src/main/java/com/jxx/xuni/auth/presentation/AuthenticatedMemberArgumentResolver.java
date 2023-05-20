@@ -32,7 +32,6 @@ public class AuthenticatedMemberArgumentResolver implements HandlerMethodArgumen
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-
         try {
             String token = request.getHeader("Authorization");
             String extractedToken = token.substring(7);

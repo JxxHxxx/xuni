@@ -40,7 +40,7 @@ public class GroupReadService {
 
     @Transactional
     public GroupReadOneResponse readOne(Long groupId, Long userId) {
-        Group group = groupReadRepository.findById(groupId).get();
+        Group group = groupReadRepository.readOneWithFetch(groupId).get();
         group.updateGroupMemberLastVisitedTime(userId);
 
         return new GroupReadOneResponse(

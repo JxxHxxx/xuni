@@ -1,12 +1,11 @@
 package com.jxx.xuni.group.domain;
 
-import com.jxx.xuni.common.exception.NotPermissionException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static com.jxx.xuni.group.dto.response.GroupApiMessage.NOT_PERMISSION;
+import java.util.Objects;
 
 @Getter
 @Embeddable
@@ -26,5 +25,18 @@ public class Host {
 
     protected boolean isHost(Long memberId) {
         return this.hostId.equals(memberId);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Host host = (Host) o;
+        return Objects.equals(hostId, host.hostId) && Objects.equals(hostName, host.hostName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hostId, hostName);
     }
 }
