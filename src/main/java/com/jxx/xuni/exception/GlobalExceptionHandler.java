@@ -38,9 +38,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler({UnauthenticatedException.class, MalformedJwtException.class})
+    @ExceptionHandler(UnauthenticatedException.class)
     public ResponseEntity<ExceptionResponse> unAuthenticatedExceptionHandler(RuntimeException exception) {
         ExceptionResponse response = ExceptionResponse.of(401, exception.getMessage());
+        return new ResponseEntity<>(response, UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    public ResponseEntity<ExceptionResponse> malformedJwtExceptionHandler() {
+        ExceptionResponse response = ExceptionResponse.of(401, "비정상적인 요청입니다.");
         return new ResponseEntity<>(response, UNAUTHORIZED);
     }
 
