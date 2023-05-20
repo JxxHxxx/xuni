@@ -23,6 +23,7 @@ public class GroupApiMessage {
     public static final String SEARCH_GROUP_COND = "그룹 조건 조회 완료";
 
     public static final String STUDY_CHECK_OF_GROUP_MEMBER = "그룹 멤버 스터디 투두 리스트 조회 완료";
+    public static final String GROUP_OWN_READ = "자신의 일정 읽기 완료";
 
     public static final String GROUP_START = "그룹 스터디를 시작합니다.";
     public static final String LEAVE_GROUP = "그룹을 떠납니다.";

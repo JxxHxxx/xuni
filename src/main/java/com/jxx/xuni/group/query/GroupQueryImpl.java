@@ -41,7 +41,7 @@ public class GroupQueryImpl implements GroupQuery {
                 )
                 .offset(pageable.getOffset())
                 .limit(QueryPolicy.LIMIT_OF_PAGE)
-                .orderBy(createOrderSpec(condition))
+                .orderBy(searchGroupOrderSpec(condition))
                 .fetch();
 
         long total = queryFactory
@@ -55,7 +55,7 @@ public class GroupQueryImpl implements GroupQuery {
         return new PageImpl(content, pageable, total);
     }
 
-    private OrderSpecifier createOrderSpec(GroupSearchCondition condition) {
+    private OrderSpecifier searchGroupOrderSpec(GroupSearchCondition condition) {
         Order direction = condition.isAsc() ? Order.ASC : Order.DESC;
         if (condition.getSortProperty() != null && !condition.getSortProperty().isBlank()) {
 
@@ -93,7 +93,7 @@ public class GroupQueryImpl implements GroupQuery {
     }
 
     @Override
-    public List<GroupAllQueryResponse> readOwnWithFetch(Long groupMemberId, Boolean isLeft) {
+    public List<GroupAllQueryResponse> readOwnWithFetch(Long groupMemberId) {
         return queryFactory
                 .select(new QGroupAllQueryResponse(
                         group.id.as("groupId"),
@@ -108,8 +108,14 @@ public class GroupQueryImpl implements GroupQuery {
                 .leftJoin(group.groupMembers, groupMember)
                 .where(
                         groupMember.groupMemberId.eq(groupMemberId),
-                        groupMember.isLeft.eq(isLeft)
+                        groupMember.isLeft.eq(false)
                 )
+                .orderBy(readOwnOrderSpec())
                 .fetch();
+    }
+
+    private OrderSpecifier readOwnOrderSpec() {
+        Order direction = Order.DESC;
+        return new OrderSpecifier(direction, groupMember.lastVisitedTime);
     }
 }

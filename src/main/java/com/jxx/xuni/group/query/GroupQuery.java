@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface GroupQuery {
     Page<GroupAllQueryResponse> searchGroup(GroupSearchCondition condition, Pageable pageable);
-    List<GroupAllQueryResponse> readOwnWithFetch(Long groupMemberId, Boolean isLeft);
+    List<GroupAllQueryResponse> readOwnWithFetch(Long groupMemberId);
 }
