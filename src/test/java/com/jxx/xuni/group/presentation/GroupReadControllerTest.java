@@ -1,7 +1,6 @@
 package com.jxx.xuni.group.presentation;
 
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
-import com.jxx.xuni.auth.support.JwtTokenManager;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.domain.*;
@@ -25,9 +24,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.RequestDocumentation;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -402,4 +399,83 @@ class GroupReadControllerTest extends GroupCommon {
                 );
 
     }
+
+    @DisplayName("내가 속한 그룹 조회 API")
+    @Test
+    void read_own_by_self() throws Exception {
+        GroupAllQueryResponse response1 = new GroupAllQueryResponse(
+                1l,
+                new Capacity(5),
+                GroupStatus.GATHERING,
+                new Host(1l, "xuni-member"),
+                Study.of("UUID", "Real MySQL 8.0 (1권)", Category.MYSQL),
+                Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
+                Period.of(LocalDate.of(2123, 5, 1), LocalDate.of(2123, 12, 31)));
+
+        GroupAllQueryResponse response2 = new GroupAllQueryResponse(
+                1l,
+                new Capacity(5),
+                GroupStatus.GATHERING,
+                new Host(1l, "xuni-member"),
+                Study.of("UUID", "Real MySQL 8.0 (2권)", Category.MYSQL),
+                Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
+                Period.of(LocalDate.of(2123, 6, 1), LocalDate.of(2123, 12, 31)));
+
+        List<GroupAllQueryResponse> responses = List.of(response1, response2);
+
+        BDDMockito.given(groupReadService.readOwn(any())).willReturn(responses);
+
+        SimpleMemberDetails memberDetails = TestGroupServiceSupporter.receiveSampleMemberDetails(1l);
+
+        ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.get("/members/{member-id}/groups", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", jwtTokenProvider.issue(memberDetails)));
+
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(GROUP_OWN_READ))
+
+                .andDo(MockMvcRestDocumentation.document("group/query/readOwn",
+
+                        RequestDocumentation.pathParameters(
+                                RequestDocumentation.parameterWithName("member-id").description("회원 식별자")
+                        ),
+
+                        HeaderDocumentation.requestHeaders(
+                                HeaderDocumentation.headerWithName("Authorization").description("인증 토큰")
+                        ),
+
+                        PayloadDocumentation.responseFields(
+                                fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+
+                                fieldWithPath("response[].groupId").type(JsonFieldType.NUMBER).description("그룹 식별자"),
+
+                                fieldWithPath("response[].capacity").type(JsonFieldType.OBJECT).description("조회 데이터"),
+                                fieldWithPath("response[].capacity.totalCapacity").type(JsonFieldType.NUMBER).description("정원"),
+                                fieldWithPath("response[].capacity.leftCapacity").type(JsonFieldType.NUMBER).description("남은 자리"),
+
+                                fieldWithPath("response[].time").type(JsonFieldType.OBJECT).description("그룹 스터디 시간"),
+                                fieldWithPath("response[].time.startTime").type(JsonFieldType.STRING).description("시작 시간"),
+                                fieldWithPath("response[].time.endTime").type(JsonFieldType.STRING).description("종료 시간"),
+
+                                fieldWithPath("response[].period").type(JsonFieldType.OBJECT).description("그룹 스터디 기간"),
+                                fieldWithPath("response[].period.startDate").type(JsonFieldType.STRING).description("시작일"),
+                                fieldWithPath("response[].period.endDate").type(JsonFieldType.STRING).description("종료일"),
+
+                                fieldWithPath("response[].groupStatus").type(JsonFieldType.STRING).description("그룹 상태"),
+
+                                fieldWithPath("response[].host").type(JsonFieldType.OBJECT).description("호스트"),
+                                fieldWithPath("response[].host.hostId").type(JsonFieldType.NUMBER).description("호스트 식별자"),
+                                fieldWithPath("response[].host.hostName").type(JsonFieldType.STRING).description("호스트 이름"),
+
+                                fieldWithPath("response[].study").type(JsonFieldType.OBJECT).description("스터디"),
+                                fieldWithPath("response[].study.id").type(JsonFieldType.STRING).description("스터디 상품 식별자"),
+                                fieldWithPath("response[].study.subject").type(JsonFieldType.STRING).description("스터디 이름"),
+                                fieldWithPath("response[].study.category").type(JsonFieldType.STRING).description("스터디 카테고리")
+
+                        )
+                ));
+    }
+
 }

@@ -74,6 +74,6 @@ public class GroupReadController {
     public ResponseEntity<GroupApiReadResult> readOwnBySelf(@PathVariable("member-id") Long groupMemberId,
                                                             @AuthenticatedMember MemberDetails md) {
         List<GroupAllQueryResponse> response = groupReadService.readOwn(groupMemberId);
-        return ResponseEntity.ok(new GroupApiReadResult("자신의 일정 읽기", response));
+        return ResponseEntity.ok(new GroupApiReadResult(GROUP_OWN_READ, response));
     }
 }
