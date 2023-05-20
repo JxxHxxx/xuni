@@ -3,6 +3,7 @@ package com.jxx.xuni.group.query;
 import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.studyproduct.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -18,13 +19,18 @@ public interface GroupReadRepository extends JpaRepository<Group, Long>, GroupQu
 
     @Query(value = "select g from Group g " +
             "join fetch g.groupMembers gm " +
+            "where g.id =:groupId")
+    Optional<Group> readOneWithFetch(@Param("groupId") Long groupId);
+
+    @Query(value = "select g from Group g " +
+            "join fetch g.groupMembers gm " +
             "where g.study.category =:category " +
             "and g.groupStatus <> 'END'")
     List<Group> readByCategoryWithFetch(@Param("category") Category category);
 
     @Query(value = "select g from Group g " +
-            "join fetch g.tasks sc " +
+            "join fetch g.tasks gt " +
             "where g.id =:groupId " +
-            "and sc.memberId =:memberId ")
+            "and gt.memberId =:memberId ")
     Optional<Group> readStudyCheckWithFetch(@Param("groupId") Long groupId, @Param("memberId") Long memberId);
 }
