@@ -7,8 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+    import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -39,13 +38,19 @@ public class AuthInterceptorConfig implements WebMvcConfigurer{
                 .addPathPatterns("/**")
                 .excludePathPatterns("/auth/**")
                 .excludePathPatterns("/h2-console/**")
+                .order(1);
+
+        log.info("[Register AdminInterceptor]");
+        registry.addInterceptor(new AdminInterceptor(jwtTokenManager))
+                .addPathPatterns("/**")
+                .excludePathPatterns("/auth/**")
+                .excludePathPatterns("/h2-console/**")
                 .order(2);
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new AuthenticatedMemberArgumentResolver(jwtTokenManager));
-        resolvers.add(new AdminMemberArgumentResolver(jwtTokenManager));
         resolvers.add(new OptionalAuthenticationArgumentResolver(jwtTokenManager));
     }
 }

@@ -1,7 +1,6 @@
 package com.jxx.xuni.studyproduct.presentation;
 
-import com.jxx.xuni.auth.application.MemberDetails;
-import com.jxx.xuni.auth.presentation.AdminMember;
+import com.jxx.xuni.auth.presentation.Admin;
 import com.jxx.xuni.common.service.AmazonS3Handler;
 import com.jxx.xuni.studyproduct.application.StudyProductCreateService;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductDetailForm;
@@ -27,22 +26,21 @@ public class StudyProductCreateController {
     @Value("${cloud.aws.s3.image.dns}")
     private String s3ImageOrigin;
 
+    @Admin
     @PostMapping("/study-products")
-    public ResponseEntity<StudyProductApiSimpleResult> enroll(@AdminMember MemberDetails memberDetails,
-                           @RequestPart(value = "image", required = false) MultipartFile file,
-                           @RequestPart("data") StudyProductForm form) throws IOException {
+    public ResponseEntity<StudyProductApiSimpleResult> enroll(@RequestPart(value = "image", required = false) MultipartFile file,
+                                                              @RequestPart("data") StudyProductForm form) throws IOException {
 
         String objectKey = amazonS3Handler.putS3Object(file);
         studyProductCreateService.create(form, s3ImageOrigin + objectKey);
 
         return new ResponseEntity(StudyProductApiSimpleResult.create(), HttpStatus.CREATED);
-
     }
 
+    @Admin
     @PostMapping("/study-products/{study-product-id}")
-    public ResponseEntity<StudyProductApiSimpleResult> createDetail(@AdminMember MemberDetails memberDetails,
-                                                                     @PathVariable("study-product-id") String studyProductId,
-                                                                     @RequestBody List<StudyProductDetailForm> StudyProductDetailForms) {
+    public ResponseEntity<StudyProductApiSimpleResult> createDetail(@PathVariable("study-product-id") String studyProductId,
+                                                                    @RequestBody List<StudyProductDetailForm> StudyProductDetailForms) {
 
         studyProductCreateService.createDetail(studyProductId, StudyProductDetailForms);
         return new ResponseEntity(StudyProductApiSimpleResult.createDetail(), HttpStatus.CREATED);

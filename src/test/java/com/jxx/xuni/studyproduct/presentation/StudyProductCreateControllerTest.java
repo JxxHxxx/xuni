@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 
 import static com.jxx.xuni.ApiDocumentUtils.*;
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.ONLY_ADMIN;
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_CREATED;
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_DETAIL_CREATED;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -80,7 +81,9 @@ class StudyProductCreateControllerTest extends StudyProductCommon{
     }
 
 
-    @DisplayName("상품 등록 실패")
+    @DisplayName("상품 등록 실패 - 관리자 권한(ADMIN)이 없을 경우 " +
+            "403 상태코드 " +
+            "ONLY_ADMIN 메시지 반환")
     @Test
     void enroll_fail() throws Exception {
         //given
@@ -92,7 +95,7 @@ class StudyProductCreateControllerTest extends StudyProductCommon{
                         .file(data)
                         .header("Authorization", userToken))
                 .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").value("권한이 존재하지 않습니다."));
+                .andExpect(jsonPath("$.message").value(ONLY_ADMIN));
     }
 
     @DisplayName("스터디 상품 상세 등록 성공")
