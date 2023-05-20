@@ -23,7 +23,7 @@ public interface GroupReadRepository extends JpaRepository<Group, Long>, GroupQu
     List<Group> readByCategoryWithFetch(@Param("category") Category category);
 
     @Query(value = "select g from Group g " +
-            "join fetch g.studyChecks sc " +
+            "join fetch g.tasks sc " +
             "where g.id =:groupId " +
             "and sc.memberId =:memberId ")
     Optional<Group> readStudyCheckWithFetch(@Param("groupId") Long groupId, @Param("memberId") Long memberId);

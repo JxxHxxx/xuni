@@ -3,7 +3,7 @@ package com.jxx.xuni.group.presentation;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.group.domain.TestGroupServiceSupporter;
-import com.jxx.xuni.group.dto.request.StudyCheckForm;
+import com.jxx.xuni.group.dto.request.GroupTaskForm;
 import com.jxx.xuni.auth.domain.LoginInfo;
 import com.jxx.xuni.auth.domain.Member;
 import org.junit.jupiter.api.BeforeEach;
@@ -99,7 +99,7 @@ class GroupManagingControllerTest extends GroupCommon {
     @DisplayName("스터디 그룹 시작 요청 성공")
     @Test
     void group_start_api() throws Exception {
-        List<StudyCheckForm> studyCheckForms = TestGroupServiceSupporter.studyCheckForms;
+        List<GroupTaskForm> studyCheckForms = TestGroupServiceSupporter.studyCheckForms;
         ResultActions result = mockMvc.perform(post
                 ("/groups/{group-id}/start", 1l)
                 .contentType(MediaType.APPLICATION_JSON)

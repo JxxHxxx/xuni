@@ -3,7 +3,7 @@ package com.jxx.xuni.group.application;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.domain.GroupRepository;
-import com.jxx.xuni.group.domain.StudyCheck;
+import com.jxx.xuni.group.domain.Task;
 import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
 import org.junit.jupiter.api.*;
@@ -107,14 +107,14 @@ class GroupManagingServiceTest extends ServiceCommon {
     void check_study_chapter_success() {
         Group startedGroup = groupRepository.save(startedGroupSample(groupHostDetail.getUserId(), 5));
         //when
-        Long chapterId = startedGroup.getStudyChecks().get(0).getChapterId();
+        Long chapterId = startedGroup.getTasks().get(0).getChapterId();
         //then
-        assertThatCode(() -> groupManagingService.checkStudyChapter(groupHostDetail, startedGroup.getId(), chapterId))
+        assertThatCode(() -> groupManagingService.doTask(groupHostDetail, startedGroup.getId(), chapterId))
                         .doesNotThrowAnyException();
 
         //then
         Group updateGroup = groupRepository.findById(startedGroup.getId()).get();
-        StudyCheck firstStudyCheck = updateGroup.getStudyChecks().get(0);
+        Task firstStudyCheck = updateGroup.getTasks().get(0);
         assertThat(firstStudyCheck.isDone()).isTrue();
 
     }
@@ -127,8 +127,8 @@ class GroupManagingServiceTest extends ServiceCommon {
         Group saveGroup = groupRepository.save(startedGroupSample(groupHostDetail.getUserId(), 5));
         //when - then
         Long notExistGroupId = saveGroup.getId() + 1;
-        assertThatThrownBy(() -> groupManagingService.checkStudyChapter(groupHostDetail, notExistGroupId,
-                        saveGroup.getStudyChecks().get(0).getChapterId()))
+        assertThatThrownBy(() -> groupManagingService.doTask(groupHostDetail, notExistGroupId,
+                        saveGroup.getTasks().get(0).getChapterId()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(NOT_EXISTED_GROUP);
     }
