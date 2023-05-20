@@ -2,7 +2,7 @@ package com.jxx.xuni.group.application;
 
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.group.domain.*;
-import com.jxx.xuni.group.dto.request.StudyCheckForm;
+import com.jxx.xuni.group.dto.request.GroupTaskForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +35,7 @@ public class GroupManagingService {
     }
 
     @Transactional
-    public void start(Long groupId, MemberDetails memberDetails, List<StudyCheckForm> studyCheckForms) {
+    public void start(Long groupId, MemberDetails memberDetails, List<GroupTaskForm> studyCheckForms) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP));
 
@@ -52,10 +52,10 @@ public class GroupManagingService {
     }
 
     @Transactional
-    public void checkStudyChapter(MemberDetails memberDetails, Long groupId, Long chapterId) {
+    public void doTask(MemberDetails memberDetails, Long groupId, Long chapterId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP));
 
-        group.verifyCheckRule(chapterId, memberDetails.getUserId());
+        group.doTask(chapterId, memberDetails.getUserId());
     }
 }

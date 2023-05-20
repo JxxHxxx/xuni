@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GroupReadRepository extends JpaRepository<Group, Long>, GroupQuery {
 
@@ -20,4 +21,10 @@ public interface GroupReadRepository extends JpaRepository<Group, Long>, GroupQu
             "where g.study.category =:category " +
             "and g.groupStatus <> 'END'")
     List<Group> readByCategoryWithFetch(@Param("category") Category category);
+
+    @Query(value = "select g from Group g " +
+            "join fetch g.tasks sc " +
+            "where g.id =:groupId " +
+            "and sc.memberId =:memberId ")
+    Optional<Group> readStudyCheckWithFetch(@Param("groupId") Long groupId, @Param("memberId") Long memberId);
 }

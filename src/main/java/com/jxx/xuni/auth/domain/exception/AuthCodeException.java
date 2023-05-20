@@ -1,4 +1,4 @@
-package com.jxx.xuni.member.domain.exception;
+package com.jxx.xuni.auth.domain.exception;
 
 public class AuthCodeException extends RuntimeException{
     public AuthCodeException(String message) {

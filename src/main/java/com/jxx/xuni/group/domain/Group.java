@@ -5,7 +5,7 @@ import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
 import com.jxx.xuni.group.domain.exception.GroupStartException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
-import com.jxx.xuni.group.dto.request.StudyCheckForm;
+import com.jxx.xuni.group.dto.request.GroupTaskForm;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,9 +54,10 @@ public class Group {
     private List<GroupMember> groupMembers = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "group_study_check", joinColumns = @JoinColumn(name = "group_id"))
-    private List<StudyCheck> studyChecks = new ArrayList<>();
+    @CollectionTable(name = "group_task", joinColumns = @JoinColumn(name = "group_id"))
+    private List<Task> tasks = new ArrayList<>();
 
+    @Builder
     public Group(Period period, Time time, Capacity capacity, Study study, Host host) {
         this.groupStatus = GATHERING;
         this.period = period;
@@ -70,21 +71,6 @@ public class Group {
         this.groupMembers.add(new GroupMember(host.getHostId(), host.getHostName()));
         this.capacity.subtractOneLeftCapacity();
 
-    }
-
-    @Builder
-    protected Group(Long id, GroupStatus groupStatus, Period period, Time time, Capacity capacity, Study study, Host host, List<GroupMember> groupMembers) {
-        this.id = id;
-        this.groupStatus = groupStatus;
-        this.period = period;
-        this.time = time;
-        this.capacity = capacity;
-        this.study = study;
-        this.host = host;
-        this.groupMembers = groupMembers;
-        this.createdDate = LocalDateTime.now();
-
-        addInGroup(new GroupMember(host.getHostId(), host.getHostName()));
     }
 
     public void verifyCreateRule() {
@@ -115,23 +101,46 @@ public class Group {
         changeGroupStatusTo(GATHER_COMPLETE);
     }
 
-    public void start(Long memberId, List<StudyCheckForm> studyCheckForms) {
+    public void start(Long memberId, List<GroupTaskForm> groupTaskForms) {
         checkHost(memberId);
         checkGroupState(GATHER_COMPLETE);
-        checkNullAndEmptyStudyCheckForm(studyCheckForms);
-        initStudyChecks(studyCheckForms);
+        checkEmptyOrNullGroupTaskForm(groupTaskForms);
+        initGroupTask(groupTaskForms);
 
         changeGroupStatusTo(START);
     }
 
-    public void verifyCheckRule(Long chapterId, Long groupMemberId) {
+    // TODO : 메서드 명 좋지 못한 듯 Refactoring 고려해야 한다.
+
+    public void doTask(Long chapterId, Long groupMemberId) {
         checkGroupState(START);
-        StudyCheck studyCheck = validateAbleToCheckStudyCheck(chapterId, groupMemberId);
-        studyCheck.check();
+        Task task = validateCheckAuthority(chapterId, groupMemberId);
+        task.updateDone();
     }
 
-    private StudyCheck validateAbleToCheckStudyCheck(Long chapterId, Long groupMemberId) {
-        return studyChecks.stream()
+    public void updateGroupMemberLastVisitedTime(Long userId) {
+        Optional<GroupMember> requestMember = getRequestMember(userId);
+        if (isGroupMember(requestMember)) {
+            requestMember.get().updateLastVisitedTime();
+        }
+    }
+
+    public List<Task> receiveGroupTasks(Long userId) {
+        return this.tasks.stream().filter(s -> s.isSameMember(userId)).toList();
+    }
+
+    private Optional<GroupMember> getRequestMember(Long userId) {
+        return this.groupMembers.stream()
+                .filter(g -> g.isSameMemberId(userId))
+                .filter(g -> g.hasNotLeft()).findFirst();
+    }
+
+    private boolean isGroupMember(Optional<GroupMember> requestMember) {
+        return requestMember.isPresent();
+    }
+
+    private Task validateCheckAuthority(Long chapterId, Long groupMemberId) {
+        return tasks.stream()
                 .filter(s -> s.isSameChapter(chapterId))
                 .filter(s -> s.isSameMember(groupMemberId))
                 .findAny().orElseThrow(() -> new IllegalArgumentException(BAD_REQUEST));
@@ -162,19 +171,19 @@ public class Group {
         if (host.isNotHost(memberId)) throw new NotPermissionException(NOT_PERMISSION);
     }
 
-    protected void initStudyChecks(List<StudyCheckForm> studyCheckForms) {
+    protected void initGroupTask(List<GroupTaskForm> groupTaskForms) {
         List<GroupMember> realGroupMember = groupMembers.stream().filter(groupMember -> groupMember.hasNotLeft()).toList();
         for (GroupMember groupMember : realGroupMember) {
-            List<StudyCheck> studyChecks = studyCheckForms.stream()
-                    .map(s -> StudyCheck.init(groupMember.getGroupMemberId(), s.chapterId(), s.title()))
+            List<Task> tasks = groupTaskForms.stream()
+                    .map(s -> Task.init(groupMember.getGroupMemberId(), s.chapterId(), s.title()))
                     .toList();
 
-            this.studyChecks.addAll(studyChecks);
+            this.tasks.addAll(tasks);
         }
     }
 
-    private void checkNullAndEmptyStudyCheckForm(List<StudyCheckForm> studyCheckForms) {
-        if (studyCheckForms == null || studyCheckForms.isEmpty()) throw new GroupStartException("커리큘럼은 필수입니다.");
+    private void checkEmptyOrNullGroupTaskForm(List<GroupTaskForm> groupTaskForms) {
+        if (groupTaskForms == null || groupTaskForms.isEmpty()) throw new GroupStartException("커리큘럼은 필수입니다.");
     }
 
     protected void checkGroupState(GroupStatus status) {

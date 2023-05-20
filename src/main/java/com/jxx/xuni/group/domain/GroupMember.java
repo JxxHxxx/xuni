@@ -4,9 +4,10 @@ import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
 
-@Slf4j
+import static java.time.LocalDateTime.now;
+
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,11 +16,13 @@ public class GroupMember {
     private Long groupMemberId;
     private String groupMemberName;
     private Boolean isLeft;
+    private LocalDateTime lastVisitedTime;
 
     public GroupMember(Long groupMemberId, String groupMemberName) {
         this.groupMemberId = groupMemberId;
         this.groupMemberName = groupMemberName;
         this.isLeft = false;
+        this.lastVisitedTime = now();
     }
 
     protected boolean isSameMemberId(Long groupMemberId) {
@@ -40,5 +43,9 @@ public class GroupMember {
 
     protected boolean isLeftMember(GroupMember groupMember) {
         return this.groupMemberId.equals(groupMember.getGroupMemberId());
+    }
+
+    protected void updateLastVisitedTime() {
+        this.lastVisitedTime = now();
     }
 }

@@ -5,8 +5,9 @@ import com.jxx.xuni.common.exception.NotPermissionException;
 import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
-import com.jxx.xuni.member.domain.PasswordNotMatchedException;
-import com.jxx.xuni.member.domain.exception.AuthCodeException;
+import com.jxx.xuni.auth.domain.PasswordNotMatchedException;
+import com.jxx.xuni.auth.domain.exception.AuthCodeException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SecurityException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -37,7 +38,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler({UnauthenticatedException.class})
+    @ExceptionHandler({UnauthenticatedException.class, MalformedJwtException.class})
     public ResponseEntity<ExceptionResponse> unAuthenticatedExceptionHandler(RuntimeException exception) {
         ExceptionResponse response = ExceptionResponse.of(401, exception.getMessage());
         return new ResponseEntity<>(response, UNAUTHORIZED);

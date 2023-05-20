@@ -1,9 +1,9 @@
 package com.jxx.xuni.auth.application;
 
-import com.jxx.xuni.member.domain.Authority;
+import com.jxx.xuni.auth.domain.Authority;
 import lombok.Getter;
 
-import static com.jxx.xuni.member.domain.Authority.*;
+import static com.jxx.xuni.auth.domain.Authority.*;
 
 @Getter
 public class SimpleMemberDetails implements MemberDetails {
@@ -11,6 +11,10 @@ public class SimpleMemberDetails implements MemberDetails {
     private String email;
     private String name;
     private Authority authority;
+
+    public static final SimpleMemberDetails GUEST() {
+        return new SimpleMemberDetails(Long.MAX_VALUE, null, "guest");
+    }
 
     public SimpleMemberDetails(Long userId, String email, String name) {
         this.userId = userId;

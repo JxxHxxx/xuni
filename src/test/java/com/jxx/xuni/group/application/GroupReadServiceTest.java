@@ -1,19 +1,16 @@
 package com.jxx.xuni.group.application;
 
-import com.jxx.xuni.group.domain.Group;
-import com.jxx.xuni.group.domain.GroupRepository;
-import com.jxx.xuni.group.domain.GroupStatus;
-import com.jxx.xuni.group.domain.TestGroupServiceSupporter;
+import com.jxx.xuni.group.domain.*;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
 import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
+import com.jxx.xuni.group.dto.response.GroupStudyCheckResponse;
+import com.jxx.xuni.group.query.GroupAllQueryResponse;
 import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.jxx.xuni.group.domain.GroupStatus.*;
@@ -38,8 +35,7 @@ class GroupReadServiceTest extends ServiceCommon {
 
         Group savedGroup = groupRepository.save(group1);
         savedGroupId = savedGroup.getId();
-        groupRepository.save(group2);
-        groupRepository.save(group3);
+        groupRepository.saveAll(List.of(group2, group3));
     }
 
     @AfterEach
@@ -69,7 +65,8 @@ class GroupReadServiceTest extends ServiceCommon {
     @Test
     void read_one() {
         //when
-        GroupReadOneResponse response = groupReadService.readOne(savedGroupId);
+        Long anyUserId = 1l;
+        GroupReadOneResponse response = groupReadService.readOne(savedGroupId, anyUserId);
         //then
         assertThat(response.getGroupId()).isEqualTo(savedGroupId);
     }
@@ -87,5 +84,77 @@ class GroupReadServiceTest extends ServiceCommon {
         //then
         int totalGroupSize = 2;
         assertThat(responses.size()).isEqualTo(totalGroupSize);
+    }
+
+    @DisplayName("그룹 스터디 체크 조회 성공" +
+            "1. chapterId 기준으로 정렬된 상태로 나와야 한다.")
+    @Test
+    void read_study_check() {
+        //given
+        Group startGroup = TestGroupServiceSupporter.startedGroupSample(1l,5);
+        Group group = groupRepository.save(startGroup);
+        Long groupId = group.getId();
+        //when
+        List<GroupStudyCheckResponse> response = groupReadService.readStudyCheck(groupId, 1l);
+        //then
+        assertThat(response.get(0).getChapterId()).isLessThan(response.get(1).getChapterId());
+        assertThat(response.get(1).getChapterId()).isLessThan(response.get(2).getChapterId());
+    }
+
+    @DisplayName("자신이 소속되어 있는 그룹 조회 규칙 - 떠난 그룹은 조회되지 않는다.")
+    @Test
+    void read_own_roles_1_not_read_left_group() {
+        //given
+        Group javaGroup = TestGroupServiceSupporter.receiveSampleGroup(10l, JAVA);
+        javaGroup.join(new GroupMember(2l, "유니"));
+
+        Group savedJavaGroup = groupRepository.save(javaGroup);
+        savedJavaGroup.leave(2l);
+        //when
+        List<GroupAllQueryResponse> response = groupReadService.readOwn(2l);
+        //then
+        assertThat(response).isEmpty();
+    }
+
+    @DisplayName("자신이 소속되어 있는 그룹 조회 규칙 - 자신이 소속된 그룹만 조회된다.")
+    @Test
+    void read_own_roles_2_belong_only_self() {
+        //given
+        Group javaGroup = TestGroupServiceSupporter.receiveSampleGroup(10l, JAVA);
+        Group springGroup = TestGroupServiceSupporter.receiveSampleGroup(5l, SPRING_FRAMEWORK);
+        javaGroup.join(new GroupMember(2l, "유니"));
+
+        groupRepository.saveAll(List.of(javaGroup, springGroup));
+        //when
+        List<GroupAllQueryResponse> response = groupReadService.readOwn(2l);
+        //then
+        assertThat(response).extracting("study.category").containsOnly(JAVA);
+    }
+
+    @DisplayName("자신이 소속되어 있는 그룹 조회 규칙 - 마지막으로 방문한 순으로 정렬된다.")
+    @Test
+    void read_own_roles_3_sort_by_last_visited_time() throws InterruptedException {
+        //given
+        Group javaGroup = TestGroupServiceSupporter.receiveSampleGroup(5l, JAVA);
+        Thread.sleep(100);
+        Group springGroup = TestGroupServiceSupporter.receiveSampleGroup(5l, SPRING_FRAMEWORK);
+        Thread.sleep(100);
+        Group reactGroup = TestGroupServiceSupporter.receiveSampleGroup(5l, REACT);
+        // 가입(join) 시, 마지막 방문 시간이 최초로 업데이트 된다.
+        javaGroup.join(new GroupMember(2l, "유니"));
+        Thread.sleep(100);
+        springGroup.join(new GroupMember(2l, "유니"));
+        Thread.sleep(100);
+        reactGroup.join(new GroupMember(2l, "유니"));
+
+        groupRepository.saveAll(List.of(javaGroup, springGroup, reactGroup));
+        //when
+        List<GroupAllQueryResponse> response = groupReadService.readOwn(2l);
+
+        for (GroupAllQueryResponse q : response) {
+            System.out.println("category : " + q.getStudy().getCategory());
+        }
+        //then
+        assertThat(response).extracting("study.category").containsExactly(REACT, SPRING_FRAMEWORK, JAVA);
     }
 }

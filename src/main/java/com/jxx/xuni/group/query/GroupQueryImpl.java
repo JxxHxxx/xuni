@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.jxx.xuni.group.domain.GroupStatus.*;
 import static com.jxx.xuni.group.domain.QGroup.group;
+import static com.jxx.xuni.group.domain.QGroupMember.*;
 
 public class GroupQueryImpl implements GroupQuery {
 
@@ -40,7 +41,7 @@ public class GroupQueryImpl implements GroupQuery {
                 )
                 .offset(pageable.getOffset())
                 .limit(QueryPolicy.LIMIT_OF_PAGE)
-                .orderBy(createOrderSpec(condition))
+                .orderBy(searchGroupOrderSpec(condition))
                 .fetch();
 
         long total = queryFactory
@@ -54,7 +55,7 @@ public class GroupQueryImpl implements GroupQuery {
         return new PageImpl(content, pageable, total);
     }
 
-    private OrderSpecifier createOrderSpec(GroupSearchCondition condition) {
+    private OrderSpecifier searchGroupOrderSpec(GroupSearchCondition condition) {
         Order direction = condition.isAsc() ? Order.ASC : Order.DESC;
         if (condition.getSortProperty() != null && !condition.getSortProperty().isBlank()) {
 
@@ -89,5 +90,32 @@ public class GroupQueryImpl implements GroupQuery {
         }
         // 클라이언트가 위 조건과 다른 표현을 사용할 경우 아래 조건이 적용된다.
         return group.groupStatus.in(GATHERING, GATHER_COMPLETE, START);
+    }
+
+    @Override
+    public List<GroupAllQueryResponse> readOwnWithFetch(Long groupMemberId) {
+        return queryFactory
+                .select(new QGroupAllQueryResponse(
+                        group.id.as("groupId"),
+                        group.capacity,
+                        group.groupStatus,
+                        group.host,
+                        group.study,
+                        group.time,
+                        group.period
+                ))
+                .from(group)
+                .leftJoin(group.groupMembers, groupMember)
+                .where(
+                        groupMember.groupMemberId.eq(groupMemberId),
+                        groupMember.isLeft.eq(false)
+                )
+                .orderBy(readOwnOrderSpec())
+                .fetch();
+    }
+
+    private OrderSpecifier readOwnOrderSpec() {
+        Order direction = Order.DESC;
+        return new OrderSpecifier(direction, groupMember.lastVisitedTime);
     }
 }

@@ -4,7 +4,7 @@ import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.presentation.AuthenticatedMember;
 import com.jxx.xuni.group.application.GroupJoinFacade;
 import com.jxx.xuni.group.application.GroupManagingService;
-import com.jxx.xuni.group.dto.request.StudyCheckForm;
+import com.jxx.xuni.group.dto.request.GroupTaskForm;
 import com.jxx.xuni.group.dto.response.GroupApiSimpleResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +46,7 @@ public class GroupManagingController {
     @PostMapping("/groups/{group-id}/start")
     public ResponseEntity<GroupApiSimpleResult> start(@PathVariable ("group-id") Long groupId,
                                                       @AuthenticatedMember MemberDetails memberDetails,
-                                                      @RequestBody List<StudyCheckForm> studyCheckForms) {
+                                                      @RequestBody List<GroupTaskForm> studyCheckForms) {
 
         groupManagingService.start(groupId, memberDetails, studyCheckForms);
         return ResponseEntity.ok(GroupApiSimpleResult.start());
@@ -57,7 +57,7 @@ public class GroupManagingController {
                                                       @PathVariable ("chapter-id") Long chapterId,
                                                       @AuthenticatedMember MemberDetails memberDetails) {
 
-        groupManagingService.checkStudyChapter(memberDetails, groupId, chapterId);
+        groupManagingService.doTask(memberDetails, groupId, chapterId);
         return ResponseEntity.ok(GroupApiSimpleResult.check());
     }
 }
