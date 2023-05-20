@@ -5,7 +5,7 @@ import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;
 import com.jxx.xuni.group.domain.exception.GroupStartException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
-import com.jxx.xuni.group.dto.request.StudyCheckForm;
+import com.jxx.xuni.group.dto.request.GroupTaskForm;
 import com.jxx.xuni.studyproduct.domain.Category;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -157,9 +157,9 @@ class GroupTest {
         Group group = Group.builder()
                 .capacity(new Capacity(5))
                 .host(new Host(1l, "재헌"))
-                .groupMembers(new ArrayList<>())
-                .groupStatus(groupStatus)
                 .build();
+
+        group.changeGroupStatusTo(groupStatus);
 
         assertThatThrownBy(() -> group.closeRecruitment(1l))
                 .isInstanceOf(NotAppropriateGroupStatusException.class)
@@ -177,8 +177,6 @@ class GroupTest {
         Group group = Group.builder()
                 .capacity(new Capacity(5))
                 .host(new Host(1l, "재헌"))
-                .groupStatus(GATHERING)
-                .groupMembers(new ArrayList<>())
                 .build();
 
         //given 그룹에 멤버 추가
@@ -189,20 +187,20 @@ class GroupTest {
         //given 모집 마감
         group.closeRecruitment(1l);
 
-        List<StudyCheckForm> studyCheckForms = new ArrayList<>();
-        studyCheckForms.add(new StudyCheckForm(1l, "객체 지향의 사실과 오해"));
+        List<GroupTaskForm> studyCheckForms = new ArrayList<>();
+        studyCheckForms.add(new GroupTaskForm(1l, "객체 지향의 사실과 오해"));
         //when
         group.start(1l, studyCheckForms);
         //then - 그룹 상태는 START 로 변경된다.
         assertThat(group.getGroupStatus()).isEqualTo(START);
 
-        assertThat(group.getStudyChecks().get(0).getTitle()).isEqualTo("객체 지향의 사실과 오해");
-        assertThat(group.getStudyChecks().get(0).getChapterId()).isEqualTo(1l);
+        assertThat(group.getTasks().get(0).getTitle()).isEqualTo("객체 지향의 사실과 오해");
+        assertThat(group.getTasks().get(0).getChapterId()).isEqualTo(1l);
         //then studyChecks 는 그룹에 참여중인 MemberId를 모두 가지고 있다. 탈퇴한 멤버는 가지고 있지 않다.
-        List<Long> members = group.getStudyChecks().stream().map(studyCheck -> studyCheck.getMemberId()).toList();
+        List<Long> members = group.getTasks().stream().map(studyCheck -> studyCheck.getMemberId()).toList();
         assertThat(members).containsExactly(1l, 2l);
         //then studyChecks isDone 초기화 값은 false다.
-        List<Boolean> isDones = group.getStudyChecks().stream().map(studyCheck -> studyCheck.isDone()).toList();
+        List<Boolean> isDones = group.getTasks().stream().map(studyCheck -> studyCheck.isDone()).toList();
         assertThat(isDones).containsOnly(false);
 
     }
@@ -217,9 +215,9 @@ class GroupTest {
         Group group = Group.builder()
                 .capacity(new Capacity(5))
                 .host(new Host(hostId, "재헌"))
-                .groupStatus(GATHER_COMPLETE)
-                .groupMembers(new ArrayList<>())
                 .build();
+
+        group.changeGroupStatusTo(GATHER_COMPLETE);
 
         assertThatThrownBy(() -> group.start(groupMemberId, null))
                 .isInstanceOf(NotPermissionException.class)
@@ -234,9 +232,9 @@ class GroupTest {
         Group group = Group.builder()
                 .capacity(new Capacity(5))
                 .host(new Host(1l, "재헌"))
-                .groupStatus(groupStatus)
-                .groupMembers(new ArrayList<>())
                 .build();
+
+        group.changeGroupStatusTo(groupStatus);
 
         assertThatThrownBy(() -> group.start(1l, null))
                 .isInstanceOf(NotAppropriateGroupStatusException.class)
@@ -248,13 +246,13 @@ class GroupTest {
     @ParameterizedTest
     @NullSource
     @EmptySource
-    void start_fail_cause_is_empty_or_null_study_check_form(List<StudyCheckForm> studyCheckForms) {
+    void start_fail_cause_is_empty_or_null_study_check_form(List<GroupTaskForm> studyCheckForms) {
         Group group = Group.builder()
                 .capacity(new Capacity(5))
                 .host(new Host(1l, "재헌"))
-                .groupStatus(GATHER_COMPLETE)
-                .groupMembers(new ArrayList<>())
                 .build();
+
+        group.changeGroupStatusTo(GATHER_COMPLETE);
 
         assertThatThrownBy(() -> group.start(1l, studyCheckForms))
                 .isInstanceOf(GroupStartException.class);
@@ -313,11 +311,11 @@ class GroupTest {
         groupMembers.add(new GroupMember(2l, "포도"));
 
         Group group = Group.builder()
-                .groupStatus(END)
                 .host(new Host(1l, "자몽"))
                 .capacity(new Capacity(5))
-                .groupMembers(groupMembers)
                 .build();
+
+        group.changeGroupStatusTo(END);
 
         //when - then
         assertThatThrownBy(() -> group.leave(2l))
@@ -363,9 +361,9 @@ class GroupTest {
         group.closeRecruitment(1l);
         group.start(1l, TestGroupServiceSupporter.studyCheckForms);
         //when
-        group.verifyCheckRule(2l, 1l);
+        group.doTask(2l, 1l);
 
-        StudyCheck studyCheckAfterVerifyCheckRule = group.getStudyChecks().stream()
+        Task studyCheckAfterVerifyCheckRule = group.getTasks().stream()
                 .filter(s -> s.isSameMember(1l))
                 .filter(s -> s.isSameChapter(2l)).findAny().get();
         //then
@@ -380,10 +378,10 @@ class GroupTest {
         //given - 그룹 시작 상태로 변경
         Group group = makeTestGroup(5);
         group.changeGroupStatusTo(status);
-        group.initStudyChecks(TestGroupServiceSupporter.studyCheckForms);
+        group.initGroupTask(TestGroupServiceSupporter.studyCheckForms);
 
         //when - then
-        assertThatThrownBy(() -> group.verifyCheckRule(2l, 1l))
+        assertThatThrownBy(() -> group.doTask(2l, 1l))
                 .isInstanceOf(NotAppropriateGroupStatusException.class)
                 .hasMessage(NOT_APPROPRIATE_GROUP_STATUS);
     }
@@ -395,11 +393,11 @@ class GroupTest {
         //given - 그룹 시작 상태로 변경
         Group group = makeTestGroup(5);
         group.changeGroupStatusTo(START);
-        group.initStudyChecks(TestGroupServiceSupporter.studyCheckForms); // chapter 는 1,2,3 까지 존재합니다.
+        group.initGroupTask(TestGroupServiceSupporter.studyCheckForms); // chapter 는 1,2,3 까지 존재합니다.
 
         //when - then
         //
-        assertThatThrownBy(() -> group.verifyCheckRule(chapterId, groupMemberId))
+        assertThatThrownBy(() -> group.doTask(chapterId, groupMemberId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(BAD_REQUEST);
     }
@@ -453,10 +451,10 @@ class GroupTest {
         //given
         Group group = TestGroupServiceSupporter.startedGroupSample(1l, 5);
         //when
-        group.verifyCheckRule(1l, 1l);
-        List<StudyCheck> myStudyChecks = group.receiveStudyChecks(1l);
+        group.doTask(1l, 1l);
+        List<Task> myStudyChecks = group.receiveGroupTasks(1l);
 
-        List<StudyCheck> otherMemberStudyChecks = group.receiveStudyChecks(2l);
+        List<Task> otherMemberStudyChecks = group.receiveGroupTasks(2l);
         //then
         assertThat(myStudyChecks).extracting("isDone").containsExactly(true, false, false);
         assertThat(otherMemberStudyChecks).extracting("isDone").containsExactly(false, false, false);

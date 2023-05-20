@@ -1,7 +1,7 @@
 package com.jxx.xuni.group.application;
 
 import com.jxx.xuni.group.domain.Group;
-import com.jxx.xuni.group.domain.StudyCheck;
+import com.jxx.xuni.group.domain.Task;
 import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
 import com.jxx.xuni.group.dto.response.GroupStudyCheckResponse;
@@ -79,7 +79,7 @@ public class GroupReadService {
     public List<GroupStudyCheckResponse> readStudyCheck(Long groupId, Long userId) {
         Group group = groupReadRepository.readStudyCheckWithFetch(groupId, userId)
                 .orElseThrow(() -> new IllegalArgumentException(BAD_REQUEST));
-        List<StudyCheck> studyChecks = group.receiveStudyChecks(userId);
+        List<Task> studyChecks = group.receiveGroupTasks(userId);
 
         return studyChecks.stream().map(s -> new GroupStudyCheckResponse(
                 s.getChapterId(),

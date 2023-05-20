@@ -1,7 +1,7 @@
 package com.jxx.xuni.group.domain;
 
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
-import com.jxx.xuni.group.dto.request.StudyCheckForm;
+import com.jxx.xuni.group.dto.request.GroupTaskForm;
 import com.jxx.xuni.studyproduct.domain.Category;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -80,10 +80,10 @@ public class TestGroupServiceSupporter {
         return new SimpleMemberDetails(memberId, "leesin5498@naver.com", "재헌", USER);
     }
 
-    public static List<StudyCheckForm> studyCheckForms = List.of(
-            new StudyCheckForm(1l, "객체"),
-            new StudyCheckForm(2l, "타입"),
-            new StudyCheckForm(3l, "인터페이스"));
+    public static List<GroupTaskForm> studyCheckForms = List.of(
+            new GroupTaskForm(1l, "객체"),
+            new GroupTaskForm(2l, "타입"),
+            new GroupTaskForm(3l, "인터페이스"));
 
     public static Group startedGroupSample(Long hostId, Integer capacity) {
         Group group = new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),

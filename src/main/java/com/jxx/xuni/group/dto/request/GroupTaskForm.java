@@ -1,6 +1,6 @@
 package com.jxx.xuni.group.dto.request;
 
-public record StudyCheckForm(
+public record GroupTaskForm(
      Long chapterId,
      String title
 ) {}
