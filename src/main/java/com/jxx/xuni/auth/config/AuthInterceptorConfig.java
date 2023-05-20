@@ -1,9 +1,6 @@
 package com.jxx.xuni.auth.config;
 
-import com.jxx.xuni.auth.presentation.ActuatorFilter;
-import com.jxx.xuni.auth.presentation.JwtAuthInterceptor;
-import com.jxx.xuni.auth.presentation.AuthenticatedMemberArgumentResolver;
-import com.jxx.xuni.auth.presentation.AdminMemberArgumentResolver;
+import com.jxx.xuni.auth.presentation.*;
 import com.jxx.xuni.auth.support.JwtTokenManager;
 import jakarta.servlet.Filter;
 import lombok.extern.slf4j.Slf4j;
@@ -49,5 +46,6 @@ public class AuthInterceptorConfig implements WebMvcConfigurer{
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new AuthenticatedMemberArgumentResolver(jwtTokenManager));
         resolvers.add(new AdminMemberArgumentResolver(jwtTokenManager));
+        resolvers.add(new OptionalAuthenticationArgumentResolver(jwtTokenManager));
     }
 }
