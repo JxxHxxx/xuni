@@ -1,6 +1,6 @@
 package com.jxx.xuni.exception;
 
-import com.jxx.xuni.auth.config.UnauthenticatedException;
+import com.jxx.xuni.auth.domain.exception.UnauthenticatedException;
 import com.jxx.xuni.common.exception.NotPermissionException;
 import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import com.jxx.xuni.group.domain.exception.GroupJoinException;

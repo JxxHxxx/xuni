@@ -2,7 +2,7 @@ package com.jxx.xuni.auth.presentation;
 
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
-import com.jxx.xuni.auth.config.UnauthenticatedException;
+import com.jxx.xuni.auth.domain.exception.UnauthenticatedException;
 import com.jxx.xuni.auth.support.JwtTokenManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
