@@ -92,7 +92,7 @@ public class TestGroupServiceSupporter {
                 Study.of("UUID", "자바의 정석", Category.JAVA),
                 new Host(hostId, "재헌"));
 
-        group.join(new GroupMember(2l, "지니"));
+        group.join(new GroupMember(2l, "지니", group));
         group.changeGroupStatusTo(GATHER_COMPLETE);
         group.start(hostId, studyCheckForms);
         return group;

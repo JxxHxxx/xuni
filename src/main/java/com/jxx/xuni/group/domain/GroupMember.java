@@ -21,12 +21,16 @@ public class GroupMember {
     private String groupMemberName;
     private Boolean isLeft;
     private LocalDateTime lastVisitedTime;
+    @JoinColumn(name = "group_id")
+    @ManyToOne
+    private Group group;
 
-    public GroupMember(Long groupMemberId, String groupMemberName) {
+    public GroupMember(Long groupMemberId, String groupMemberName, Group group) {
         this.groupMemberId = groupMemberId;
         this.groupMemberName = groupMemberName;
         this.isLeft = false;
         this.lastVisitedTime = now();
+        this.group = group;
     }
 
     protected boolean isSameMemberId(Long groupMemberId) {

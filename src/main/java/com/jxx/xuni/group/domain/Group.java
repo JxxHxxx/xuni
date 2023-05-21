@@ -48,13 +48,9 @@ public class Group {
     private Host host;
     @Version
     private long version;
-
-    @JoinColumn(name = "group_id")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "group")
     private List<GroupMember> groupMembers = new ArrayList<>();
-
-    @JoinColumn(name = "group_id")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "group")
     private List<Task> tasks = new ArrayList<>();
 
     @Builder
@@ -68,9 +64,8 @@ public class Group {
         this.version = 0l;
         this.createdDate = LocalDateTime.now();
 
-        this.groupMembers.add(new GroupMember(host.getHostId(), host.getHostName()));
+        this.groupMembers.add(new GroupMember(host.getHostId(), host.getHostName(), this));
         this.capacity.subtractOneLeftCapacity();
-
     }
 
     public void verifyCreateRule() {
@@ -175,7 +170,7 @@ public class Group {
         List<GroupMember> realGroupMember = groupMembers.stream().filter(groupMember -> groupMember.hasNotLeft()).toList();
         for (GroupMember groupMember : realGroupMember) {
             List<Task> tasks = groupTaskForms.stream()
-                    .map(s -> Task.init(groupMember.getGroupMemberId(), s.chapterId(), s.title()))
+                    .map(s -> Task.init(groupMember.getGroupMemberId(), s.chapterId(), s.title(), this))
                     .toList();
 
             this.tasks.addAll(tasks);

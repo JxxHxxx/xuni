@@ -54,7 +54,7 @@ class GroupReadControllerTest extends GroupCommon {
     @Test
     void read_all_group() throws Exception {
         List<GroupMember> groupMembers = new ArrayList<>();
-        groupMembers.add(new GroupMember(1l, "xuni-member"));
+        groupMembers.add(new GroupMember(1l, "xuni-member", null));
 
         GroupReadAllResponse response1 = new GroupReadAllResponse(
                 1l,
