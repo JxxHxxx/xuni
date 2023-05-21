@@ -34,13 +34,13 @@ public class AdminInterceptor implements HandlerInterceptor {
         throw new NotPermissionException(ONLY_ADMIN);
     }
 
-    private boolean isNotAdmin(Method method) {
-        return method.getDeclaredAnnotation(Admin.class) == null ? true : false;
-    }
-
     private Method getMethod(Object handler) {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         return handlerMethod.getMethod();
+    }
+
+    private boolean isNotAdmin(Method method) {
+        return method.getDeclaredAnnotation(Admin.class) == null ? true : false;
     }
 
     private MemberDetails getMemberDetails(HttpServletRequest request) {

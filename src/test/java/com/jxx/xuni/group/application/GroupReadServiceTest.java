@@ -106,7 +106,7 @@ class GroupReadServiceTest extends ServiceCommon {
     void read_own_roles_1_not_read_left_group() {
         //given
         Group javaGroup = TestGroupServiceSupporter.receiveSampleGroup(10l, JAVA);
-        javaGroup.join(new GroupMember(2l, "유니"));
+        javaGroup.join(new GroupMember(2l, "유니", javaGroup));
 
         Group savedJavaGroup = groupRepository.save(javaGroup);
         savedJavaGroup.leave(2l);
@@ -122,7 +122,7 @@ class GroupReadServiceTest extends ServiceCommon {
         //given
         Group javaGroup = TestGroupServiceSupporter.receiveSampleGroup(10l, JAVA);
         Group springGroup = TestGroupServiceSupporter.receiveSampleGroup(5l, SPRING_FRAMEWORK);
-        javaGroup.join(new GroupMember(2l, "유니"));
+        javaGroup.join(new GroupMember(2l, "유니", javaGroup));
 
         groupRepository.saveAll(List.of(javaGroup, springGroup));
         //when
@@ -141,11 +141,11 @@ class GroupReadServiceTest extends ServiceCommon {
         Thread.sleep(100);
         Group reactGroup = TestGroupServiceSupporter.receiveSampleGroup(5l, REACT);
         // 가입(join) 시, 마지막 방문 시간이 최초로 업데이트 된다.
-        javaGroup.join(new GroupMember(2l, "유니"));
+        javaGroup.join(new GroupMember(2l, "유니", javaGroup));
         Thread.sleep(100);
-        springGroup.join(new GroupMember(2l, "유니"));
+        springGroup.join(new GroupMember(2l, "유니", springGroup));
         Thread.sleep(100);
-        reactGroup.join(new GroupMember(2l, "유니"));
+        reactGroup.join(new GroupMember(2l, "유니", reactGroup));
 
         groupRepository.saveAll(List.of(javaGroup, springGroup, reactGroup));
         //when
