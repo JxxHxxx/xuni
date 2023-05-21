@@ -43,6 +43,8 @@ public class AuthInterceptorConfig implements WebMvcConfigurer{
         log.info("[Register AdminInterceptor]");
         registry.addInterceptor(new AdminInterceptor(jwtTokenManager))
                 .addPathPatterns("/**")
+                .excludePathPatterns("/docs/**")
+                .excludePathPatterns("/favicon.ico")
                 .excludePathPatterns("/auth/**")
                 .excludePathPatterns("/h2-console/**")
                 .order(2);
