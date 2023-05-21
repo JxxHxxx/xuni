@@ -5,10 +5,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Getter
-@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "group_task")
 public class Task {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "group_task_pk")
+    private Long id;
     @Column(name = "group_member_id")
     private Long memberId;
     private Long chapterId;

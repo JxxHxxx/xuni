@@ -1,6 +1,6 @@
 package com.jxx.xuni.group.domain;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,10 +9,14 @@ import java.time.LocalDateTime;
 import static java.time.LocalDateTime.now;
 
 @Getter
-@Embeddable
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "group_member")
 public class GroupMember {
 
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "group_member_pk")
+    private Long id;
     private Long groupMemberId;
     private String groupMemberName;
     private Boolean isLeft;
@@ -48,4 +52,6 @@ public class GroupMember {
     protected void updateLastVisitedTime() {
         this.lastVisitedTime = now();
     }
+
+
 }

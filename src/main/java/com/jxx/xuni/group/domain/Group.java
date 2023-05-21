@@ -49,12 +49,12 @@ public class Group {
     @Version
     private long version;
 
-    @ElementCollection
-    @CollectionTable(name = "group_member", joinColumns = @JoinColumn(name = "group_id"))
+    @JoinColumn(name = "group_id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupMember> groupMembers = new ArrayList<>();
 
-    @ElementCollection
-    @CollectionTable(name = "group_task", joinColumns = @JoinColumn(name = "group_id"))
+    @JoinColumn(name = "group_id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
 
     @Builder

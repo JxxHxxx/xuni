@@ -4,10 +4,7 @@ import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.domain.*;
-import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
-import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
-import com.jxx.xuni.group.dto.response.GroupStudyCheckResponse;
-import com.jxx.xuni.group.dto.response.PageInfo;
+import com.jxx.xuni.group.dto.response.*;
 import com.jxx.xuni.group.query.GroupAllQueryResponse;
 import com.jxx.xuni.group.query.PageConverter;
 import com.jxx.xuni.studyproduct.domain.Category;
@@ -27,6 +24,7 @@ import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +131,9 @@ class GroupReadControllerTest extends GroupCommon {
                 Study.of("UUID", "JAVA의 정석", Category.JAVA),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 Period.of(LocalDate.now(), LocalDate.of(2123, 12, 31)),
-                List.of(new GroupMember(1l, "이재헌"), new GroupMember(12l, "김유니")));
+                List.of(new GroupMemberDto(1l, "이재헌" , false , LocalDateTime.now()),
+                        new GroupMemberDto(12l, "김유니", false, LocalDateTime.now())
+                ));
 
         BDDMockito.given(groupReadService.readOne(any(), any())).willReturn(response);
 

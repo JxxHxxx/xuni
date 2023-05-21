@@ -2,6 +2,7 @@ package com.jxx.xuni.group.application;
 
 import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.domain.Task;
+import com.jxx.xuni.group.dto.response.GroupMemberDto;
 import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
 import com.jxx.xuni.group.dto.response.GroupStudyCheckResponse;
@@ -43,6 +44,10 @@ public class GroupReadService {
         Group group = groupReadRepository.readOneWithFetch(groupId).get();
         group.updateGroupMemberLastVisitedTime(userId);
 
+        List<GroupMemberDto> groupMembers = group.getGroupMembers().stream()
+                .map(gm -> new GroupMemberDto(gm.getGroupMemberId(), gm.getGroupMemberName(), gm.getIsLeft(), gm.getLastVisitedTime()))
+                .toList();
+
         return new GroupReadOneResponse(
                 group.getId(),
                 group.getCapacity(),
@@ -51,7 +56,7 @@ public class GroupReadService {
                 group.getStudy(),
                 group.getTime(),
                 group.getPeriod(),
-                group.getGroupMembers());
+                groupMembers);
     }
 
     public List<GroupReadAllResponse> readByCategory(Category category) {

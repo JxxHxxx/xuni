@@ -72,7 +72,6 @@ class GroupManagingServiceTest extends ServiceCommon {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(NOT_EXISTED_GROUP);
 
-
     }
 
     @DisplayName("그룹 모집 완료에 성공하면 " +
