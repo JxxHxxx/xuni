@@ -66,7 +66,7 @@ class GroupTest {
     void join_group_success() {
         //given
         Group group = makeTestGroup(5);
-        GroupMember groupMember = new GroupMember(2l, "유니");
+        GroupMember groupMember = new GroupMember(2l, "유니",group);
         group.join(groupMember);
 
 
@@ -81,7 +81,7 @@ class GroupTest {
     void join_group_success_rejoin() {
         //given
         Group group = makeTestGroup(5);
-        GroupMember groupMember = new GroupMember(2l, "유니");
+        GroupMember groupMember = new GroupMember(2l, "유니",group);
         group.join(groupMember);
 
         GroupMember findGroupMember = group.getGroupMembers().stream()
@@ -104,7 +104,7 @@ class GroupTest {
     void join_group_fail_cause_already_join() {
         //given
         Group group = makeTestGroup(5);
-        GroupMember groupMember = new GroupMember(1l, "유니");
+        GroupMember groupMember = new GroupMember(1l, "유니", group);
 
         //when - then
         assertThatThrownBy(() -> group.join(groupMember)).isInstanceOf(GroupJoinException.class)
@@ -117,7 +117,7 @@ class GroupTest {
     @Test
     void join_group_fail_cause_left_capacity_is_0() {
         Group group = makeTestGroup(1);
-        GroupMember groupMember = new GroupMember(2l, "이재헌");
+        GroupMember groupMember = new GroupMember(2l, "이재헌", group);
 
         assertThatThrownBy(() -> group.join(groupMember)).isInstanceOf(GroupJoinException.class)
                 .hasMessage(NOT_LEFT_CAPACITY);
@@ -133,7 +133,7 @@ class GroupTest {
         group.closeRecruitment(1l);
 
         //when - then
-        GroupMember groupMember = new GroupMember(2l, "유니");
+        GroupMember groupMember = new GroupMember(2l, "유니",group);
         assertThatThrownBy(() -> group.join(groupMember))
                 .isInstanceOf(GroupJoinException.class);
     }
@@ -180,8 +180,8 @@ class GroupTest {
                 .build();
 
         //given 그룹에 멤버 추가
-        group.join(new GroupMember(2l, "유니"));
-        group.join(new GroupMember(3l, "지니"));
+        group.join(new GroupMember(2l, "유니",group));
+        group.join(new GroupMember(3l, "지니", group));
         group.leave(3l);
 
         //given 모집 마감
@@ -267,7 +267,7 @@ class GroupTest {
     void leave_group_success() {
         //given
         Group group = makeTestGroup(5);
-        GroupMember groupMember = new GroupMember(2l, "유니");
+        GroupMember groupMember = new GroupMember(2l, "유니",group);
         group.join(groupMember);
 
 
@@ -308,7 +308,7 @@ class GroupTest {
     void leave_group_fail_cause_group_status_is_end() {
         //given
         List<GroupMember> groupMembers = new ArrayList<>();
-        groupMembers.add(new GroupMember(2l, "포도"));
+        groupMembers.add(new GroupMember(2l, "포도", null));
 
         Group group = Group.builder()
                 .host(new Host(1l, "자몽"))
@@ -342,7 +342,7 @@ class GroupTest {
     void leave_group_fail_cause_repeated_leave() {
         //given
         Group group = makeTestGroup(5);
-        GroupMember groupMember = new GroupMember(2l, "유니");
+        GroupMember groupMember = new GroupMember(2l, "유니",group);
         group.join(groupMember);
         group.leave(2l);
 

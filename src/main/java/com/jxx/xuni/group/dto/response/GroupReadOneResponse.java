@@ -14,9 +14,9 @@ public class GroupReadOneResponse {
     private Study study;
     private Time time;
     private Period period;
-    private List<GroupMember> groupMembers;
+    private List<GroupMemberDto> groupMembers;
 
-    public GroupReadOneResponse(Long groupId, Capacity capacity, GroupStatus groupStatus, Host host, Study study, Time time, Period period, List<GroupMember> groupMembers) {
+    public GroupReadOneResponse(Long groupId, Capacity capacity, GroupStatus groupStatus, Host host, Study study, Time time, Period period, List<GroupMemberDto> groupMembers) {
         this.groupId = groupId;
         this.capacity = capacity;
         this.groupStatus = groupStatus;

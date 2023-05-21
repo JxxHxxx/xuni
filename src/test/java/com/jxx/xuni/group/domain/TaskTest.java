@@ -1,8 +1,12 @@
 package com.jxx.xuni.group.domain;
 
+import com.jxx.xuni.group.dto.request.GroupTaskForm;
+import com.jxx.xuni.studyproduct.domain.Category;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 
 class TaskTest {
@@ -14,17 +18,17 @@ class TaskTest {
     @Test
     void check() {
         //given
-        Task studyCheck = Task.init(1l, 1l, "spring loc");
-        Assertions.assertThat(studyCheck.isDone()).isFalse();
+        Task task = Task.init(1l, 1l, "spring loc", null);
+        Assertions.assertThat(task.isDone()).isFalse();
         //when
-        studyCheck.updateDone();
+        task.updateDone();
         //then
-        Assertions.assertThat(studyCheck.isDone()).isTrue();
+        Assertions.assertThat(task.isDone()).isTrue();
 
         // 다시 체크 메서드를 호출하면 False 로 변경된다.
         //when
-        studyCheck.updateDone();
+        task.updateDone();
         //then
-        Assertions.assertThat(studyCheck.isDone()).isFalse();
+        Assertions.assertThat(task.isDone()).isFalse();
     }
 }

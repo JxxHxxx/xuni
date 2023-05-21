@@ -21,7 +21,7 @@ public class GroupManagingService {
     public void join(MemberDetails memberDetails, Long groupId) {
         Group group = groupRepository.readWithOptimisticLock(groupId)
                 .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP));
-        GroupMember groupMember = new GroupMember(memberDetails.getUserId(), memberDetails.getName());
+        GroupMember groupMember = new GroupMember(memberDetails.getUserId(), memberDetails.getName(), group);
 
         group.join(groupMember);
     }
