@@ -1,6 +1,7 @@
 package com.jxx.xuni.group.query;
 
-import com.jxx.xuni.group.dto.response.GroupPageApiResult;
+import com.jxx.xuni.group.dto.response.GroupAllQueryResponse;
+import com.jxx.xuni.group.dto.response.QGroupAllQueryResponse;
 import com.jxx.xuni.group.query.dynamic.ConditionUtils;
 import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
 import com.jxx.xuni.group.query.dynamic.QueryLimitPolicy;
@@ -27,8 +28,8 @@ public class GroupQueryImpl implements GroupQuery {
     }
 
     @Override
-    public Page<GroupPageApiResult.GroupAllQueryResponse> searchGroup(GroupSearchCondition condition, Pageable pageable) {
-        List<GroupPageApiResult.GroupAllQueryResponse> content = queryFactory
+    public Page<GroupAllQueryResponse> searchGroup(GroupSearchCondition condition, Pageable pageable) {
+        List<GroupAllQueryResponse> content = queryFactory
                 .select(new QGroupAllQueryResponse(
                         group.id.as("groupId"),
                         group.capacity,
@@ -97,7 +98,7 @@ public class GroupQueryImpl implements GroupQuery {
     }
 
     @Override
-    public List<GroupPageApiResult.GroupAllQueryResponse> readOwnWithFetch(Long groupMemberId) {
+    public List<GroupAllQueryResponse> readOwnWithFetch(Long groupMemberId) {
         return queryFactory
                 .select(new QGroupAllQueryResponse(
                         group.id.as("groupId"),

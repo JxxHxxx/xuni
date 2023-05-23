@@ -68,12 +68,12 @@ public class GroupReadService {
                 group.getPeriod())).toList();
     }
 
-    public Page<GroupPageApiResult.GroupAllQueryResponse> searchGroup(GroupSearchCondition condition, Pageable pageable) {
+    public Page<GroupAllQueryResponse> searchGroup(GroupSearchCondition condition, Pageable pageable) {
         condition.nullHandle();
         return groupReadRepository.searchGroup(condition, pageable);
     }
 
-    public List<GroupPageApiResult.GroupAllQueryResponse> readOwn(Long groupMemberId) {
+    public List<GroupAllQueryResponse> readOwn(Long groupMemberId) {
         return groupReadRepository.readOwnWithFetch(groupMemberId);
     }
 

@@ -264,7 +264,7 @@ class GroupReadControllerTest extends GroupCommon {
     @DisplayName("스터디 그룹 조건 조회 API")
     @Test
     void search_group() throws Exception {
-        GroupPageApiResult.GroupAllQueryResponse response1 = new GroupPageApiResult.GroupAllQueryResponse(
+        GroupAllQueryResponse response1 = new GroupAllQueryResponse(
                 1l,
                 new Capacity(5),
                 GroupStatus.GATHERING,
@@ -273,7 +273,7 @@ class GroupReadControllerTest extends GroupCommon {
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 Period.of(LocalDate.of(2123, 5, 1), LocalDate.of(2123, 12, 31)));
 
-        GroupPageApiResult.GroupAllQueryResponse response2 = new GroupPageApiResult.GroupAllQueryResponse(
+        GroupAllQueryResponse response2 = new GroupAllQueryResponse(
                 1l,
                 new Capacity(5),
                 GroupStatus.GATHERING,
@@ -283,7 +283,7 @@ class GroupReadControllerTest extends GroupCommon {
                 Period.of(LocalDate.of(2123, 6, 1), LocalDate.of(2123, 12, 31)));
         Pageable pageable = Pageable.ofSize(20);
 
-        List<GroupPageApiResult.GroupAllQueryResponse> content = List.of(response1, response2);
+        List<GroupAllQueryResponse> content = List.of(response1, response2);
 
         BDDMockito.given(groupReadService.searchGroup(any(), any()))
                 .willReturn(new PageImpl<>(content, pageable, content.size()));
@@ -402,7 +402,7 @@ class GroupReadControllerTest extends GroupCommon {
     @DisplayName("내가 속한 그룹 조회 API")
     @Test
     void read_own_by_self() throws Exception {
-        GroupPageApiResult.GroupAllQueryResponse response1 = new GroupPageApiResult.GroupAllQueryResponse(
+        GroupAllQueryResponse response1 = new GroupAllQueryResponse(
                 1l,
                 new Capacity(5),
                 GroupStatus.GATHERING,
@@ -411,7 +411,7 @@ class GroupReadControllerTest extends GroupCommon {
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 Period.of(LocalDate.of(2123, 5, 1), LocalDate.of(2123, 12, 31)));
 
-        GroupPageApiResult.GroupAllQueryResponse response2 = new GroupPageApiResult.GroupAllQueryResponse(
+        GroupAllQueryResponse response2 = new GroupAllQueryResponse(
                 1l,
                 new Capacity(5),
                 GroupStatus.GATHERING,
@@ -420,7 +420,7 @@ class GroupReadControllerTest extends GroupCommon {
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 Period.of(LocalDate.of(2123, 6, 1), LocalDate.of(2123, 12, 31)));
 
-        List<GroupPageApiResult.GroupAllQueryResponse> responses = List.of(response1, response2);
+        List<GroupAllQueryResponse> responses = List.of(response1, response2);
 
         BDDMockito.given(groupReadService.readOwn(any())).willReturn(responses);
 
