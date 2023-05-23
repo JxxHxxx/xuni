@@ -1,4 +1,4 @@
-package com.jxx.xuni.group.query;
+package com.jxx.xuni.group.query.dynamic;
 
 import com.jxx.xuni.studyproduct.domain.Category;
 

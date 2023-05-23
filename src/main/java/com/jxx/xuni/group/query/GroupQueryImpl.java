@@ -1,5 +1,9 @@
 package com.jxx.xuni.group.query;
 
+import com.jxx.xuni.group.dto.response.GroupPageApiResult;
+import com.jxx.xuni.group.query.dynamic.ConditionUtils;
+import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
+import com.jxx.xuni.group.query.dynamic.QueryLimitPolicy;
 import com.jxx.xuni.studyproduct.domain.Category;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -23,8 +27,8 @@ public class GroupQueryImpl implements GroupQuery {
     }
 
     @Override
-    public Page<GroupAllQueryResponse> searchGroup(GroupSearchCondition condition, Pageable pageable) {
-        List<GroupAllQueryResponse> content = queryFactory
+    public Page<GroupPageApiResult.GroupAllQueryResponse> searchGroup(GroupSearchCondition condition, Pageable pageable) {
+        List<GroupPageApiResult.GroupAllQueryResponse> content = queryFactory
                 .select(new QGroupAllQueryResponse(
                         group.id.as("groupId"),
                         group.capacity,
@@ -40,7 +44,7 @@ public class GroupQueryImpl implements GroupQuery {
                         readTypeCond(condition.getReadType())
                 )
                 .offset(pageable.getOffset())
-                .limit(QueryPolicy.LIMIT_OF_PAGE)
+                .limit(QueryLimitPolicy.LIMIT_OF_PAGE)
                 .orderBy(searchGroupOrderSpec(condition))
                 .fetch();
 
@@ -75,7 +79,7 @@ public class GroupQueryImpl implements GroupQuery {
     }
 
     private BooleanExpression readTypeCond(String readType) {
-        if (QueryUtils.isValid(readType)) {
+        if (ConditionUtils.isValid(readType)) {
             if ("default".equals(readType)) {
                 return group.groupStatus.in(GATHERING, GATHER_COMPLETE, START);
             }
@@ -93,7 +97,7 @@ public class GroupQueryImpl implements GroupQuery {
     }
 
     @Override
-    public List<GroupAllQueryResponse> readOwnWithFetch(Long groupMemberId) {
+    public List<GroupPageApiResult.GroupAllQueryResponse> readOwnWithFetch(Long groupMemberId) {
         return queryFactory
                 .select(new QGroupAllQueryResponse(
                         group.id.as("groupId"),
