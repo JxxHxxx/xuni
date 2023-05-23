@@ -1,5 +1,6 @@
 package com.jxx.xuni.studyproduct.application;
 
+import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.studyproduct.domain.*;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductDetailForm;
 import com.jxx.xuni.support.ServiceCommon;

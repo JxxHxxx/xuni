@@ -1,6 +1,6 @@
 package com.jxx.xuni.studyproduct.query;
 
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.studyproduct.domain.StudyProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

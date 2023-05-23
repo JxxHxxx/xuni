@@ -1,7 +1,7 @@
 package com.jxx.xuni.studyproduct.presentation;
 
 import com.jxx.xuni.studyproduct.application.StudyProductReadService;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductApiReadResult;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductDetailReadResponse;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;

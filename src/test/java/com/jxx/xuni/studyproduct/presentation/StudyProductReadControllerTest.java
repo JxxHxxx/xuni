@@ -1,7 +1,7 @@
 package com.jxx.xuni.studyproduct.presentation;
 
 import com.jxx.xuni.studyproduct.application.StudyProductReadService;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.studyproduct.domain.StudyProductDetail;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductDetailReadResponse;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;
@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 

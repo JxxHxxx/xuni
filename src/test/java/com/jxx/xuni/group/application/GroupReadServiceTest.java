@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static com.jxx.xuni.group.domain.GroupStatus.*;
-import static com.jxx.xuni.studyproduct.domain.Category.*;
-import static com.jxx.xuni.studyproduct.domain.Category.SPRING_FRAMEWORK;
+import static com.jxx.xuni.common.domain.Category.*;
+import static com.jxx.xuni.common.domain.Category.SPRING_FRAMEWORK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ServiceTest

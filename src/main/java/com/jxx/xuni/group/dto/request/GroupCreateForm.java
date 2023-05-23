@@ -1,6 +1,6 @@
 package com.jxx.xuni.group.dto.request;
 
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import lombok.Getter;
 import java.time.LocalDate;
 import java.time.LocalTime;

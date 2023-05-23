@@ -5,7 +5,7 @@ import com.jxx.xuni.group.dto.request.GroupCreateForm;
 import com.jxx.xuni.auth.domain.LoginInfo;
 import com.jxx.xuni.auth.domain.Member;
 import com.jxx.xuni.auth.domain.MemberRepository;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
 import org.assertj.core.api.Assertions;

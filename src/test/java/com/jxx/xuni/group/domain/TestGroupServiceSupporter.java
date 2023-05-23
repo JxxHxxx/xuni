@@ -2,7 +2,7 @@ package com.jxx.xuni.group.domain;
 
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.group.dto.request.GroupTaskForm;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;

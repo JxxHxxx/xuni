@@ -6,7 +6,7 @@ import com.jxx.xuni.group.domain.exception.GroupJoinException;
 import com.jxx.xuni.group.domain.exception.GroupStartException;
 import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
 import com.jxx.xuni.group.dto.request.GroupTaskForm;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

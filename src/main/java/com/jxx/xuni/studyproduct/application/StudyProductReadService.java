@@ -1,6 +1,6 @@
 package com.jxx.xuni.studyproduct.application;
 
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.studyproduct.domain.StudyProduct;
 import com.jxx.xuni.studyproduct.domain.StudyProductDetail;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductDetailReadResponse;

@@ -6,7 +6,7 @@ import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.domain.*;
 import com.jxx.xuni.group.dto.response.*;
 import com.jxx.xuni.group.query.converter.PageConverter;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;

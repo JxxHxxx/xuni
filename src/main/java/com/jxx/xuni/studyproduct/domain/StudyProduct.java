@@ -1,5 +1,6 @@
 package com.jxx.xuni.studyproduct.domain;
 
+import com.jxx.xuni.common.domain.Category;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

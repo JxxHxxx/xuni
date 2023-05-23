@@ -5,7 +5,7 @@ import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.common.service.AmazonS3Handler;
 import com.jxx.xuni.group.domain.TestGroupServiceSupporter;
 import com.jxx.xuni.studyproduct.application.StudyProductCreateService;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductDetailForm;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductForm;
 import org.junit.jupiter.api.BeforeEach;

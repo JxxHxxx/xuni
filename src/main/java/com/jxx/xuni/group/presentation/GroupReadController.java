@@ -7,7 +7,7 @@ import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.dto.response.*;
 import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
 import com.jxx.xuni.group.query.converter.PageConverter;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

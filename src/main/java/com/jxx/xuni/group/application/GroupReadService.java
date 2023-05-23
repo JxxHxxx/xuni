@@ -5,7 +5,7 @@ import com.jxx.xuni.group.domain.Task;
 import com.jxx.xuni.group.dto.response.*;
 import com.jxx.xuni.group.query.GroupReadRepository;
 import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

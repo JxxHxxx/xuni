@@ -5,7 +5,7 @@ import com.jxx.xuni.group.dto.response.QGroupAllQueryResponse;
 import com.jxx.xuni.group.query.dynamic.ConditionUtils;
 import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
 import com.jxx.xuni.group.query.dynamic.QueryLimitPolicy;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
