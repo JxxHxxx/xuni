@@ -5,9 +5,8 @@ import com.jxx.xuni.auth.presentation.AuthenticatedMember;
 import com.jxx.xuni.auth.presentation.OptionalAuthentication;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.dto.response.*;
-import com.jxx.xuni.group.query.GroupAllQueryResponse;
-import com.jxx.xuni.group.query.GroupSearchCondition;
-import com.jxx.xuni.group.query.PageConverter;
+import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
+import com.jxx.xuni.group.query.converter.PageConverter;
 import com.jxx.xuni.studyproduct.domain.Category;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,8 +54,8 @@ public class GroupReadController {
 
     @GetMapping("/groups/cd-cp")
     public ResponseEntity<GroupPageApiResult> searchCond(GroupSearchCondition condition, Pageable pageable) {
-        Page<GroupAllQueryResponse> page = groupReadService.searchGroup(condition, pageable);
-        List<GroupAllQueryResponse> response = page.getContent();
+        Page<GroupPageApiResult.GroupAllQueryResponse> page = groupReadService.searchGroup(condition, pageable);
+        List<GroupPageApiResult.GroupAllQueryResponse> response = page.getContent();
         PageInfo pageInfo = pageConverter.toPageInfo(page.getPageable(), page.getTotalElements(), page.getTotalPages());
 
         return ResponseEntity.ok(new GroupPageApiResult(SEARCH_GROUP_COND, response, pageInfo));
@@ -73,7 +72,7 @@ public class GroupReadController {
     @GetMapping("/members/{member-id}/groups")
     public ResponseEntity<GroupApiReadResult> readOwnBySelf(@PathVariable("member-id") Long groupMemberId,
                                                             @AuthenticatedMember MemberDetails md) {
-        List<GroupAllQueryResponse> response = groupReadService.readOwn(groupMemberId);
+        List<GroupPageApiResult.GroupAllQueryResponse> response = groupReadService.readOwn(groupMemberId);
         return ResponseEntity.ok(new GroupApiReadResult(GROUP_OWN_READ, response));
     }
 }

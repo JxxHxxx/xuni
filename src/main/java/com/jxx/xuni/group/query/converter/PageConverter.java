@@ -1,4 +1,4 @@
-package com.jxx.xuni.group.query;
+package com.jxx.xuni.group.query.converter;
 
 import com.jxx.xuni.group.dto.response.PageInfo;
 import org.springframework.data.domain.Pageable;

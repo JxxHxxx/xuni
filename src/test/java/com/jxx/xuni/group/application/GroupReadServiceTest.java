@@ -1,16 +1,15 @@
 package com.jxx.xuni.group.application;
 
 import com.jxx.xuni.group.domain.*;
+import com.jxx.xuni.group.dto.response.GroupPageApiResult;
 import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
 import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
 import com.jxx.xuni.group.dto.response.GroupStudyCheckResponse;
-import com.jxx.xuni.group.query.GroupAllQueryResponse;
 import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.jxx.xuni.group.domain.GroupStatus.*;
@@ -111,7 +110,7 @@ class GroupReadServiceTest extends ServiceCommon {
         Group savedJavaGroup = groupRepository.save(javaGroup);
         savedJavaGroup.leave(2l);
         //when
-        List<GroupAllQueryResponse> response = groupReadService.readOwn(2l);
+        List<GroupPageApiResult.GroupAllQueryResponse> response = groupReadService.readOwn(2l);
         //then
         assertThat(response).isEmpty();
     }
@@ -126,7 +125,7 @@ class GroupReadServiceTest extends ServiceCommon {
 
         groupRepository.saveAll(List.of(javaGroup, springGroup));
         //when
-        List<GroupAllQueryResponse> response = groupReadService.readOwn(2l);
+        List<GroupPageApiResult.GroupAllQueryResponse> response = groupReadService.readOwn(2l);
         //then
         assertThat(response).extracting("study.category").containsOnly(JAVA);
     }
@@ -149,9 +148,9 @@ class GroupReadServiceTest extends ServiceCommon {
 
         groupRepository.saveAll(List.of(javaGroup, springGroup, reactGroup));
         //when
-        List<GroupAllQueryResponse> response = groupReadService.readOwn(2l);
+        List<GroupPageApiResult.GroupAllQueryResponse> response = groupReadService.readOwn(2l);
 
-        for (GroupAllQueryResponse q : response) {
+        for (GroupPageApiResult.GroupAllQueryResponse q : response) {
             System.out.println("category : " + q.getStudy().getCategory());
         }
         //then
