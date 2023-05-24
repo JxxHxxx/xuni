@@ -3,7 +3,7 @@ package com.jxx.xuni.studyproduct.presentation;
 import com.jxx.xuni.auth.presentation.Admin;
 import com.jxx.xuni.common.service.AmazonS3Handler;
 import com.jxx.xuni.studyproduct.application.StudyProductCreateService;
-import com.jxx.xuni.studyproduct.dto.request.StudyProductDetailForm;
+import com.jxx.xuni.studyproduct.dto.request.StudyProductContentForm;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductForm;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductApiSimpleResult;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +39,10 @@ public class StudyProductCreateController {
 
     @Admin
     @PostMapping("/study-products/{study-product-id}")
-    public ResponseEntity<StudyProductApiSimpleResult> createDetail(@PathVariable("study-product-id") String studyProductId,
-                                                                    @RequestBody List<StudyProductDetailForm> StudyProductDetailForms) {
+    public ResponseEntity<StudyProductApiSimpleResult> putStudyProductContent(@PathVariable("study-product-id") String studyProductId,
+                                                                              @RequestBody List<StudyProductContentForm> StudyProductDetailForms) {
 
-        studyProductCreateService.createDetail(studyProductId, StudyProductDetailForms);
+        studyProductCreateService.putContent(studyProductId, StudyProductDetailForms);
         return new ResponseEntity(StudyProductApiSimpleResult.createDetail(), HttpStatus.CREATED);
     }
 }

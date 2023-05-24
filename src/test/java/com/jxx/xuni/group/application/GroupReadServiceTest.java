@@ -1,21 +1,17 @@
 package com.jxx.xuni.group.application;
 
 import com.jxx.xuni.group.domain.*;
-import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
-import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
-import com.jxx.xuni.group.dto.response.GroupStudyCheckResponse;
-import com.jxx.xuni.group.query.GroupAllQueryResponse;
+import com.jxx.xuni.group.dto.response.*;
 import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.jxx.xuni.group.domain.GroupStatus.*;
-import static com.jxx.xuni.studyproduct.domain.Category.*;
-import static com.jxx.xuni.studyproduct.domain.Category.SPRING_FRAMEWORK;
+import static com.jxx.xuni.common.domain.Category.*;
+import static com.jxx.xuni.common.domain.Category.SPRING_FRAMEWORK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ServiceTest

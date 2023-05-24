@@ -1,6 +1,11 @@
 package com.jxx.xuni.group.query;
 
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.group.dto.response.GroupAllQueryResponse;
+import com.jxx.xuni.group.dto.response.QGroupAllQueryResponse;
+import com.jxx.xuni.group.query.dynamic.ConditionUtils;
+import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
+import com.jxx.xuni.group.query.dynamic.QueryLimitPolicy;
+import com.jxx.xuni.common.domain.Category;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -40,7 +45,7 @@ public class GroupQueryImpl implements GroupQuery {
                         readTypeCond(condition.getReadType())
                 )
                 .offset(pageable.getOffset())
-                .limit(QueryPolicy.LIMIT_OF_PAGE)
+                .limit(QueryLimitPolicy.LIMIT_OF_PAGE)
                 .orderBy(searchGroupOrderSpec(condition))
                 .fetch();
 
@@ -75,7 +80,7 @@ public class GroupQueryImpl implements GroupQuery {
     }
 
     private BooleanExpression readTypeCond(String readType) {
-        if (QueryUtils.isValid(readType)) {
+        if (ConditionUtils.isValid(readType)) {
             if ("default".equals(readType)) {
                 return group.groupStatus.in(GATHERING, GATHER_COMPLETE, START);
             }

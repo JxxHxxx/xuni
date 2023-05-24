@@ -1,5 +1,7 @@
 package com.jxx.xuni.group.query;
 
+import com.jxx.xuni.group.dto.response.GroupAllQueryResponse;
+import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

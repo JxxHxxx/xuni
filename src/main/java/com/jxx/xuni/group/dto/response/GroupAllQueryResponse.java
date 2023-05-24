@@ -1,4 +1,4 @@
-package com.jxx.xuni.group.query;
+package com.jxx.xuni.group.dto.response;
 
 import com.jxx.xuni.group.domain.*;
 import com.querydsl.core.annotations.QueryProjection;

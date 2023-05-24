@@ -1,7 +1,5 @@
 package com.jxx.xuni.group.dto.response;
 
-
-import com.jxx.xuni.group.query.GroupAllQueryResponse;
 import lombok.Getter;
 
 import java.util.List;

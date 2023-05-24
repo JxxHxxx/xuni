@@ -1,6 +1,6 @@
-package com.jxx.xuni.group.query;
+package com.jxx.xuni.group.query.dynamic;
 
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 
 public class GroupSearchCondition {
     private Category category;

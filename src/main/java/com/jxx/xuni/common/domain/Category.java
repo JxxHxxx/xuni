@@ -1,4 +1,4 @@
-package com.jxx.xuni.studyproduct.domain;
+package com.jxx.xuni.common.domain;
 
 public enum Category {
     JAVA, JAVASCRIPT, REACT, JPA, SPRING_FRAMEWORK, TEST, NETWORK, AWS, MYSQL, REST, ETC, CSS, STATE_MANAGEMENT;

@@ -1,12 +1,8 @@
 package com.jxx.xuni.group.domain;
 
-import com.jxx.xuni.group.dto.request.GroupTaskForm;
-import com.jxx.xuni.studyproduct.domain.Category;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 
 class TaskTest {

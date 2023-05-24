@@ -1,9 +1,9 @@
 package com.jxx.xuni.studyproduct.presentation;
 
 import com.jxx.xuni.studyproduct.application.StudyProductReadService;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductApiReadResult;
-import com.jxx.xuni.studyproduct.dto.response.StudyProductDetailReadResponse;
+import com.jxx.xuni.studyproduct.dto.response.StudyProductContentReadResponse;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +39,7 @@ public class StudyProductReadController {
 
     @GetMapping("/study-products/{study-product-id}")
     public ResponseEntity<StudyProductApiReadResult> readDetails(@PathVariable("study-product-id") String studyProductId) {
-        StudyProductDetailReadResponse response = studyProductReadService.readDetails(studyProductId);
+        StudyProductContentReadResponse response = studyProductReadService.readContent(studyProductId);
 
         return ResponseEntity.ok(new StudyProductApiReadResult(STUDY_PRODUCT_DETAIL_READ, response));
     }
