@@ -364,7 +364,7 @@ class GroupReadControllerTest extends GroupCommon {
         GroupStudyCheckResponse response1 = new GroupStudyCheckResponse(1l, "인터페이스", true);
         GroupStudyCheckResponse response2 = new GroupStudyCheckResponse(2l, "객체 지향 설계", false);
 
-        BDDMockito.given(groupReadService.readStudyCheck(any(), any())).willReturn(List.of(response1, response2));
+        BDDMockito.given(groupReadService.readGroupTask(any(), any())).willReturn(List.of(response1, response2));
 
         ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.get("/groups/{group-id}/chapters", 1l)
                         .contentType(MediaType.APPLICATION_JSON)

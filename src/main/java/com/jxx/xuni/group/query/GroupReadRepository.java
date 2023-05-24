@@ -31,5 +31,5 @@ public interface GroupReadRepository extends JpaRepository<Group, Long>, GroupQu
             "join fetch g.tasks gt " +
             "where g.id =:groupId " +
             "and gt.memberId =:memberId ")
-    Optional<Group> readStudyCheckWithFetch(@Param("groupId") Long groupId, @Param("memberId") Long memberId);
+    Optional<Group> readTaskWithFetch(@Param("groupId") Long groupId, @Param("memberId") Long memberId);
 }

@@ -77,8 +77,8 @@ public class GroupReadService {
         return groupReadRepository.readOwnWithFetch(groupMemberId);
     }
 
-    public List<GroupStudyCheckResponse> readStudyCheck(Long groupId, Long userId) {
-        Group group = groupReadRepository.readStudyCheckWithFetch(groupId, userId)
+    public List<GroupStudyCheckResponse> readGroupTask(Long groupId, Long userId) {
+        Group group = groupReadRepository.readTaskWithFetch(groupId, userId)
                 .orElseThrow(() -> new IllegalArgumentException(BAD_REQUEST));
         List<Task> studyChecks = group.receiveGroupTasks(userId);
 
