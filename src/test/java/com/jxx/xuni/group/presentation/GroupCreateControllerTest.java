@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static com.jxx.xuni.studyproduct.domain.Category.JAVA;
+import static com.jxx.xuni.common.domain.Category.JAVA;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

@@ -1,9 +1,9 @@
 package com.jxx.xuni.group.query;
 
 import com.jxx.xuni.group.domain.*;
-import com.jxx.xuni.group.dto.response.GroupPageApiResult;
+import com.jxx.xuni.group.dto.response.GroupAllQueryResponse;
 import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
-import com.jxx.xuni.studyproduct.domain.Category;
+import com.jxx.xuni.common.domain.Category;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.jxx.xuni.group.domain.GroupStatus.*;
 import static com.jxx.xuni.group.domain.TestGroupServiceSupporter.*;
-import static com.jxx.xuni.studyproduct.domain.Category.*;
+import static com.jxx.xuni.common.domain.Category.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
@@ -71,8 +71,8 @@ class GroupQueryImplTest {
         Integer forceInjectValue = 100;
         PageRequest pageable = PageRequest.of(0, forceInjectValue);
         //when
-        Page<GroupPageApiResult.GroupAllQueryResponse> response = groupReadRepository.searchGroup(condition, pageable);
-        List<GroupPageApiResult.GroupAllQueryResponse> content = response.getContent();
+        Page<GroupAllQueryResponse> response = groupReadRepository.searchGroup(condition, pageable);
+        List<GroupAllQueryResponse> content = response.getContent();
         //then
         assertThat(content).extracting("groupStatus").containsOnly(GATHERING, GATHER_COMPLETE, START);
 
@@ -88,7 +88,7 @@ class GroupQueryImplTest {
         GroupSearchCondition condition = new GroupSearchCondition(MYSQL, null, false, null);
         PageRequest pageable = PageRequest.of(0, 20);
         //when
-        List<GroupPageApiResult.GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
+        List<GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
         //then
         List<Study> studies = content.stream().map(c -> c.getStudy()).toList();
         assertThat(studies).extracting("category").containsOnly(MYSQL);
@@ -102,7 +102,7 @@ class GroupQueryImplTest {
         GroupSearchCondition condition = new GroupSearchCondition(null, "all", false, null);
         PageRequest pageable = PageRequest.of(0, 20);
         //when
-        List<GroupPageApiResult.GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
+        List<GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
         //then
         assertThat(content).extracting("groupStatus").containsOnly(GATHERING, GATHER_COMPLETE, START, END);
     }
@@ -113,7 +113,7 @@ class GroupQueryImplTest {
         GroupSearchCondition condition = new GroupSearchCondition(null, "gathering", false, null);
         PageRequest pageable = PageRequest.of(0, 20);
         //when
-        List<GroupPageApiResult.GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
+        List<GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
         //then
         assertThat(content).extracting("groupStatus").containsOnly(GATHERING);
     }
@@ -124,7 +124,7 @@ class GroupQueryImplTest {
         GroupSearchCondition condition = new GroupSearchCondition(null, "default", false, null);
         PageRequest pageable = PageRequest.of(0, 20);
         //when
-        List<GroupPageApiResult.GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
+        List<GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
         //then
         assertThat(content).extracting("groupStatus").containsOnly(GATHERING, GATHER_COMPLETE, START);
     }
@@ -135,7 +135,7 @@ class GroupQueryImplTest {
         GroupSearchCondition condition = new GroupSearchCondition(null, "otherValue", false, null);
         PageRequest pageable = PageRequest.of(0, 20);
         //when
-        List<GroupPageApiResult.GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
+        List<GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
         //then
         assertThat(content).extracting("groupStatus").containsOnly(GATHERING, GATHER_COMPLETE, START);
     }

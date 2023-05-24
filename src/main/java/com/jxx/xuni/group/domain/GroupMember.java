@@ -22,7 +22,7 @@ public class GroupMember {
     private Boolean isLeft;
     private LocalDateTime lastVisitedTime;
     @JoinColumn(name = "group_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Group group;
 
     public GroupMember(Long groupMemberId, String groupMemberName, Group group) {

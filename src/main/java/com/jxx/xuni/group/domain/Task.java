@@ -20,7 +20,7 @@ public class Task {
     private String title;
     private boolean isDone;
     @JoinColumn(name = "group_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Group group;
 
     private Task(Long memberId, Long chapterId, String title, boolean isDone, Group group) {

@@ -1,9 +1,9 @@
 package com.jxx.xuni.studyproduct.presentation;
 
 import com.jxx.xuni.studyproduct.application.StudyProductReadService;
-import com.jxx.xuni.studyproduct.domain.Category;
-import com.jxx.xuni.studyproduct.domain.StudyProductDetail;
-import com.jxx.xuni.studyproduct.dto.response.StudyProductDetailReadResponse;
+import com.jxx.xuni.common.domain.Category;
+import com.jxx.xuni.studyproduct.domain.Content;
+import com.jxx.xuni.studyproduct.dto.response.StudyProductContentReadResponse;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -42,10 +41,10 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
     @Test
     void study_product_read_all() throws Exception {
         StudyProductReadResponse response1 = new StudyProductReadResponse(
-                "스프링 코어/MVC 스터디", Category.SPRING_FRAMEWORK, "초보 웹 개발자를 위한 스프링5 프로그래밍 입문",
+                "초보 웹 개발자를 위한 스프링5 프로그래밍 입문", Category.SPRING_FRAMEWORK,
                 "최범균", "IMAGE URL");
         StudyProductReadResponse response2 = new StudyProductReadResponse(
-                "네트워크 스터디", Category.NETWORK, "모두의 네트워크", "미즈구치 카츠야", "IMAGE URL");
+                "미즈구치 카츠야", Category.NETWORK, "모두의 네트워크", "IMAGE URL");
         BDDMockito.given(studyProductReadService.readAll()).willReturn(List.of(response1, response2));
 
         ResultActions result = mockMvc.perform(get("/study-products")
@@ -63,11 +62,10 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
 
                                 fieldWithPath("response").type(JsonFieldType.ARRAY).description("조회 데이터"),
-                                fieldWithPath("response[].name").type(JsonFieldType.STRING).description("스터디 상품 이름"),
+                                fieldWithPath("response[].name").type(JsonFieldType.STRING).description("스터디 상품 제목"),
                                 fieldWithPath("response[].category").type(JsonFieldType.STRING).description("스터디 상품 카테고리"),
-                                fieldWithPath("response[].content").type(JsonFieldType.STRING).description("스터디 상품 제목"),
-                                fieldWithPath("response[].author").type(JsonFieldType.STRING).description("스터디 상품 저자"),
-                                fieldWithPath("response[].image").type(JsonFieldType.STRING).description("스터디 상품 이미지 URL")
+                                fieldWithPath("response[].creator").type(JsonFieldType.STRING).description("스터디 상품 저자"),
+                                fieldWithPath("response[].thumbnail").type(JsonFieldType.STRING).description("스터디 상품 썸네일 URL")
                         )
                 ));
     }
@@ -76,9 +74,9 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
     @Test
     void study_product_read_cond_by_category() throws Exception {
         StudyProductReadResponse response1 = new StudyProductReadResponse(
-                "자바 스터디", Category.JAVA, "JAVA의 정석", "남궁성", "IMAGE URL");
+                "JAVA의 정석", Category.JAVA, "남궁성", "IMAGE URL");
         StudyProductReadResponse response2 = new StudyProductReadResponse(
-                "자바 스터디", Category.JAVA, "이펙티브 자바 3/E", "조슈아 블로치", "IMAGE URL");
+                "이펙티브 자바 3/E", Category.JAVA, "조슈아 블로치", "IMAGE URL");
         BDDMockito.given(studyProductReadService.readBy(Category.JAVA)).willReturn(List.of(response1, response2));
 
         ResultActions result = mockMvc.perform(get("/study-products/cond")
@@ -101,11 +99,10 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
 
                                 fieldWithPath("response").type(JsonFieldType.ARRAY).description("조회 데이터"),
-                                fieldWithPath("response[].name").type(JsonFieldType.STRING).description("스터디 상품 이름"),
+                                fieldWithPath("response[].name").type(JsonFieldType.STRING).description("스터디 상품 제목"),
                                 fieldWithPath("response[].category").type(JsonFieldType.STRING).description("스터디 상품 카테고리"),
-                                fieldWithPath("response[].content").type(JsonFieldType.STRING).description("스터디 상품 제목"),
-                                fieldWithPath("response[].author").type(JsonFieldType.STRING).description("스터디 상품 저자"),
-                                fieldWithPath("response[].image").type(JsonFieldType.STRING).description("스터디 상품 이미지 URL")
+                                fieldWithPath("response[].creator").type(JsonFieldType.STRING).description("스터디 상품 저자"),
+                                fieldWithPath("response[].thumbnail").type(JsonFieldType.STRING).description("스터디 상품 썸네일 URL")
                         )
                 ));
     }
@@ -113,23 +110,22 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
     @DisplayName("스터디 상품 상세 조회")
     @Test
     void study_product_read_one() throws Exception {
-        StudyProductDetailReadResponse response = new StudyProductDetailReadResponse(
-                "네트워크 스터디",
-                Category.NETWORK,
+        StudyProductContentReadResponse response = new StudyProductContentReadResponse(
                 "모두의 네트워크",
+                Category.NETWORK,
                 "미즈구치 카츠야",
                 "IMAGE URL",
-                List.of(new StudyProductDetail(1l, "1장 네트워크 첫걸음"),
-                        new StudyProductDetail(2l, "2장 네트워크의 기본 규칙"),
-                        new StudyProductDetail(3l, "3장 물리 계층 : 데이터를 전기 신호로 변환하기"),
-                        new StudyProductDetail(4l, "4장 데이터 링크 계층 : 랜에서 데이터 전송하기"),
-                        new StudyProductDetail(5l, "5장 네트워크 계층 : 목적지에 데이터 전달하기"),
-                        new StudyProductDetail(6l, "6장 전송 계층 : 신뢰할 수 있는 데이터 전송하기"),
-                        new StudyProductDetail(7l, "7장 응용 계층 : 애플리케이션에 데이터 전송하기"),
-                        new StudyProductDetail(8l, "8장 네트워크의 전체 흐름 살펴보기"),
-                        new StudyProductDetail(9l, "9장 무선 랜 이해하기")));
+                List.of(new Content(1l, "1장 네트워크 첫걸음"),
+                        new Content(2l, "2장 네트워크의 기본 규칙"),
+                        new Content(3l, "3장 물리 계층 : 데이터를 전기 신호로 변환하기"),
+                        new Content(4l, "4장 데이터 링크 계층 : 랜에서 데이터 전송하기"),
+                        new Content(5l, "5장 네트워크 계층 : 목적지에 데이터 전달하기"),
+                        new Content(6l, "6장 전송 계층 : 신뢰할 수 있는 데이터 전송하기"),
+                        new Content(7l, "7장 응용 계층 : 애플리케이션에 데이터 전송하기"),
+                        new Content(8l, "8장 네트워크의 전체 흐름 살펴보기"),
+                        new Content(9l, "9장 무선 랜 이해하기")));
 
-        BDDMockito.given(studyProductReadService.readDetails(any())).willReturn(response);
+        BDDMockito.given(studyProductReadService.readContent(any())).willReturn(response);
 
         ResultActions result = mockMvc.perform(get("/study-products/{study-product-id}", "uuid")
                 .contentType(MediaType.APPLICATION_JSON));
@@ -150,13 +146,12 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
                                 fieldWithPath("response").type(JsonFieldType.OBJECT).description("조회 데이터"),
                                 fieldWithPath("response.name").type(JsonFieldType.STRING).description("스터디 상품 이름"),
                                 fieldWithPath("response.category").type(JsonFieldType.STRING).description("스터디 상품 카테고리"),
-                                fieldWithPath("response.content").type(JsonFieldType.STRING).description("스터디 상품 제목"),
-                                fieldWithPath("response.author").type(JsonFieldType.STRING).description("스터디 상품 저자"),
-                                fieldWithPath("response.image").type(JsonFieldType.STRING).description("스터디 상품 이미지 URL"),
+                                fieldWithPath("response.creator").type(JsonFieldType.STRING).description("스터디 상품 저자"),
+                                fieldWithPath("response.thumbnail").type(JsonFieldType.STRING).description("스터디 상품 썸네일 URL"),
 
-                                fieldWithPath("response.studyProductDetail").type(JsonFieldType.ARRAY).description("스터디 상품 상세 정보"),
-                                fieldWithPath("response.studyProductDetail[].chapterId").type(JsonFieldType.NUMBER).description("스터디 상품 상세 식별자"),
-                                fieldWithPath("response.studyProductDetail[].title").type(JsonFieldType.STRING).description("제목")
+                                fieldWithPath("response.contents").type(JsonFieldType.ARRAY).description("스터디 상품 컨텐츠 정보"),
+                                fieldWithPath("response.contents[].chapterNo").type(JsonFieldType.NUMBER).description("상품 목차 인덱스"),
+                                fieldWithPath("response.contents[].title").type(JsonFieldType.STRING).description("목차 제목")
                         )
                 ));
     }

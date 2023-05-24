@@ -1,10 +1,7 @@
 package com.jxx.xuni.group.application;
 
 import com.jxx.xuni.group.domain.*;
-import com.jxx.xuni.group.dto.response.GroupPageApiResult;
-import com.jxx.xuni.group.dto.response.GroupReadAllResponse;
-import com.jxx.xuni.group.dto.response.GroupReadOneResponse;
-import com.jxx.xuni.group.dto.response.GroupStudyCheckResponse;
+import com.jxx.xuni.group.dto.response.*;
 import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
 import org.junit.jupiter.api.*;
@@ -13,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static com.jxx.xuni.group.domain.GroupStatus.*;
-import static com.jxx.xuni.studyproduct.domain.Category.*;
-import static com.jxx.xuni.studyproduct.domain.Category.SPRING_FRAMEWORK;
+import static com.jxx.xuni.common.domain.Category.*;
+import static com.jxx.xuni.common.domain.Category.SPRING_FRAMEWORK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ServiceTest
@@ -110,7 +107,7 @@ class GroupReadServiceTest extends ServiceCommon {
         Group savedJavaGroup = groupRepository.save(javaGroup);
         savedJavaGroup.leave(2l);
         //when
-        List<GroupPageApiResult.GroupAllQueryResponse> response = groupReadService.readOwn(2l);
+        List<GroupAllQueryResponse> response = groupReadService.readOwn(2l);
         //then
         assertThat(response).isEmpty();
     }
@@ -125,7 +122,7 @@ class GroupReadServiceTest extends ServiceCommon {
 
         groupRepository.saveAll(List.of(javaGroup, springGroup));
         //when
-        List<GroupPageApiResult.GroupAllQueryResponse> response = groupReadService.readOwn(2l);
+        List<GroupAllQueryResponse> response = groupReadService.readOwn(2l);
         //then
         assertThat(response).extracting("study.category").containsOnly(JAVA);
     }
@@ -148,9 +145,9 @@ class GroupReadServiceTest extends ServiceCommon {
 
         groupRepository.saveAll(List.of(javaGroup, springGroup, reactGroup));
         //when
-        List<GroupPageApiResult.GroupAllQueryResponse> response = groupReadService.readOwn(2l);
+        List<GroupAllQueryResponse> response = groupReadService.readOwn(2l);
 
-        for (GroupPageApiResult.GroupAllQueryResponse q : response) {
+        for (GroupAllQueryResponse q : response) {
             System.out.println("category : " + q.getStudy().getCategory());
         }
         //then
