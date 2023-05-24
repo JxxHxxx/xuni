@@ -8,9 +8,8 @@ import java.util.List;
 public record StudyProductContentReadResponse(
         String name,
         Category category,
-        String content,
-        String author,
-        String image,
+        String creator,
+        String thumbnail,
         List<Content> contents
 )
 { }

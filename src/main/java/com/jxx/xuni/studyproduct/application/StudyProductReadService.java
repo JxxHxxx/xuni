@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,34 +20,32 @@ public class StudyProductReadService {
     public List<StudyProductReadResponse> readAll() {
         List<StudyProduct> studyProducts = studyProductReadRepository.findAll();
 
-        return mappedResponse(studyProducts);
+        return studyProducts.stream().map(sp -> new StudyProductReadResponse(
+                sp.getName(),
+                sp.getCategory(),
+                sp.getCreator(),
+                sp.getThumbnail())).toList();
     }
 
     public List<StudyProductReadResponse> readBy(Category category) {
         List<StudyProduct> studyProducts = studyProductReadRepository.findStudyProductByCategory(category);
 
-        return mappedResponse(studyProducts);
-    }
-
-    private static List<StudyProductReadResponse> mappedResponse(List<StudyProduct> studyProducts) {
-        return studyProducts.stream().map(studyProduct -> new StudyProductReadResponse(
-                studyProduct.getName(),
-                studyProduct.getCategory(),
-                studyProduct.getTopic().getContent(),
-                studyProduct.getTopic().getAuthor(),
-                studyProduct.getTopic().getImage())).collect(Collectors.toList());
+        return studyProducts.stream().map(sp -> new StudyProductReadResponse(
+                sp.getName(),
+                sp.getCategory(),
+                sp.getCreator(),
+                sp.getThumbnail())).toList();
     }
 
     public StudyProductContentReadResponse readContent(String studyProductId) {
         StudyProduct studyProduct = studyProductReadRepository.readWithContentFetch(studyProductId);
-        List<Content> studyProductDetails = studyProduct.getContents();
+        List<Content> contents = studyProduct.getContents();
 
         return new StudyProductContentReadResponse(
                 studyProduct.getName(),
                 studyProduct.getCategory(),
-                studyProduct.getTopic().getContent(),
-                studyProduct.getTopic().getAuthor(),
-                studyProduct.getTopic().getImage(),
-                studyProductDetails);
+                studyProduct.getCreator(),
+                studyProduct.getThumbnail(),
+                contents);
     }
 }

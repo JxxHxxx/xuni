@@ -4,21 +4,19 @@ import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
-@Slf4j
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Content {
 
-    private Long chapterId;
+    private Long chapterNo;
     private String title;
 
-    public Content(Long chapterId, String title) {
-        this.chapterId = chapterId;
+    public Content(Long chapterNo, String title) {
+        this.chapterNo = chapterNo;
         this.title = title;
     }
 
@@ -27,11 +25,11 @@ public class Content {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Content detail = (Content) o;
-        return Objects.equals(chapterId, detail.chapterId) && Objects.equals(title, detail.title);
+        return Objects.equals(chapterNo, detail.chapterNo) && Objects.equals(title, detail.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(chapterId, title);
+        return Objects.hash(chapterNo, title);
     }
 }
