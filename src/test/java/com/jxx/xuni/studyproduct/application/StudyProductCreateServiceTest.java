@@ -67,16 +67,16 @@ class StudyProductCreateServiceTest extends ServiceCommon {
                 new StudyProductDetailForm("MVC"));
 
         //when
-        studyProductCreateService.createDetail(studyProductId1, form1);
-        studyProductCreateService.createDetail(studyProductId2, form2);
+        studyProductCreateService.putContent(studyProductId1, form1);
+        studyProductCreateService.putContent(studyProductId2, form2);
 
         //then
         StudyProduct findStudyProduct1 = studyProductRepository.findById(studyProductId1).get();
         StudyProduct findStudyProduct2 = studyProductRepository.findById(studyProductId2).get();
 
-        List<Long> studyProduct1ChapterId = findStudyProduct1.getStudyProductDetail()
+        List<Long> studyProduct1ChapterId = findStudyProduct1.getContents()
                 .stream().map(d -> d.getChapterId()).toList();
-        List<Long> studyProduct2ChapterId = findStudyProduct2.getStudyProductDetail()
+        List<Long> studyProduct2ChapterId = findStudyProduct2.getContents()
                 .stream().map(d -> d.getChapterId()).toList();
 
         Assertions.assertThat(studyProduct1ChapterId).containsAnyElementsOf(studyProduct2ChapterId);
@@ -94,7 +94,7 @@ class StudyProductCreateServiceTest extends ServiceCommon {
                 new StudyProductDetailForm("인터페이스"));
 
         //when - then
-        Assertions.assertThatThrownBy(() -> studyProductCreateService.createDetail(notExistStudyProductId, form1))
+        Assertions.assertThatThrownBy(() -> studyProductCreateService.putContent(notExistStudyProductId, form1))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage(NOT_EXIST_STUDY_PRODUCT);
 

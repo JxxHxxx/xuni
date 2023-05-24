@@ -39,10 +39,10 @@ public class StudyProductCreateController {
 
     @Admin
     @PostMapping("/study-products/{study-product-id}")
-    public ResponseEntity<StudyProductApiSimpleResult> createDetail(@PathVariable("study-product-id") String studyProductId,
-                                                                    @RequestBody List<StudyProductDetailForm> StudyProductDetailForms) {
+    public ResponseEntity<StudyProductApiSimpleResult> putStudyProductContent(@PathVariable("study-product-id") String studyProductId,
+                                                                              @RequestBody List<StudyProductDetailForm> StudyProductDetailForms) {
 
-        studyProductCreateService.createDetail(studyProductId, StudyProductDetailForms);
+        studyProductCreateService.putContent(studyProductId, StudyProductDetailForms);
         return new ResponseEntity(StudyProductApiSimpleResult.createDetail(), HttpStatus.CREATED);
     }
 }

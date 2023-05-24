@@ -2,8 +2,8 @@ package com.jxx.xuni.studyproduct.presentation;
 
 import com.jxx.xuni.studyproduct.application.StudyProductReadService;
 import com.jxx.xuni.common.domain.Category;
-import com.jxx.xuni.studyproduct.domain.StudyProductDetail;
-import com.jxx.xuni.studyproduct.dto.response.StudyProductDetailReadResponse;
+import com.jxx.xuni.studyproduct.domain.Content;
+import com.jxx.xuni.studyproduct.dto.response.StudyProductContentReadResponse;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -112,23 +112,23 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
     @DisplayName("스터디 상품 상세 조회")
     @Test
     void study_product_read_one() throws Exception {
-        StudyProductDetailReadResponse response = new StudyProductDetailReadResponse(
+        StudyProductContentReadResponse response = new StudyProductContentReadResponse(
                 "네트워크 스터디",
                 Category.NETWORK,
                 "모두의 네트워크",
                 "미즈구치 카츠야",
                 "IMAGE URL",
-                List.of(new StudyProductDetail(1l, "1장 네트워크 첫걸음"),
-                        new StudyProductDetail(2l, "2장 네트워크의 기본 규칙"),
-                        new StudyProductDetail(3l, "3장 물리 계층 : 데이터를 전기 신호로 변환하기"),
-                        new StudyProductDetail(4l, "4장 데이터 링크 계층 : 랜에서 데이터 전송하기"),
-                        new StudyProductDetail(5l, "5장 네트워크 계층 : 목적지에 데이터 전달하기"),
-                        new StudyProductDetail(6l, "6장 전송 계층 : 신뢰할 수 있는 데이터 전송하기"),
-                        new StudyProductDetail(7l, "7장 응용 계층 : 애플리케이션에 데이터 전송하기"),
-                        new StudyProductDetail(8l, "8장 네트워크의 전체 흐름 살펴보기"),
-                        new StudyProductDetail(9l, "9장 무선 랜 이해하기")));
+                List.of(new Content(1l, "1장 네트워크 첫걸음"),
+                        new Content(2l, "2장 네트워크의 기본 규칙"),
+                        new Content(3l, "3장 물리 계층 : 데이터를 전기 신호로 변환하기"),
+                        new Content(4l, "4장 데이터 링크 계층 : 랜에서 데이터 전송하기"),
+                        new Content(5l, "5장 네트워크 계층 : 목적지에 데이터 전달하기"),
+                        new Content(6l, "6장 전송 계층 : 신뢰할 수 있는 데이터 전송하기"),
+                        new Content(7l, "7장 응용 계층 : 애플리케이션에 데이터 전송하기"),
+                        new Content(8l, "8장 네트워크의 전체 흐름 살펴보기"),
+                        new Content(9l, "9장 무선 랜 이해하기")));
 
-        BDDMockito.given(studyProductReadService.readDetails(any())).willReturn(response);
+        BDDMockito.given(studyProductReadService.readContent(any())).willReturn(response);
 
         ResultActions result = mockMvc.perform(get("/study-products/{study-product-id}", "uuid")
                 .contentType(MediaType.APPLICATION_JSON));

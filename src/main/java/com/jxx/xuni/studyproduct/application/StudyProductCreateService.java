@@ -1,7 +1,7 @@
 package com.jxx.xuni.studyproduct.application;
 
 import com.jxx.xuni.studyproduct.domain.StudyProduct;
-import com.jxx.xuni.studyproduct.domain.StudyProductDetail;
+import com.jxx.xuni.studyproduct.domain.Content;
 import com.jxx.xuni.studyproduct.domain.StudyProductRepository;
 import com.jxx.xuni.studyproduct.domain.Topic;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductDetailForm;
@@ -27,13 +27,13 @@ public class StudyProductCreateService {
     }
 
     @Transactional
-    public void createDetail(String studyProductId, List<StudyProductDetailForm> StudyProductDetailForms) {
+    public void putContent(String studyProductId, List<StudyProductDetailForm> StudyProductDetailForms) {
         Long chapterIdSequence = 1l;
         StudyProduct studyProduct = studyProductRepository.findById(studyProductId)
                 .orElseThrow(() -> new IllegalArgumentException(NOT_EXIST_STUDY_PRODUCT));
 
         for (StudyProductDetailForm form : StudyProductDetailForms) {
-            studyProduct.getStudyProductDetail().add(new StudyProductDetail(chapterIdSequence++, form.title()));
+            studyProduct.getContents().add(new Content(chapterIdSequence++, form.title()));
         }
     }
 }
