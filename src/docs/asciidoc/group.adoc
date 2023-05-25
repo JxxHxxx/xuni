@@ -123,13 +123,13 @@ include::{snippets}/group/query/studyCheck/response-fields.adoc[]
 == 자신이 속해있는 그룹 조회
 
 === HTTP request
-include::{snippets}/group/query/studyCheck/http-request.adoc[]
+include::{snippets}/group/query/readOwn/http-request.adoc[]
 ==== request header
-include::{snippets}/group/query/studyCheck/request-headers.adoc[]
+include::{snippets}/group/query/readOwn/request-headers.adoc[]
 ==== path parameter
-include::{snippets}/group/query/studyCheck/path-parameters.adoc[]
+include::{snippets}/group/query/readOwn/path-parameters.adoc[]
 
 === HTTP response body
-include::{snippets}/group/query/studyCheck/response-body.adoc[]
+include::{snippets}/group/query/readOwn/response-body.adoc[]
 ==== response body description
-include::{snippets}/group/query/studyCheck/response-fields.adoc[]
+include::{snippets}/group/query/readOwn/response-fields.adoc[]

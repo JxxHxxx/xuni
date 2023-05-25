@@ -91,7 +91,7 @@ class GroupReadServiceTest extends ServiceCommon {
         Group group = groupRepository.save(startGroup);
         Long groupId = group.getId();
         //when
-        List<GroupStudyCheckResponse> response = groupReadService.readStudyCheck(groupId, 1l);
+        List<GroupStudyCheckResponse> response = groupReadService.readGroupTask(groupId, 1l);
         //then
         assertThat(response.get(0).getChapterId()).isLessThan(response.get(1).getChapterId());
         assertThat(response.get(1).getChapterId()).isLessThan(response.get(2).getChapterId());
