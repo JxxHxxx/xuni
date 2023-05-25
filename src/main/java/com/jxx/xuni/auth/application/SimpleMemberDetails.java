@@ -1,9 +1,11 @@
 package com.jxx.xuni.auth.application;
 
 import com.jxx.xuni.auth.domain.Authority;
+import com.jxx.xuni.common.exception.NotPermissionException;
 import lombok.Getter;
 
 import static com.jxx.xuni.auth.domain.Authority.*;
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.PRIVATE_ACCESSIBLE;
 
 @Getter
 public class SimpleMemberDetails implements MemberDetails {
@@ -28,5 +30,12 @@ public class SimpleMemberDetails implements MemberDetails {
         this.email = email;
         this.name = name;
         this.authority = authority;
+    }
+
+    @Override
+    public void checkPrivateAuthority(Long userId) {
+        if (this.userId != userId) {
+            throw new NotPermissionException(PRIVATE_ACCESSIBLE);
+        }
     }
 }
