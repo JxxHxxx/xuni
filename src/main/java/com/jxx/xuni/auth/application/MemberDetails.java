@@ -11,4 +11,6 @@ public interface MemberDetails {
     String getEmail();
     Long getUserId();
     Authority getAuthority();
+
+    void checkPrivateAuthority(Long userId);
 }
