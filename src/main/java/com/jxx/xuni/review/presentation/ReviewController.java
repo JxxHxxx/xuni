@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.jxx.xuni.review.dto.response.ReviewApiMessage.REVIEW_CREATE;
+import static com.jxx.xuni.review.dto.response.ReviewApiMessage.REVIEW_READ;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -33,13 +35,13 @@ public class ReviewController {
         eventPublisher.publishEvent(event);
         reviewService.create(memberDetails, studyProductId, form);
 
-        return new ResponseEntity<>(ReviewApiSimpleResult.create("리뷰 작성 완료"), CREATED);
+        return new ResponseEntity<>(ReviewApiSimpleResult.create(REVIEW_CREATE), CREATED);
     }
 
     @GetMapping("/reviews/study-products/{study-product-id}")
     public ResponseEntity<ReviewApiResult> readReviewBy(@PathVariable("study-product-id") String studyProductId) {
         List<ReviewOneResponse> response = reviewService.read(studyProductId);
 
-        return ResponseEntity.ok(new ReviewApiResult(200, "리뷰 조회 완료", response));
+        return ResponseEntity.ok(new ReviewApiResult(200, REVIEW_READ, response));
     }
 }
