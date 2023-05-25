@@ -64,7 +64,7 @@ public class GroupReadController {
     @GetMapping("/groups/{group-id}/chapters")
     public ResponseEntity<GroupApiReadResult> readChapter(@PathVariable("group-id") Long groupId,
                                                           @AuthenticatedMember MemberDetails memberDetails) {
-        List<GroupStudyCheckResponse> response = groupReadService.readStudyCheck(groupId, memberDetails.getUserId());
+        List<GroupStudyCheckResponse> response = groupReadService.readGroupTask(groupId, memberDetails.getUserId());
 
         return ResponseEntity.ok(new GroupApiReadResult(STUDY_CHECK_OF_GROUP_MEMBER, response));
     }

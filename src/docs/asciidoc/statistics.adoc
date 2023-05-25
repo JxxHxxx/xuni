@@ -1,0 +1,20 @@
+:doctype: book
+:icons: font
+:toc: left
+:toclevels: 3
+
+== 홈으로
+* link:index.html[index]
+
+== 스터디 진행률 조회
+=== HTTP request
+include::{snippets}/statistics/progress/http-request.adoc[]
+==== request header
+include::{snippets}/statistics/progress/request-headers.adoc[]
+==== path parameter
+include::{snippets}/statistics/progress/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/statistics/progress/response-body.adoc[]
+==== response body description
+include::{snippets}/statistics/progress/response-fields.adoc[]
