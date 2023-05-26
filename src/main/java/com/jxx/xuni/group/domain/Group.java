@@ -105,8 +105,6 @@ public class Group {
         changeGroupStatusTo(START);
     }
 
-    // TODO : 메서드 명 좋지 못한 듯 Refactoring 고려해야 한다.
-
     public void doTask(Long chapterId, Long groupMemberId) {
         checkGroupState(START);
         Task task = validateCheckAuthority(chapterId, groupMemberId);
@@ -122,6 +120,15 @@ public class Group {
 
     public List<Task> receiveGroupTasks(Long userId) {
         return this.tasks.stream().filter(s -> s.isSameMember(userId)).toList();
+    }
+
+    public int calculateProgress(Long memberId) {
+        List<Task> taskOfMember = this.tasks.stream().filter(t -> t.isSameMember(memberId)).toList();
+        int taskAmount = taskOfMember.size();
+        long doneTaskAmount = taskOfMember.stream().filter(tm -> tm.isDone()).count();
+
+        double middleResult = (double) doneTaskAmount / taskAmount;
+        return (int) (middleResult * 100);
     }
 
     private Optional<GroupMember> getRequestMember(Long userId) {
