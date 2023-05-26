@@ -6,8 +6,8 @@ import com.jxx.xuni.common.event.trigger.StatisticsUpdateEvent;
 import com.jxx.xuni.statistics.domain.MemberStatistics;
 import com.jxx.xuni.statistics.domain.MemberStatisticsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.Optional;
 
@@ -18,7 +18,7 @@ public class MemberStatisticsNotifier {
     private final MemberStatisticsRepository memberStatisticsRepository;
     private final ReviewCreatedConnector reviewCreatedConnector;
 
-    @TransactionalEventListener
+    @EventListener(StatisticsUpdateEvent.class)
     public void handle(StatisticsUpdateEvent event) {
         int progress = reviewCreatedConnector.receive(ReviewCreatedEvent.by(event));
         Optional<MemberStatistics> optionalMemberStatistics = memberStatisticsRepository.readBy(event.memberId(), event.studyProductId());
