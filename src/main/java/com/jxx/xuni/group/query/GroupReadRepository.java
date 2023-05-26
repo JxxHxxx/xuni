@@ -32,4 +32,10 @@ public interface GroupReadRepository extends JpaRepository<Group, Long>, GroupQu
             "where g.id =:groupId " +
             "and gt.memberId =:memberId ")
     Optional<Group> readTaskWithFetch(@Param("groupId") Long groupId, @Param("memberId") Long memberId);
+
+    @Query(value = "select g from Group g " +
+            "join fetch g.tasks gt " +
+            "where gt.memberId =:memberId " +
+            "and g.study.id =:studyProductId")
+    Optional<Group> findBy(@Param("memberId") Long memberId, @Param("studyProductId") String studyProductId);
 }
