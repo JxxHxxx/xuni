@@ -5,9 +5,7 @@ import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.statistics.application.MemberStatisticsService;
 import com.jxx.xuni.statistics.dto.response.ReviewNeedResponse;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
-import org.mockito.internal.matchers.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -38,7 +36,7 @@ class MemberStatisticsControllerTest extends StatisticsCommon {
     @Test
     void send_progress_docs() throws Exception {
         ReviewNeedResponse response = new ReviewNeedResponse(50);
-        BDDMockito.given(memberStatisticsService.findReviewNeedStatistics(any(), any())).willReturn(response);
+        BDDMockito.given(memberStatisticsService.readOne(any(), any())).willReturn(response);
 
         String token = jwtTokenProvider.issue(new SimpleMemberDetails(1l, "xuni@naver.com", "유니"));
         ResultActions result = mockMvc.perform(get("/member-statistics/members/{member-id}/study-products/{study-product-id}", 1l, "id")
