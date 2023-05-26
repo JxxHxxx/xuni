@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
+
 @Service
 @RequiredArgsConstructor
 public class GroupEventNotifier implements ReviewCreatedConnector {
@@ -15,9 +17,10 @@ public class GroupEventNotifier implements ReviewCreatedConnector {
     private final GroupReadRepository groupReadRepository;
 
     @Override
-    @EventListener
+    @EventListener(ReviewCreatedEvent.class)
     public int receive(ReviewCreatedEvent event) {
-        Group group = groupReadRepository.findBy(event.memberId(), event.studyProductId()).get();
+        Group group = groupReadRepository.findBy(event.memberId(), event.studyProductId()).orElseThrow(
+                () -> new IllegalArgumentException(NOT_EXIST_ENTITY));
         return group.calculateProgress(event.memberId());
     }
 }
