@@ -1,6 +1,6 @@
 package com.jxx.xuni.common.event.trigger;
 
-public record StatisticsUpdateEvent(
+public record StatisticsAccessedEvent(
         Long memberId,
         String studyProductId
 

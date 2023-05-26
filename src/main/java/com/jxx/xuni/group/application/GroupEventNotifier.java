@@ -1,6 +1,6 @@
 package com.jxx.xuni.group.application;
 
-import com.jxx.xuni.common.event.trigger.ReviewCreatedEvent;
+import com.jxx.xuni.common.event.trigger.GroupAccessedEvent;
 import com.jxx.xuni.common.event.connector.ReviewCreatedConnector;
 import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.query.GroupReadRepository;
@@ -17,8 +17,8 @@ public class GroupEventNotifier implements ReviewCreatedConnector {
     private final GroupReadRepository groupReadRepository;
 
     @Override
-    @EventListener(ReviewCreatedEvent.class)
-    public int receive(ReviewCreatedEvent event) {
+    @EventListener(GroupAccessedEvent.class)
+    public int receive(GroupAccessedEvent event) {
         Group group = groupReadRepository.findBy(event.memberId(), event.studyProductId()).orElseThrow(
                 () -> new IllegalArgumentException(NOT_EXIST_ENTITY));
         return group.calculateProgress(event.memberId());

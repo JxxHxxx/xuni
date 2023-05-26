@@ -1,7 +1,7 @@
 package com.jxx.xuni.common.event.connector;
 
-import com.jxx.xuni.common.event.trigger.ReviewCreatedEvent;
+import com.jxx.xuni.common.event.trigger.GroupAccessedEvent;
 
 public interface ReviewCreatedConnector {
-    int receive(ReviewCreatedEvent event);
+    int receive(GroupAccessedEvent event);
 }

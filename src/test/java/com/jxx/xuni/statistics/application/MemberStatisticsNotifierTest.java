@@ -4,7 +4,7 @@ import com.jxx.xuni.auth.domain.LoginInfo;
 import com.jxx.xuni.auth.domain.Member;
 import com.jxx.xuni.auth.domain.MemberRepository;
 import com.jxx.xuni.common.domain.Category;
-import com.jxx.xuni.common.event.trigger.StatisticsUpdateEvent;
+import com.jxx.xuni.common.event.trigger.StatisticsAccessedEvent;
 import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.domain.TestGroupServiceSupporter;
 import com.jxx.xuni.group.query.GroupReadRepository;
@@ -83,7 +83,7 @@ class MemberStatisticsNotifierTest {
         group.doTask(2l, memberId);
         group.doTask(3l, memberId);
         //when
-        StatisticsUpdateEvent event = new StatisticsUpdateEvent(memberId, studyProductId);
+        StatisticsAccessedEvent event = new StatisticsAccessedEvent(memberId, studyProductId);
         eventPublisher.publishEvent(event);
 
         MemberStatistics updateStatistics = memberStatisticsRepository.readBy(memberId, studyProductId).get();
