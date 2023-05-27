@@ -8,9 +8,12 @@ import com.jxx.xuni.studyproduct.application.StudyProductCreateService;
 import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductContentForm;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductForm;
+import com.jxx.xuni.studyproduct.dto.response.StudyProductCreateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -29,6 +32,7 @@ import static com.jxx.xuni.ApiDocumentUtils.*;
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.ONLY_ADMIN;
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_CREATED;
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_DETAIL_CREATED;
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -53,10 +57,14 @@ class StudyProductCreateControllerTest extends StudyProductCommon{
 
     @DisplayName("상품 등록 성공")
     @Test
-    void study_product_enroll_success() throws Exception {
+    void create_study_product_docs() throws Exception {
         //given
         String AdminToken = jwtTokenProvider.issue(TestGroupServiceSupporter.AdminMemberDetails(1l));
         MockMultipartFile data = new MockMultipartFile("data", "data", "application/json", byteForm);
+
+        StudyProductCreateResponse response = new StudyProductCreateResponse("study-product-identifier");
+
+        BDDMockito.given(studyProductCreateService.create(any(), any())).willReturn(response);
 
         ResultActions result = mockMvc.perform(multipart("/study-products")
                 .file(data)
@@ -74,7 +82,9 @@ class StudyProductCreateControllerTest extends StudyProductCommon{
                         ),
                         PayloadDocumentation.responseFields(
                                 fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
-                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지")
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                fieldWithPath("response").type(JsonFieldType.OBJECT).description("응답 본문"),
+                                fieldWithPath("response.studyProductId").type(JsonFieldType.STRING).description("응다 본문")
                         )
                 ));
     }
@@ -84,7 +94,7 @@ class StudyProductCreateControllerTest extends StudyProductCommon{
             "403 상태코드 " +
             "ONLY_ADMIN 메시지 반환")
     @Test
-    void enroll_fail() throws Exception {
+    void create_study_product_fail() throws Exception {
         //given
         String userToken = jwtTokenProvider.issue(TestGroupServiceSupporter.UserMemberDetails(1l));
 
@@ -99,7 +109,7 @@ class StudyProductCreateControllerTest extends StudyProductCommon{
 
     @DisplayName("스터디 상품 상세 등록 성공")
     @Test
-    void create_detail_success() throws Exception {
+    void reate_study_product_content_docs() throws Exception {
         //given
         String AdminToken = jwtTokenProvider.issue(TestGroupServiceSupporter.AdminMemberDetails(1l));
         String studyProductId = "6f7e5d4a-4893-4efc-b8c4-fdda39cabd55";
