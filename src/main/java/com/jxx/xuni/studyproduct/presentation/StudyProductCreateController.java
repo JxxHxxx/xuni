@@ -5,7 +5,9 @@ import com.jxx.xuni.common.service.AmazonS3Handler;
 import com.jxx.xuni.studyproduct.application.StudyProductCreateService;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductContentForm;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductForm;
+import com.jxx.xuni.studyproduct.dto.response.StudyProductApiResult;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductApiSimpleResult;
+import com.jxx.xuni.studyproduct.dto.response.StudyProductCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+
+import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_CREATED;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,19 +32,19 @@ public class StudyProductCreateController {
 
     @Admin
     @PostMapping("/study-products")
-    public ResponseEntity<StudyProductApiSimpleResult> enroll(@RequestPart(value = "image", required = false) MultipartFile file,
-                                                              @RequestPart("data") StudyProductForm form) throws IOException {
+    public ResponseEntity<StudyProductApiResult> createStudyProduct(@RequestPart(value = "image", required = false) MultipartFile file,
+                                                                    @RequestPart("data") StudyProductForm form) throws IOException {
 
         String objectKey = amazonS3Handler.putS3Object(file);
-        studyProductCreateService.create(form, s3ImageOrigin + objectKey);
+        StudyProductCreateResponse response = studyProductCreateService.create(form, s3ImageOrigin + objectKey);
 
-        return new ResponseEntity(StudyProductApiSimpleResult.create(), HttpStatus.CREATED);
+        return new ResponseEntity(new StudyProductApiResult<>(201, STUDY_PRODUCT_CREATED, response), HttpStatus.CREATED);
     }
 
     @Admin
     @PostMapping("/study-products/{study-product-id}")
-    public ResponseEntity<StudyProductApiSimpleResult> putStudyProductContent(@PathVariable("study-product-id") String studyProductId,
-                                                                              @RequestBody List<StudyProductContentForm> StudyProductDetailForms) {
+    public ResponseEntity<StudyProductApiSimpleResult> createStudyProductContent(@PathVariable("study-product-id") String studyProductId,
+                                                                                 @RequestBody List<StudyProductContentForm> StudyProductDetailForms) {
 
         studyProductCreateService.putContent(studyProductId, StudyProductDetailForms);
         return new ResponseEntity(StudyProductApiSimpleResult.createDetail(), HttpStatus.CREATED);

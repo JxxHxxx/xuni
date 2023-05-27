@@ -6,14 +6,14 @@
 == 홈으로
 * link:index.html[index]
 
-== 스터디 상품 등록
+== 스터디 상품 등록(admin 전용)
 === HTTP request
 include::{snippets}/studyproduct/create/self/http-request.adoc[]
 
 === HTTP response
 include::{snippets}/studyproduct/create/self/response-body.adoc[]
 
-== 스터디 상품 상세 등록
+== 스터디 상품 상세 등록(admin 전용)
 === HTTP request
 include::{snippets}/studyproduct/create/detail/http-request.adoc[]
 
