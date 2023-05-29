@@ -7,6 +7,8 @@ import com.jxx.xuni.studyproduct.dto.response.StudyProductContentReadResponse;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;
 import com.jxx.xuni.studyproduct.query.StudyProductReadRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +19,11 @@ public class StudyProductReadService {
 
     private final StudyProductReadRepository studyProductReadRepository;
 
-    public List<StudyProductReadResponse> readAll() {
-        List<StudyProduct> studyProducts = studyProductReadRepository.findAll();
+    public List<StudyProductReadResponse> readBy(Pageable pageable) {
+        Page<StudyProduct> studyProducts = studyProductReadRepository.readBy(pageable);
 
         return studyProducts.stream().map(sp -> new StudyProductReadResponse(
+                sp.getId(),
                 sp.getName(),
                 sp.getCategory(),
                 sp.getCreator(),
@@ -31,6 +34,7 @@ public class StudyProductReadService {
         List<StudyProduct> studyProducts = studyProductReadRepository.findStudyProductByCategory(category);
 
         return studyProducts.stream().map(sp -> new StudyProductReadResponse(
+                sp.getId(),
                 sp.getName(),
                 sp.getCategory(),
                 sp.getCreator(),

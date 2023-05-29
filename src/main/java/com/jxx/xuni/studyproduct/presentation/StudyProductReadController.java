@@ -6,6 +6,7 @@ import com.jxx.xuni.studyproduct.dto.response.StudyProductApiReadResult;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductContentReadResponse;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +25,10 @@ public class StudyProductReadController {
     private final StudyProductReadService studyProductReadService;
 
     @GetMapping("/study-products")
-    public ResponseEntity<StudyProductApiReadResult> readAll() {
-        List<StudyProductReadResponse> responses = studyProductReadService.readAll();
+    public ResponseEntity<StudyProductApiReadResult> readAll(@RequestParam(required = false, defaultValue = "0") int page,
+                                                               @RequestParam(required = false, defaultValue = "10")  int size) {
+
+        List<StudyProductReadResponse> responses = studyProductReadService.readBy(PageRequest.of(page, size));
 
         return ResponseEntity.ok(new StudyProductApiReadResult(STUDY_PRODUCT_READ, responses));
     }
@@ -38,7 +41,7 @@ public class StudyProductReadController {
     }
 
     @GetMapping("/study-products/{study-product-id}")
-    public ResponseEntity<StudyProductApiReadResult> readDetails(@PathVariable("study-product-id") String studyProductId) {
+    public ResponseEntity<StudyProductApiReadResult> readOne(@PathVariable("study-product-id") String studyProductId) {
         StudyProductContentReadResponse response = studyProductReadService.readContent(studyProductId);
 
         return ResponseEntity.ok(new StudyProductApiReadResult(STUDY_PRODUCT_DETAIL_READ, response));

@@ -10,13 +10,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.headers.HeaderDocumentation;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.jxx.xuni.ApiDocumentUtils.getDocumentRequest;
 import static com.jxx.xuni.ApiDocumentUtils.getDocumentResponse;
@@ -40,15 +44,17 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
     @DisplayName("스터디 상품 전체 조회")
     @Test
     void study_product_read_all() throws Exception {
-        StudyProductReadResponse response1 = new StudyProductReadResponse(
+        StudyProductReadResponse response1 = new StudyProductReadResponse(UUID.randomUUID().toString(),
                 "초보 웹 개발자를 위한 스프링5 프로그래밍 입문", Category.SPRING_FRAMEWORK,
                 "최범균", "IMAGE URL");
-        StudyProductReadResponse response2 = new StudyProductReadResponse(
+        StudyProductReadResponse response2 = new StudyProductReadResponse(UUID.randomUUID().toString(),
                 "미즈구치 카츠야", Category.NETWORK, "모두의 네트워크", "IMAGE URL");
-        BDDMockito.given(studyProductReadService.readAll()).willReturn(List.of(response1, response2));
+        BDDMockito.given(studyProductReadService.readBy(PageRequest.of(0,10))).willReturn(List.of(response1, response2));
 
         ResultActions result = mockMvc.perform(get("/study-products")
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("size", "10")
+                .queryParam("page", "0"));
 
         result
                 .andExpect(status().isOk())
@@ -57,11 +63,17 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
                 .andDo(MockMvcRestDocumentation.document("studyproduct/query/readAll",
                         getDocumentRequest(), getDocumentResponse(),
 
+                        queryParameters(
+                                parameterWithName("size").description("한 번에 보여줄 상품 개수"),
+                                parameterWithName("page").description("현재 페이지")
+                        ),
+
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
 
                                 fieldWithPath("response").type(JsonFieldType.ARRAY).description("조회 데이터"),
+                                fieldWithPath("response[].studyProductId").type(JsonFieldType.STRING).description("스터디 상품 식별자"),
                                 fieldWithPath("response[].name").type(JsonFieldType.STRING).description("스터디 상품 제목"),
                                 fieldWithPath("response[].category").type(JsonFieldType.STRING).description("스터디 상품 카테고리"),
                                 fieldWithPath("response[].creator").type(JsonFieldType.STRING).description("스터디 상품 저자"),
@@ -73,9 +85,9 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
     @DisplayName("스터디 상품 카테고리별 조회")
     @Test
     void study_product_read_cond_by_category() throws Exception {
-        StudyProductReadResponse response1 = new StudyProductReadResponse(
+        StudyProductReadResponse response1 = new StudyProductReadResponse(UUID.randomUUID().toString(),
                 "JAVA의 정석", Category.JAVA, "남궁성", "IMAGE URL");
-        StudyProductReadResponse response2 = new StudyProductReadResponse(
+        StudyProductReadResponse response2 = new StudyProductReadResponse(UUID.randomUUID().toString(),
                 "이펙티브 자바 3/E", Category.JAVA, "조슈아 블로치", "IMAGE URL");
         BDDMockito.given(studyProductReadService.readBy(Category.JAVA)).willReturn(List.of(response1, response2));
 
@@ -99,6 +111,7 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
 
                                 fieldWithPath("response").type(JsonFieldType.ARRAY).description("조회 데이터"),
+                                fieldWithPath("response[].studyProductId").type(JsonFieldType.STRING).description("스터디 상품 식별자"),
                                 fieldWithPath("response[].name").type(JsonFieldType.STRING).description("스터디 상품 제목"),
                                 fieldWithPath("response[].category").type(JsonFieldType.STRING).description("스터디 상품 카테고리"),
                                 fieldWithPath("response[].creator").type(JsonFieldType.STRING).description("스터디 상품 저자"),
