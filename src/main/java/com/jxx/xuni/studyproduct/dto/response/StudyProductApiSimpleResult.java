@@ -15,10 +15,6 @@ public class StudyProductApiSimpleResult {
         this.message = message;
     }
 
-    public static StudyProductApiSimpleResult create() {
-        return new StudyProductApiSimpleResult(201, STUDY_PRODUCT_CREATED);
-    }
-
     public static StudyProductApiSimpleResult createDetail() {
         return new StudyProductApiSimpleResult(201, STUDY_PRODUCT_DETAIL_CREATED);
     }

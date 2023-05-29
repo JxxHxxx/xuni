@@ -97,4 +97,17 @@ public class TestGroupServiceSupporter {
         group.start(hostId, studyCheckForms);
         return group;
     }
+
+    public static Group startGroup(String studyProductId, Long hostId) {
+        Group group = new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
+                Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
+                new Capacity(5),
+                Study.of(studyProductId, "자바의 정석", Category.JAVA),
+                new Host(hostId, "재헌"));
+
+        group.join(new GroupMember(2l, "지니", group));
+        group.changeGroupStatusTo(GATHER_COMPLETE);
+        group.start(hostId, studyCheckForms);
+        return group;
+    }
 }

@@ -5,6 +5,7 @@ import com.jxx.xuni.studyproduct.domain.Content;
 import com.jxx.xuni.studyproduct.domain.StudyProductRepository;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductContentForm;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductForm;
+import com.jxx.xuni.studyproduct.dto.response.StudyProductCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,7 @@ public class StudyProductCreateService {
 
     private final StudyProductRepository studyProductRepository;
 
-    public void create(StudyProductForm form, String imageURL) {
+    public StudyProductCreateResponse create(StudyProductForm form, String imageURL) {
         StudyProduct studyProduct = StudyProduct.builder()
                 .name(form.name())
                 .creator(form.creator())
@@ -27,7 +28,8 @@ public class StudyProductCreateService {
                 .category(form.category())
                 .build();
 
-        studyProductRepository.save(studyProduct);
+        StudyProduct savedProduct = studyProductRepository.save(studyProduct);
+        return new StudyProductCreateResponse(savedProduct.getId());
     }
 
     @Transactional

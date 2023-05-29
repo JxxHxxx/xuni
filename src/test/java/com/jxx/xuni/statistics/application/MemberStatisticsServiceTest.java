@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
 import static org.assertj.core.api.Assertions.*;
@@ -23,6 +24,8 @@ class MemberStatisticsServiceTest extends ServiceCommon {
     MemberStatisticsService memberStatisticsService;
     @Autowired
     MemberStatisticsRepository memberStatisticsRepository;
+    @MockBean
+    MemberStatisticsNotifier memberStatisticsNotifier;
 
     @BeforeEach
     void beforeEach() {
@@ -37,7 +40,7 @@ class MemberStatisticsServiceTest extends ServiceCommon {
     @DisplayName("findReviewNeedStatistics 성공 시 Review 작성에 필요한 진행률(progress)을 담는다.")
     @Test
     void find_review_need_statistics_success() {
-        ReviewNeedResponse response = memberStatisticsService.findReviewNeedStatistics(1l, "sp-id");
+        ReviewNeedResponse response = memberStatisticsService.readOne(1l, "sp-id");
         assertThat(response.progress()).isEqualTo(10);
     }
 
@@ -45,7 +48,7 @@ class MemberStatisticsServiceTest extends ServiceCommon {
     @ParameterizedTest(name = "[{index}] : {2}")
     @CsvSource(value = {"999999, sp-id, memberId 존재하지 않은 경우", "1, not-exist-id, studyProductId 존재하지 않은 경우"})
     void find_review_need_statistics_fail_cause_not_exist(long memberId, String studyProductId, String message) {
-        assertThatThrownBy(() -> memberStatisticsService.findReviewNeedStatistics(memberId, studyProductId))
+        assertThatThrownBy(() -> memberStatisticsService.readOne(memberId, studyProductId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(NOT_EXIST_ENTITY);
     }

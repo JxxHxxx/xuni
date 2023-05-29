@@ -25,7 +25,7 @@ public class MemberStatisticsController {
                                                                   @PathVariable("study-product-id") String studyProductId) {
 
         memberDetails.checkPrivateAuthority(memberId);
-        ReviewNeedResponse response = memberStatisticsService.findReviewNeedStatistics(memberId, studyProductId);
+        ReviewNeedResponse response = memberStatisticsService.readOne(memberId, studyProductId);
 
         return ResponseEntity.ok(new MemberStatisticsApiResult(200, REVIEW_NEED_DATA, response));
     }

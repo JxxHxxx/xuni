@@ -1,13 +1,13 @@
 package com.jxx.xuni.statistics.application;
 
 import com.jxx.xuni.common.event.connector.ReviewCreatedConnector;
-import com.jxx.xuni.common.event.trigger.ReviewCreatedEvent;
-import com.jxx.xuni.common.event.trigger.StatisticsUpdateEvent;
+import com.jxx.xuni.common.event.trigger.GroupAccessedEvent;
+import com.jxx.xuni.common.event.trigger.StatisticsAccessedEvent;
 import com.jxx.xuni.statistics.domain.MemberStatistics;
 import com.jxx.xuni.statistics.domain.MemberStatisticsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.Optional;
 
@@ -18,9 +18,9 @@ public class MemberStatisticsNotifier {
     private final MemberStatisticsRepository memberStatisticsRepository;
     private final ReviewCreatedConnector reviewCreatedConnector;
 
-    @TransactionalEventListener
-    public void handle(StatisticsUpdateEvent event) {
-        int progress = reviewCreatedConnector.receive(ReviewCreatedEvent.by(event));
+    @EventListener(StatisticsAccessedEvent.class)
+    public void handle(StatisticsAccessedEvent event) {
+        int progress = reviewCreatedConnector.receive(GroupAccessedEvent.by(event));
         Optional<MemberStatistics> optionalMemberStatistics = memberStatisticsRepository.readBy(event.memberId(), event.studyProductId());
 
         if (optionalMemberStatistics.isEmpty()) {
