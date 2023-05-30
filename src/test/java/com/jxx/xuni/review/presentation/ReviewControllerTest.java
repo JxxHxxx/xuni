@@ -6,6 +6,7 @@ import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.review.application.ReviewService;
 import com.jxx.xuni.review.domain.Progress;
 import com.jxx.xuni.review.dto.request.ReviewForm;
+import com.jxx.xuni.review.dto.request.ReviewUpdateForm;
 import com.jxx.xuni.review.dto.response.ReviewOneResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -21,15 +22,18 @@ import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.jxx.xuni.ApiDocumentUtils.getDocumentRequest;
 import static com.jxx.xuni.ApiDocumentUtils.getDocumentResponse;
-import static com.jxx.xuni.review.dto.response.ReviewApiMessage.REVIEW_CREATE;
-import static com.jxx.xuni.review.dto.response.ReviewApiMessage.REVIEW_READ;
+import static com.jxx.xuni.review.dto.response.ReviewApiMessage.*;
+import static java.nio.charset.StandardCharsets.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -52,7 +56,7 @@ class ReviewControllerTest extends ReviewCommon {
         SimpleMemberDetails memberDetails = new SimpleMemberDetails(1l, "xuni@naver.com", "유니");
         ReviewForm form = new ReviewForm((byte) 3, "ORM 기초를 쌓는데 정말 유익한 것 같아요", 50);
 
-        ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.post("/reviews/study-products/{study-product-id}", studyProductId)
+        ResultActions result = mockMvc.perform(post("/reviews/study-products/{study-product-id}", studyProductId)
                 .header("Authorization", jwtTokenProvider.issue(memberDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(form)));
@@ -61,7 +65,7 @@ class ReviewControllerTest extends ReviewCommon {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value(REVIEW_CREATE))
 
-                .andDo(MockMvcRestDocumentation.document("review/create",
+                .andDo(document("review/create",
                         requestHeaders(
                                 headerWithName("Authorization").description("인증 토큰")
                         ),
@@ -105,7 +109,7 @@ class ReviewControllerTest extends ReviewCommon {
 
         BDDMockito.given(reviewService.read(any())).willReturn(responses);
 
-        ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.get("/reviews/study-products/{study-product-id}", studyProductId)
+        ResultActions result = mockMvc.perform(get("/reviews/study-products/{study-product-id}", studyProductId)
                 .contentType(MediaType.APPLICATION_JSON));
 
         result
@@ -113,7 +117,7 @@ class ReviewControllerTest extends ReviewCommon {
                 .andExpect(jsonPath("$.message").value(REVIEW_READ))
 
                 .andDo(
-                        MockMvcRestDocumentation.document("review/read",
+                        document("review/read",
                                 getDocumentRequest(), getDocumentResponse(),
 
                                 pathParameters(
@@ -136,5 +140,76 @@ class ReviewControllerTest extends ReviewCommon {
 
                         )
                 );
+    }
+
+
+    @Test
+    void update_review() throws Exception {
+        ReviewUpdateForm updateForm = new ReviewUpdateForm((byte) 3, "기초를 다루는데 좋은 것 같아요.");
+
+        SimpleMemberDetails memberDetails = new SimpleMemberDetails(1l, "xuni@naver.com", "유니");
+        ResultActions result = mockMvc.perform(patch("/reviews/{review-id}", 1l)
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding(UTF_8)
+                .header("Authorization", jwtTokenProvider.issue(memberDetails))
+                .content(objectMapper.writeValueAsString(updateForm))
+        );
+
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(REVIEW_UPDATE))
+
+                .andDo(document("review/update",
+                        requestHeaders(
+                                headerWithName("Authorization").description("인증 토큰")
+                        ),
+
+                        pathParameters(
+                                parameterWithName("review-id").description("리뷰 식별자")
+                        ),
+
+                        requestFields(
+                                fieldWithPath("rating").type(JsonFieldType.NUMBER).description("상품 평점"),
+                                fieldWithPath("comment").type(JsonFieldType.STRING).description("상품 한줄평")
+                        ),
+
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지")
+                        )
+                ));
+
+    }
+
+    @Test
+    void delete_review() throws Exception {
+        SimpleMemberDetails memberDetails = new SimpleMemberDetails(1l, "xuni@naver.com", "유니");
+
+        ResultActions result = mockMvc.perform(delete("/reviews/{review-id}", 1l)
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding(UTF_8)
+                .header("Authorization", jwtTokenProvider.issue(memberDetails))
+        );
+
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(REVIEW_DELETE))
+
+                .andDo(document("review/delete",
+
+                        requestHeaders(
+                                headerWithName("Authorization").description("인증 토큰")
+                        ),
+
+                        pathParameters(
+                                parameterWithName("review-id").description("리뷰 식별자")
+                        ),
+
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지")
+                        )
+
+                ));
     }
 }
