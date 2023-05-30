@@ -1,5 +1,6 @@
 package com.jxx.xuni.review.domain;
 
+import com.jxx.xuni.common.exception.NotPermissionException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.*;
 
 @Getter
 @Entity
@@ -23,12 +26,36 @@ public class Review {
     @Embedded
     private Content content;
     private LocalDateTime lastModifiedTime;
+    private Boolean isDeleted;
 
     @Builder
     public Review(Reviewer reviewer, String studyProductId, Content content) {
         this.reviewer = reviewer;
         this.studyProductId = studyProductId;
         this.content = content;
+        this.lastModifiedTime = LocalDateTime.now();
+        this.isDeleted = false;
+    }
+
+    public void update(Long reviewerId, Byte rating, String comment) {
+        // 본인 검증
+        checkWriter(reviewerId);
+        this.content.update(rating, comment);
+        updateLastModifiedTime();
+    }
+
+    public void delete(Long reviewerId) {
+        checkWriter(reviewerId);
+        this.isDeleted = true;
+    }
+
+    private void checkWriter(Long reviewerId) {
+        if (!this.receiveReviewerId().equals(reviewerId)) {
+            throw new NotPermissionException(PRIVATE_ACCESSIBLE);
+        }
+    }
+
+    private void updateLastModifiedTime() {
         this.lastModifiedTime = LocalDateTime.now();
     }
 

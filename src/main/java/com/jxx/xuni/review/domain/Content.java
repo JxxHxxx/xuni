@@ -20,4 +20,16 @@ public class Content {
     public static Content of(Byte rating, String comment) {
         return new Content(rating, comment);
     }
+
+    protected void update(Byte rating, String comment) {
+        if (rating != null) {
+            this.rating = rating;
+        }
+
+        if (comment != null) {
+            if (!comment.isBlank()) {
+                this.comment = comment;
+            }
+        }
+    }
 }

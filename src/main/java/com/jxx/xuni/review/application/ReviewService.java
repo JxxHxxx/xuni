@@ -3,11 +3,15 @@ package com.jxx.xuni.review.application;
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.review.domain.*;
 import com.jxx.xuni.review.dto.request.ReviewForm;
+import com.jxx.xuni.review.dto.request.ReviewUpdateForm;
 import com.jxx.xuni.review.dto.response.ReviewOneResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
 
 @Service
 @RequiredArgsConstructor
@@ -36,5 +40,23 @@ public class ReviewService {
                 r.receiveReviewerId(),
                 r.receiveReviewerName(),
                 r.receiveProgress())).toList();
+    }
+
+    @Transactional
+    public void updateReview(Long reviewId, Long reviewerId, ReviewUpdateForm form) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                () -> new IllegalArgumentException(NOT_EXIST_ENTITY)
+        );
+
+        review.update(reviewerId, form.rating(), form.comment());
+    }
+
+    @Transactional
+    public void deleteReview(Long reviewId, Long reviewerId) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                () -> new IllegalArgumentException(NOT_EXIST_ENTITY)
+        );
+
+        review.delete(reviewerId);
     }
 }
