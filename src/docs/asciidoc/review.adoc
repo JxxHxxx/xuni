@@ -29,3 +29,29 @@ include::{snippets}/review/read/path-parameters.adoc[]
 include::{snippets}/review/read/response-body.adoc[]
 ==== response body description
 include::{snippets}/review/read/response-fields.adoc[]
+
+== 리뷰 수정
+=== HTTP request
+include::{snippets}/review/update/http-request.adoc[]
+==== request header
+include::{snippets}/review/update/request-headers.adoc[]
+==== path parameter
+include::{snippets}/review/update/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/review/update/response-body.adoc[]
+==== response body description
+include::{snippets}/review/update/response-fields.adoc[]
+
+== 리뷰 삭제
+=== HTTP request
+include::{snippets}/review/delete/http-request.adoc[]
+==== request header
+include::{snippets}/review/delete/request-headers.adoc[]
+==== path parameter
+include::{snippets}/review/delete/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/review/delete/response-body.adoc[]
+==== response body description
+include::{snippets}/review/delete/response-fields.adoc[]
