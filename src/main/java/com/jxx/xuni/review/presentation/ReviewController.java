@@ -44,7 +44,7 @@ public class ReviewController {
         return ResponseEntity.ok(new ReviewApiResult(200, REVIEW_READ, response));
     }
 
-    @GetMapping("/reviews/study-products/{study-product-id}/average")
+    @GetMapping("/study-products/{study-product-id}/rating-avg")
     public ResponseEntity<ReviewApiResult> readRatingAvg(@PathVariable("study-product-id") String studyProductId) {
         RatingResponse response = reviewService.readRatingAvg(studyProductId);
 

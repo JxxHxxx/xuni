@@ -18,6 +18,7 @@ import java.util.List;
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_DETAIL_READ;
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_READ;
 
+
 @RestController
 @RequiredArgsConstructor
 public class StudyProductReadController {
@@ -26,8 +27,7 @@ public class StudyProductReadController {
 
     @GetMapping("/study-products")
     public ResponseEntity<StudyProductApiReadResult> readAll(@RequestParam(required = false, defaultValue = "0") int page,
-                                                               @RequestParam(required = false, defaultValue = "10")  int size) {
-
+                                                             @RequestParam(required = false, defaultValue = "10") int size) {
         List<StudyProductReadResponse> responses = studyProductReadService.readBy(PageRequest.of(page, size));
 
         return ResponseEntity.ok(new StudyProductApiReadResult(STUDY_PRODUCT_READ, responses));
