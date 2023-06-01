@@ -49,18 +49,17 @@ class StudyProductReadCachingTest extends ServiceCommon {
     @Test
     void cache_hit() {
         //when
-        studyProductReadService.readContent(studyProductId);
+        StudyProductContentReadResponse response = studyProductReadService.readContent(studyProductId);
         //then
-        StudyProductContentReadResponse cache = cacheManager.getCache("study-product")
+        StudyProductContentReadResponse cacheResponse = cacheManager.getCache("study-product")
                 .get(studyProductId, StudyProductContentReadResponse.class);
 
-        assertThat(cache).isNotNull();
+        assertThat(response).isEqualTo(cacheResponse);
     }
 
     @DisplayName("이미 호출한 적이 없는 스터디 상품은 캐시 저장소에 응답이 저장되어 있지 않다.")
     @Test
     void cache_miss() {
-        //when - 호출하지 않았을 경우
         //then
         StudyProductContentReadResponse cache = cacheManager.getCache("study-product")
                 .get(studyProductId, StudyProductContentReadResponse.class);
