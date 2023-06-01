@@ -1,5 +1,6 @@
 package com.jxx.xuni.studyproduct.application;
 
+import com.jxx.xuni.common.event.trigger.StudyProductCreatedEvent;
 import com.jxx.xuni.studyproduct.domain.StudyProduct;
 import com.jxx.xuni.studyproduct.domain.Content;
 import com.jxx.xuni.studyproduct.domain.StudyProductRepository;
@@ -7,6 +8,7 @@ import com.jxx.xuni.studyproduct.dto.request.StudyProductContentForm;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductForm;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductCreateResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.NOT_
 public class StudyProductCreateService {
 
     private final StudyProductRepository studyProductRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public StudyProductCreateResponse create(StudyProductForm form, String imageURL) {
         StudyProduct studyProduct = StudyProduct.builder()
@@ -29,6 +32,10 @@ public class StudyProductCreateService {
                 .build();
 
         StudyProduct savedProduct = studyProductRepository.save(studyProduct);
+
+        StudyProductCreatedEvent event = new StudyProductCreatedEvent(savedProduct.getId());
+        eventPublisher.publishEvent(event);
+
         return new StudyProductCreateResponse(savedProduct.getId());
     }
 

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CacheConfig {
     @Bean
-    public CacheManager cacheManager() {
+    public CacheManager localCacheManager() {
         return new CaffeineCacheManager();
     }
 }
