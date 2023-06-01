@@ -10,4 +10,7 @@ public class ReviewApiMessage {
     public static final String REVIEW_UPDATE = "리뷰 수정 완료";
     public static final String REVIEW_DELETE = "리뷰 삭제 완료";
     public static final String REVIEW_READ = "리뷰 조회 완료";
+
+    public static final String RATING_AVG = "리뷰 평균 평점 조회 완료";
+
 }
