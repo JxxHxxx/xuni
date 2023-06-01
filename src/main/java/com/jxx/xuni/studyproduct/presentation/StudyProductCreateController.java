@@ -10,6 +10,7 @@ import com.jxx.xuni.studyproduct.dto.response.StudyProductApiSimpleResult;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class StudyProductCreateController {
     private String s3ImageOrigin;
 
     @Admin
+    @CacheEvict(cacheNames = "study-products", allEntries = true)
     @PostMapping("/study-products")
     public ResponseEntity<StudyProductApiResult> createStudyProduct(@RequestPart(value = "image", required = false) MultipartFile file,
                                                                     @RequestPart("data") StudyProductForm form) throws IOException {

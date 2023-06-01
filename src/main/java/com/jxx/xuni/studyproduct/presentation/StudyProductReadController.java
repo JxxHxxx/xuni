@@ -6,6 +6,7 @@ import com.jxx.xuni.studyproduct.dto.response.StudyProductApiReadResult;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductContentReadResponse;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,21 +19,24 @@ import java.util.List;
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_DETAIL_READ;
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_READ;
 
+
 @RestController
 @RequiredArgsConstructor
 public class StudyProductReadController {
 
     private final StudyProductReadService studyProductReadService;
 
+    @Cacheable(cacheNames = "study-products")
     @GetMapping("/study-products")
     public ResponseEntity<StudyProductApiReadResult> readAll(@RequestParam(required = false, defaultValue = "0") int page,
-                                                               @RequestParam(required = false, defaultValue = "10")  int size) {
+                                                             @RequestParam(required = false, defaultValue = "10")  int size) {
 
         List<StudyProductReadResponse> responses = studyProductReadService.readBy(PageRequest.of(page, size));
 
         return ResponseEntity.ok(new StudyProductApiReadResult(STUDY_PRODUCT_READ, responses));
     }
 
+    @Cacheable(cacheNames = "study-product-cond", key = "#category")
     @GetMapping("/study-products/cond")
     public ResponseEntity<StudyProductApiReadResult> readAllBy(@RequestParam Category category) {
         List<StudyProductReadResponse> responses = studyProductReadService.readBy(category);
@@ -40,6 +44,7 @@ public class StudyProductReadController {
         return ResponseEntity.ok(new StudyProductApiReadResult(category.name() + " " + STUDY_PRODUCT_READ, responses));
     }
 
+    @Cacheable(cacheNames = "study-product", key="#studyProductId")
     @GetMapping("/study-products/{study-product-id}")
     public ResponseEntity<StudyProductApiReadResult> readOne(@PathVariable("study-product-id") String studyProductId) {
         StudyProductContentReadResponse response = studyProductReadService.readContent(studyProductId);

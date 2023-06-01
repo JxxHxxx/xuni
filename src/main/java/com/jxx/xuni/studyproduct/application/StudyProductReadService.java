@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
+
 @Service
 @RequiredArgsConstructor
 public class StudyProductReadService {
@@ -41,8 +43,12 @@ public class StudyProductReadService {
                 sp.getThumbnail())).toList();
     }
 
+    // TODO : 상품 목차가 존재하지 않을 때 해당 예외를 던지는게 올바른지 판단해야 함
+
     public StudyProductContentReadResponse readContent(String studyProductId) {
-        StudyProduct studyProduct = studyProductReadRepository.readWithContentFetch(studyProductId);
+        StudyProduct studyProduct = studyProductReadRepository.readWithContentFetch(studyProductId).orElseThrow(
+                () -> new IllegalArgumentException(NOT_EXIST_ENTITY));
+
         List<Content> contents = studyProduct.getContents();
 
         return new StudyProductContentReadResponse(
