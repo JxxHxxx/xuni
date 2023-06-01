@@ -4,11 +4,11 @@ import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.review.domain.*;
 import com.jxx.xuni.review.dto.request.ReviewForm;
 import com.jxx.xuni.review.dto.request.ReviewUpdateForm;
+import com.jxx.xuni.review.dto.response.RatingResponse;
 import com.jxx.xuni.review.dto.response.ReviewOneResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
@@ -18,6 +18,7 @@ import static com.jxx.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENT
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final RatingHandler ratingHandler;
 
     public void create(MemberDetails memberDetails, String studyProductId, ReviewForm form) {
         Review review = Review.builder()
@@ -45,18 +46,20 @@ public class ReviewService {
     @Transactional
     public void updateReview(Long reviewId, Long reviewerId, ReviewUpdateForm form) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new IllegalArgumentException(NOT_EXIST_ENTITY)
-        );
-
+                () -> new IllegalArgumentException(NOT_EXIST_ENTITY));
         review.update(reviewerId, form.rating(), form.comment());
     }
 
     @Transactional
     public void deleteReview(Long reviewId, Long reviewerId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new IllegalArgumentException(NOT_EXIST_ENTITY)
-        );
-
+                () -> new IllegalArgumentException(NOT_EXIST_ENTITY));
         review.delete(reviewerId);
+    }
+
+    public RatingResponse readRatingAvg(String studyProductId) {
+        List<Review> reviews = reviewRepository.readBy(studyProductId);
+
+        return new RatingResponse(ratingHandler.calculateAvg(reviews));
     }
 }
