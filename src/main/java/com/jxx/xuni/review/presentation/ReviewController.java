@@ -5,6 +5,7 @@ import com.jxx.xuni.auth.presentation.AuthenticatedMember;
 import com.jxx.xuni.review.application.ReviewService;
 import com.jxx.xuni.review.dto.request.ReviewForm;
 import com.jxx.xuni.review.dto.request.ReviewUpdateForm;
+import com.jxx.xuni.review.dto.response.RatingResponse;
 import com.jxx.xuni.review.dto.response.ReviewApiResult;
 import com.jxx.xuni.review.dto.response.ReviewApiSimpleResult;
 import com.jxx.xuni.review.dto.response.ReviewOneResponse;
@@ -41,6 +42,13 @@ public class ReviewController {
         List<ReviewOneResponse> response = reviewService.read(studyProductId);
 
         return ResponseEntity.ok(new ReviewApiResult(200, REVIEW_READ, response));
+    }
+
+    @GetMapping("/study-products/{study-product-id}/rating-avg")
+    public ResponseEntity<ReviewApiResult> readRatingAvg(@PathVariable("study-product-id") String studyProductId) {
+        RatingResponse response = reviewService.readRatingAvg(studyProductId);
+
+        return ResponseEntity.ok(new ReviewApiResult(200, RATING_AVG, response));
     }
 
     @PatchMapping("/reviews/{review-id}")

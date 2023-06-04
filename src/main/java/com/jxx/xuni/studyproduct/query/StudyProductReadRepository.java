@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudyProductReadRepository extends JpaRepository<StudyProduct, String> {
 
@@ -16,7 +17,7 @@ public interface StudyProductReadRepository extends JpaRepository<StudyProduct, 
 
     @Query(value = "select sp from StudyProduct sp " +
             "join fetch sp.contents spd where sp.id =:studyProductId")
-    StudyProduct readWithContentFetch(@Param("studyProductId") String studyProductId);
+    Optional<StudyProduct> readWithContentFetch(@Param("studyProductId") String studyProductId);
 
     Page<StudyProduct> readBy(Pageable pageable);
 }

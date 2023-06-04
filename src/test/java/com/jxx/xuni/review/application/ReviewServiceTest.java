@@ -4,9 +4,11 @@ import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.review.domain.*;
 import com.jxx.xuni.review.dto.request.ReviewForm;
 import com.jxx.xuni.review.dto.request.ReviewUpdateForm;
+import com.jxx.xuni.review.dto.response.RatingResponse;
 import com.jxx.xuni.review.dto.response.ReviewOneResponse;
 import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -117,5 +120,25 @@ class ReviewServiceTest extends ServiceCommon {
         assertThatThrownBy(() -> reviewService.deleteReview(notExistReviewId, 1l))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(NOT_EXIST_ENTITY);
+    }
+
+    @Test
+    void rating() {
+        Review review1 = Review.builder()
+                .reviewer(Reviewer.of(5l, "바니", Progress.HALF))
+                .content(Content.of((byte) 2, "this book is really bad"))
+                .studyProductId("avg-test-stp-id").build();
+        Review review2 = Review.builder()
+                .reviewer(Reviewer.of(6l, "바니", Progress.HALF))
+                .content(Content.of((byte) 1, "this book is really bad"))
+                .studyProductId("avg-test-stp-id").build();
+        Review review3 = Review.builder()
+                .reviewer(Reviewer.of(7l, "바니", Progress.HALF))
+                .content(Content.of((byte) 1, "this book is really bad"))
+                .studyProductId("avg-test-stp-id").build();
+        reviewRepository.saveAll(List.of(review1, review2, review3));
+
+        RatingResponse ratingResponse = reviewService.readRatingAvg("avg-test-stp-id");
+        assertThat(ratingResponse.ratingAvg()).isEqualTo(1.33);
     }
 }
