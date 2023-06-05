@@ -52,9 +52,7 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: 'EC2-ACCESS', keyFileVariable: 'PEM_KEY')]) {
                     dir('/var/lib/jenkins/workspace/xuni-deploy/build/libs') {
                         sh "scp -o StrictHostKeyChecking=no -i $PEM_KEY xuni-0.0.1-SNAPSHOT.jar ubuntu@$API_REMOTE_SERVER_IP:/home/ubuntu"
-                        sh "ssh -o StrictHostKeyChecking=no -i $PEM_KEY ubuntu@$API_REMOTE_SERVER_IP pkill -f xuni-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &"
-                        sh "sleep 30s"
-                        sh "ssh -o StrictHostKeyChecking=no -i $PEM_KEY ubuntu@$API_REMOTE_SERVER_IP nohup java -jar -Duser.timezone=Asia/Seoul /home/ubuntu/xuni-0.0.1-SNAPSHOT.jar --spring.config.name=application-dev &"
+                        sh "ssh -o StrictHostKeyChecking=no -i $PEM_KEY ubuntu@$API_REMOTE_SERVER_IP pkill -f xuni-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 ; nohup java -jar -Duser.timezone=Asia/Seoul /home/ubuntu/xuni-0.0.1-SNAPSHOT.jar --spring.config.name=application-dev &"
                     }
                 }
             }
