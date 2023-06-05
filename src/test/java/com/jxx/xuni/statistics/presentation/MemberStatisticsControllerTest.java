@@ -39,7 +39,7 @@ class MemberStatisticsControllerTest extends StatisticsCommon {
         BDDMockito.given(memberStatisticsService.readOne(any(), any())).willReturn(response);
 
         String token = jwtTokenProvider.issue(new SimpleMemberDetails(1l, "xuni@naver.com", "유니"));
-        ResultActions result = mockMvc.perform(get("/member-statistics/members/{member-id}/study-products/{study-product-id}", 1l, "id")
+        ResultActions result = mockMvc.perform(get("/statistics/members/{member-id}/study-products/{study-product-id}", 1l, "id")
                 .header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON));
 
