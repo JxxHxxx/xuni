@@ -61,6 +61,6 @@ public class AuthInterceptorConfig implements WebMvcConfigurer{
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3030")
-                .allowedMethods("GET","POST","PATCH","PUT","DELETE");
+                .allowedMethods("GET","POST","PATCH","PUT","DELETE","OPTIONS");
     }
 }
