@@ -9,20 +9,13 @@ import com.jxx.xuni.review.dto.request.ReviewForm;
 import com.jxx.xuni.review.dto.request.ReviewUpdateForm;
 import com.jxx.xuni.review.dto.response.ReviewOneResponse;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.headers.HeaderDocumentation;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -54,7 +47,7 @@ class ReviewControllerTest extends ReviewCommon {
     @Test
     void create_review_docs() throws Exception {
         SimpleMemberDetails memberDetails = new SimpleMemberDetails(1l, "xuni@naver.com", "유니");
-        ReviewForm form = new ReviewForm((byte) 3, "ORM 기초를 쌓는데 정말 유익한 것 같아요", 50);
+        ReviewForm form = new ReviewForm(3, "ORM 기초를 쌓는데 정말 유익한 것 같아요", 50);
 
         ResultActions result = mockMvc.perform(post("/reviews/study-products/{study-product-id}", studyProductId)
                 .header("Authorization", jwtTokenProvider.issue(memberDetails))
@@ -92,7 +85,7 @@ class ReviewControllerTest extends ReviewCommon {
         ReviewOneResponse response1 = new ReviewOneResponse(
                 1l,
                 "ORM 기초를 배우는데 좋은 것 같습니다.",
-                (byte) 3, LocalDateTime.now(),
+                3, LocalDateTime.now(),
                 10l,
                 "유니",
                 Progress.HALF);
@@ -100,7 +93,7 @@ class ReviewControllerTest extends ReviewCommon {
         ReviewOneResponse response2 = new ReviewOneResponse(
                 1l,
                 "김영한 그는 JPA의 신이야",
-                (byte) 3, LocalDateTime.of(2023,5, 15, 10, 20),
+                3, LocalDateTime.of(2023,5, 15, 10, 20),
                 15l,
                 "허니",
                 Progress.ALMOST);
@@ -145,7 +138,7 @@ class ReviewControllerTest extends ReviewCommon {
 
     @Test
     void update_review() throws Exception {
-        ReviewUpdateForm updateForm = new ReviewUpdateForm((byte) 3, "기초를 다루는데 좋은 것 같아요.");
+        ReviewUpdateForm updateForm = new ReviewUpdateForm(3, "기초를 다루는데 좋은 것 같아요.");
 
         SimpleMemberDetails memberDetails = new SimpleMemberDetails(1l, "xuni@naver.com", "유니");
         ResultActions result = mockMvc.perform(patch("/reviews/{review-id}", 1l)

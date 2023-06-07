@@ -6,17 +6,17 @@ import com.jxx.xuni.review.dto.request.ReviewForm;
 import com.jxx.xuni.review.dto.request.ReviewUpdateForm;
 import com.jxx.xuni.review.dto.response.RatingResponse;
 import com.jxx.xuni.review.dto.response.ReviewOneResponse;
+import com.jxx.xuni.statistics.application.StudyProductStatisticsService;
 import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.List;
 
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -27,22 +27,24 @@ class ReviewServiceTest extends ServiceCommon {
     ReviewService reviewService;
     @Autowired
     ReviewRepository reviewRepository;
+    @MockBean
+    StudyProductStatisticsService studyProductStatisticsService;
 
     @BeforeEach
     void beforeEach() {
         Review review1 = Review.builder()
                 .reviewer(Reviewer.of(1l, "유니", Progress.HALF))
-                .content(Content.of((byte) 5, "this book is really good"))
+                .content(Content.of(5, "this book is really good"))
                 .studyProductId("update-each-id").build();
 
         Review review2 = Review.builder()
                 .reviewer(Reviewer.of(2l, "바니", Progress.HALF))
-                .content(Content.of((byte) 1, "this book is really bad"))
+                .content(Content.of(1, "this book is really bad"))
                 .studyProductId("before-each-id").build();
 
         Review review3 = Review.builder()
                 .reviewer(Reviewer.of(3l, "바니", Progress.HALF))
-                .content(Content.of((byte) 1, "this book is really bad"))
+                .content(Content.of(1, "this book is really bad"))
                 .studyProductId("before-each-id").build();
         review3.delete(3l);
         reviewRepository.saveAll(List.of(review1, review2, review3));
@@ -53,7 +55,7 @@ class ReviewServiceTest extends ServiceCommon {
     void create_review() {
         //given
         SimpleMemberDetails memberDetails = new SimpleMemberDetails(1l, "xuni@naver.com", "유니");
-        ReviewForm form = new ReviewForm((byte) 4, "this book is really good", 100);
+        ReviewForm form = new ReviewForm(4, "this book is really good", 100);
         //when
         reviewService.create(memberDetails, "study-product-id", form);
         //then
@@ -79,11 +81,11 @@ class ReviewServiceTest extends ServiceCommon {
         List<Review> reviews = reviewRepository.readBy("update-each-id");
         Long reviewId = reviews.get(0).getId();
         //when - 해당 리뷰의 기존 content 값 Rating 5 | Comment "this book is really good"
-        reviewService.updateReview(reviewId, 1l, new ReviewUpdateForm((byte) 3, "this book is really excellent"));
+        reviewService.updateReview(reviewId, 1l, new ReviewUpdateForm(3, "this book is really excellent"));
         //then
         Review updateReview = reviewRepository.readBy("update-each-id").get(0);
         assertThat(updateReview.receiveComment()).isEqualTo("this book is really excellent");
-        assertThat(updateReview.receiveRating()).isEqualTo((byte) 3);
+        assertThat(updateReview.receiveRating()).isEqualTo(3);
     }
 
     @DisplayName("존재하지 않는 리뷰를 수정하려는 경우 " +
@@ -91,7 +93,7 @@ class ReviewServiceTest extends ServiceCommon {
     @Test
     void update_review_fail_cause_not_exist() {
         Long notExistReviewId = 100l;
-        ReviewUpdateForm form = new ReviewUpdateForm((byte) 3, "this book is really excellent");
+        ReviewUpdateForm form = new ReviewUpdateForm(3, "this book is really excellent");
 
         assertThatThrownBy(() -> reviewService.updateReview(notExistReviewId, 1l, form))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -126,15 +128,15 @@ class ReviewServiceTest extends ServiceCommon {
     void rating() {
         Review review1 = Review.builder()
                 .reviewer(Reviewer.of(5l, "바니", Progress.HALF))
-                .content(Content.of((byte) 2, "this book is really bad"))
+                .content(Content.of(2, "this book is really bad"))
                 .studyProductId("avg-test-stp-id").build();
         Review review2 = Review.builder()
                 .reviewer(Reviewer.of(6l, "바니", Progress.HALF))
-                .content(Content.of((byte) 1, "this book is really bad"))
+                .content(Content.of(1, "this book is really bad"))
                 .studyProductId("avg-test-stp-id").build();
         Review review3 = Review.builder()
                 .reviewer(Reviewer.of(7l, "바니", Progress.HALF))
-                .content(Content.of((byte) 1, "this book is really bad"))
+                .content(Content.of(1, "this book is really bad"))
                 .studyProductId("avg-test-stp-id").build();
         reviewRepository.saveAll(List.of(review1, review2, review3));
 

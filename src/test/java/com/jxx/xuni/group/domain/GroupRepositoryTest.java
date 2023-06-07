@@ -1,5 +1,6 @@
 package com.jxx.xuni.group.domain;
 
+import com.jxx.xuni.auth.domain.AuthProvider;
 import com.jxx.xuni.auth.domain.LoginInfo;
 import com.jxx.xuni.auth.domain.Member;
 import com.jxx.xuni.auth.domain.MemberRepository;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import static com.jxx.xuni.auth.domain.AuthProvider.*;
 import static com.jxx.xuni.group.domain.GroupStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,7 +37,7 @@ class GroupRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Member member = new Member(LoginInfo.of("leesin5498@naver.com", "1234"), "이재헌");
+        Member member = new Member(LoginInfo.of("leesin5498@naver.com", "1234"), "이재헌", XUNI);
         Member savedMember = memberRepository.save(member);
         hostId = savedMember.getId();
     }

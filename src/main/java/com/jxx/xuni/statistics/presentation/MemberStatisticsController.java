@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.jxx.xuni.statistics.dto.response.MemberStatisticsApiMessage.REVIEW_NEED_DATA;
+import static com.jxx.xuni.statistics.dto.response.StatisticsApiMessage.REVIEW_NEED_DATA;
 
 @RestController
 @RequiredArgsConstructor

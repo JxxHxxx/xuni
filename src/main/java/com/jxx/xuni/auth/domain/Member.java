@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
+import static com.jxx.xuni.auth.domain.AuthProvider.GOOGLE;
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
 
 @Getter
@@ -22,10 +25,13 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
     private String name;
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
-    public Member(LoginInfo loginInfo, String name) {
+    public Member(LoginInfo loginInfo, String name, AuthProvider authProvider) {
         this.loginInfo = loginInfo;
         this.name = name;
+        this.authProvider = authProvider;
         this.authority = Authority.USER;
     }
 
@@ -42,5 +48,9 @@ public class Member {
 
     public String receiveEmail() {
         return loginInfo.getEmail();
+    }
+
+    public boolean isAuthProvider(AuthProvider authProvider) {
+        return this.authProvider.equals(authProvider);
     }
 }

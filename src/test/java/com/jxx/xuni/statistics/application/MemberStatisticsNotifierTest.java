@@ -1,5 +1,6 @@
 package com.jxx.xuni.statistics.application;
 
+import com.jxx.xuni.auth.domain.AuthProvider;
 import com.jxx.xuni.auth.domain.LoginInfo;
 import com.jxx.xuni.auth.domain.Member;
 import com.jxx.xuni.auth.domain.MemberRepository;
@@ -23,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.jxx.xuni.auth.domain.AuthProvider.XUNI;
+
 @Transactional // 영속성 컨택스트 종료 방지
 @SpringBootTest
 class MemberStatisticsNotifierTest {
@@ -41,7 +44,7 @@ class MemberStatisticsNotifierTest {
     @BeforeEach
     void beforeEach() {
         // member 생성
-        Member member = new Member(LoginInfo.of("xuni@naver.com", "12341234"), "유니");
+        Member member = new Member(LoginInfo.of("xuni@naver.com", "12341234"), "유니", XUNI);
         memberRepository.save(member);
 
         Member findMember = memberRepository.findByLoginInfoEmail("xuni@naver.com").get();

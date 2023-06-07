@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import static com.jxx.xuni.auth.domain.AuthProvider.XUNI;
+
 @ServiceTest
 class GroupCreateServiceTest extends ServiceCommon {
 
@@ -32,7 +34,7 @@ class GroupCreateServiceTest extends ServiceCommon {
 
     @BeforeEach
     void beforeEach() {
-        Member member = memberRepository.save(new Member(LoginInfo.of("leesin5498@naver.com", "12341234"), "재헌"));
+        Member member = memberRepository.save(new Member(LoginInfo.of("leesin5498@naver.com", "12341234"), "재헌", XUNI));
         MemberId = member.getId();
     }
 

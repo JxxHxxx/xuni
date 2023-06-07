@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static com.jxx.xuni.auth.domain.AuthProvider.*;
 import static com.jxx.xuni.auth.domain.Authority.*;
 
 
@@ -20,7 +21,7 @@ class MemberTest {
     @Test
     void createMember() {
         //given - when
-        Member member = new Member(LoginInfo.of("leesin5498@naver.com", "1234"), "이재헌");
+        Member member = new Member(LoginInfo.of("leesin5498@naver.com", "1234"), "이재헌", XUNI);
         //then
         Assertions.assertThat(member.getAuthority()).isEqualTo(USER);
     }
@@ -29,7 +30,7 @@ class MemberTest {
     @Test
     void matches_password_success() {
         //given - when
-        Member member = new Member(LoginInfo.of("leesin5498@naver.com", "1234"), "이재헌");
+        Member member = new Member(LoginInfo.of("leesin5498@naver.com", "1234"), "이재헌",XUNI);
         //then
         Assertions.assertThatCode(() -> member.matches("1234")).doesNotThrowAnyException();
     }
@@ -41,7 +42,7 @@ class MemberTest {
     @ValueSource(strings = {"9999"})
     void matches_password_fail(String password) {
         //given
-        Member member = new Member(LoginInfo.of("leesin5498@naver.com", "1234"), "이재헌");
+        Member member = new Member(LoginInfo.of("leesin5498@naver.com", "1234"), "이재헌",XUNI);
 
         //when - then
         Assertions.assertThatThrownBy(() -> member.matches(password))
