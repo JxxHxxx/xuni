@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.jxx.xuni.auth.domain.AuthProvider.*;
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.EXISTED_EMAIL;
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
 import static com.jxx.xuni.auth.domain.exception.ExceptionMessage.ALREADY_EXIST_EMAIL;
@@ -36,8 +37,14 @@ public class AuthService {
         return new CreateAuthCodeEvent(authCode.getAuthCodeId(), authCode.getEmail(), authCode.getValue());
     }
 
-    public void checkExistEmail(EmailForm form) {
-        if (memberRepository.findByLoginInfoEmail(form.email()).isPresent()) throw new IllegalArgumentException(ALREADY_EXIST_EMAIL);
+    public void checkEmailAndAuthProvider(EmailForm form) {
+        Optional<Member> oMember = memberRepository.findByLoginInfoEmail(form.email());
+        if (oMember.isPresent()) {
+            Member member = oMember.get();
+            if (member.isAuthProvider(XUNI)) {
+                throw new IllegalArgumentException(ALREADY_EXIST_EMAIL);
+            }
+        }
     }
 
     @Transactional

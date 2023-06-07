@@ -90,7 +90,19 @@ class AuthServiceTest extends ServiceCommon {
         //given
         EmailForm emailForm = new EmailForm("create@naver.com");
         //when - then
-        assertThatCode(() -> authService.checkExistEmail(emailForm))
+        assertThatCode(() -> authService.checkEmailAndAuthProvider(emailForm))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("동일한 이메일이 있지만 AuthProvider 가 XUNI가 아닐 경우에는 이메일 중복 검사를 통과할 수 있다.")
+    @Test
+    void check_exist_email_success_cause_diff_auth_provider() {
+        //given
+        EmailForm emailForm = new EmailForm("diffAuthProvider@naver.com");
+        AuthProvider authProvider = GOOGLE;
+        memberRepository.save(new Member(LoginInfo.of("diffAuthProvider@naver.com", "0000"),"김유니", authProvider));
+        //when - then
+        assertThatCode(() -> authService.checkEmailAndAuthProvider(emailForm))
                 .doesNotThrowAnyException();
     }
 
@@ -105,7 +117,7 @@ class AuthServiceTest extends ServiceCommon {
         EmailForm emailForm = new EmailForm("already@naver.com");
         memberRepository.save(new Member(LoginInfo.of("already@naver.com", "0000"),"김유니", XUNI));
         //when - then
-        assertThatThrownBy(() -> authService.checkExistEmail(emailForm))
+        assertThatThrownBy(() -> authService.checkEmailAndAuthProvider(emailForm))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(ALREADY_EXIST_EMAIL);
     }
