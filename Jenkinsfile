@@ -48,21 +48,19 @@ pipeline {
             }
         }
 
-         stage('Deploy') {
+        stage('Deploy') {
             steps {
                 script {
                     def addresses = ['13.124.210.71', '13.125.241.19']
 
-                        dir('/var/lib/jenkins/workspace/xuni-deploy/build/libs') {
-
-                            for (int i=0; i < addresses.size(); i++) {
-                                echo "start ${addresses[i]} deploy"
-                                sh "scp -o StrictHostKeyChecking=no -i ${API_SERVER_PEM_KEY} xuni-0.0.1-SNAPSHOT.jar ubuntu@${addresses[i]}:/home/ubuntu"
-                                sh "ssh -o StrictHostKeyChecking=no -i ${API_SERVER_PEM_KEY} ubuntu@${addresses[i]} sudo rm -f /home/ubuntu/deploy.sh"
-                                sh "scp -o StrictHostKeyChecking=no -i ${API_SERVER_PEM_KEY} ${DEPLOY_SCRIPT} ubuntu@${addresses[i]}:/home/ubuntu"
-                                sh "ssh -o StrictHostKeyChecking=no -i ${API_SERVER_PEM_KEY} ubuntu@${addresses[i]} chmod +x /home/ubuntu/deploy.sh"
-                                sh "ssh -o StrictHostKeyChecking=no -i ${API_SERVER_PEM_KEY} ubuntu@${addresses[i]} /home/ubuntu/deploy.sh &"
-                            }
+                    dir('/var/lib/jenkins/workspace/xuni-deploy/build/libs') {
+                        for (int i=0; i < addresses.size(); i++) {
+                            echo "start ${addresses[i]} deploy"
+                            sh "scp -o StrictHostKeyChecking=no -i ${API_SERVER_PEM_KEY} xuni-0.0.1-SNAPSHOT.jar ubuntu@${addresses[i]}:/home/ubuntu"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${API_SERVER_PEM_KEY} ubuntu@${addresses[i]} sudo rm -f /home/ubuntu/deploy.sh"
+                            sh "scp -o StrictHostKeyChecking=no -i ${API_SERVER_PEM_KEY} ${DEPLOY_SCRIPT} ubuntu@${addresses[i]}:/home/ubuntu"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${API_SERVER_PEM_KEY} ubuntu@${addresses[i]} chmod +x /home/ubuntu/deploy.sh"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${API_SERVER_PEM_KEY} ubuntu@${addresses[i]} /home/ubuntu/deploy.sh &"
                         }
                     }
                 }
