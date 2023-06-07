@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.jxx.xuni.auth.domain.AuthProvider.*;
+
 @Getter
 @Entity
 @Table(name = "member_auth_code")
@@ -58,7 +60,7 @@ public class AuthCode {
 
     public Member createMember(String email, String password, String name) {
         checkAuthenticated();
-        return new Member(LoginInfo.of(email, password), name);
+        return new Member(LoginInfo.of(email, password), name, XUNI);
     }
 
     public void setMember(Member member) {

@@ -3,6 +3,7 @@ package com.jxx.xuni.auth.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jxx.xuni.auth.domain.AuthProvider;
 import com.jxx.xuni.auth.domain.LoginInfo;
 import com.jxx.xuni.auth.domain.Member;
 import com.jxx.xuni.auth.domain.MemberRepository;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.jxx.xuni.auth.application.Oauth2Const.*;
+import static com.jxx.xuni.auth.domain.AuthProvider.*;
 
 @Component
 @RequiredArgsConstructor
@@ -113,6 +115,6 @@ public class GoogleClient  {
     }
 
     private Member createNewMember(String email, String name) {
-        return new Member(LoginInfo.of(email, passwordEncoder.encrypt(UUID.randomUUID().toString())), name);
+        return new Member(LoginInfo.of(email, passwordEncoder.encrypt(UUID.randomUUID().toString())), name, GOOGLE);
     }
 }

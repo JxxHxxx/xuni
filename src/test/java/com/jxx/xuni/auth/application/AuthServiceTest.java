@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.jxx.xuni.auth.domain.AuthProvider.*;
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.EXISTED_EMAIL;
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
 import static com.jxx.xuni.auth.domain.exception.ExceptionMessage.ALREADY_EXIST_EMAIL;
@@ -102,7 +103,7 @@ class AuthServiceTest extends ServiceCommon {
     void check_exist_email_fail_cause_exist_email() {
         //given
         EmailForm emailForm = new EmailForm("already@naver.com");
-        memberRepository.save(new Member(LoginInfo.of("already@naver.com", "0000"),"김유니"));
+        memberRepository.save(new Member(LoginInfo.of("already@naver.com", "0000"),"김유니", XUNI));
         //when - then
         assertThatThrownBy(() -> authService.checkExistEmail(emailForm))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -180,7 +181,7 @@ class AuthServiceTest extends ServiceCommon {
         authService.verifyAuthCode(form);
         SignupForm signupForm = new SignupForm(authCodeId, "0000", "김유니");
         // 이메일 중복을 만들기 위한 데이터 주입
-        memberRepository.save(new Member(LoginInfo.of("test@naver.com","0000"),"김유니"));
+        memberRepository.save(new Member(LoginInfo.of("test@naver.com","0000"),"김유니", XUNI));
 
         //when - then
         assertThatThrownBy(() -> authService.signup(signupForm))
@@ -192,7 +193,7 @@ class AuthServiceTest extends ServiceCommon {
     @Test
     void login_success() {
         // given
-        memberRepository.save(new Member(LoginInfo.of("test@naver.com", passwordEncoder.encrypt("0000")), "김유니"));
+        memberRepository.save(new Member(LoginInfo.of("test@naver.com", passwordEncoder.encrypt("0000")), "김유니", XUNI));
         LoginForm loginForm = new LoginForm("test@naver.com", "0000");
         // when
         MemberDetails memberDetails = authService.login(loginForm);
@@ -208,7 +209,7 @@ class AuthServiceTest extends ServiceCommon {
                         "incorrectemail@naver.com, 0000, 이메일이 틀린 경우"})
     void login_fail_by_message(String email, String password, String message) {
         // given
-        memberRepository.save(new Member(LoginInfo.of("test@naver.com", passwordEncoder.encrypt("0000")), "김유니"));
+        memberRepository.save(new Member(LoginInfo.of("test@naver.com", passwordEncoder.encrypt("0000")), "김유니", XUNI));
         LoginForm loginForm = new LoginForm(email, password);
         // when - then
         assertThatThrownBy(() -> authService.login(loginForm))

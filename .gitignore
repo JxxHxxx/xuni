@@ -39,3 +39,4 @@ src/main/resources/application.properties
 .vscode/
 /src/main/resources/data.sql
 /src/main/resources/application-dev.properties
+/deploy.sh
