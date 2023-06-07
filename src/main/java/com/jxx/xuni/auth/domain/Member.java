@@ -22,10 +22,13 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
     private String name;
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
-    public Member(LoginInfo loginInfo, String name) {
+    public Member(LoginInfo loginInfo, String name, AuthProvider authProvider) {
         this.loginInfo = loginInfo;
         this.name = name;
+        this.authProvider = authProvider;
         this.authority = Authority.USER;
     }
 
