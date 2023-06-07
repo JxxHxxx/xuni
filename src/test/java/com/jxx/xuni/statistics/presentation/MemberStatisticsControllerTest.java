@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.jxx.xuni.ApiDocumentUtils.getDocumentRequest;
 import static com.jxx.xuni.ApiDocumentUtils.getDocumentResponse;
-import static com.jxx.xuni.statistics.dto.response.MemberStatisticsApiMessage.REVIEW_NEED_DATA;
+import static com.jxx.xuni.statistics.dto.response.StatisticsApiMessage.REVIEW_NEED_DATA;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;

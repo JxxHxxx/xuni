@@ -9,19 +9,19 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Content {
-    private Byte rating;
+    private Integer rating;
     private String comment;
 
-    private Content(Byte rating, String comment) {
+    private Content(Integer rating, String comment) {
         this.rating = rating;
         this.comment = comment;
     }
 
-    public static Content of(Byte rating, String comment) {
+    public static Content of(Integer rating, String comment) {
         return new Content(rating, comment);
     }
 
-    protected void update(Byte rating, String comment) {
+    protected void update(Integer rating, String comment) {
         if (rating != null) {
             this.rating = rating;
         }

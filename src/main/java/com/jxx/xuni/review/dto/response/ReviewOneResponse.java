@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public record ReviewOneResponse(
         Long reviewId,
         String comment,
-        Byte rating,
+        Integer rating,
         LocalDateTime lastModifiedTime,
         Long reviewerId,
         String reviewerName,

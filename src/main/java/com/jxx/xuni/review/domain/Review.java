@@ -37,7 +37,7 @@ public class Review {
         this.isDeleted = false;
     }
 
-    public void update(Long reviewerId, Byte rating, String comment) {
+    public void update(Long reviewerId, Integer rating, String comment) {
         // 본인 검증
         checkWriter(reviewerId);
         this.content.update(rating, comment);
@@ -59,7 +59,7 @@ public class Review {
         this.lastModifiedTime = LocalDateTime.now();
     }
 
-    public Byte receiveRating() {
+    public Integer receiveRating() {
         return this.content.getRating();
     }
 
