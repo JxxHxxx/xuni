@@ -17,7 +17,7 @@ class ReviewTest {
     void init() {
         Review review = Review.builder()
                 .reviewer(Reviewer.of(1l, "wogjs", Progress.HALF))
-                .content(Content.of((byte) 5, "정말 재밋어요"))
+                .content(Content.of(5, "정말 재밋어요"))
                 .studyProductId("study-product-id").build();
 
         assertThat(review.getIsDeleted()).isFalse();
@@ -32,12 +32,12 @@ class ReviewTest {
 
         Review review = Review.builder()
                 .reviewer(Reviewer.of(reviewerId, "wogjs", Progress.HALF))
-                .content(Content.of((byte) 5, "정말 재밋어요"))
+                .content(Content.of(5, "정말 재밋어요"))
                 .studyProductId("study-product-id").build();
 
-        review.update(reviewerId, (byte) 3, "정말 재미없어요");
+        review.update(reviewerId, 3, "정말 재미없어요");
 
-        assertThat(review.receiveRating()).isEqualTo((byte) 3);
+        assertThat(review.receiveRating()).isEqualTo(3);
         assertThat(review.receiveComment()).isEqualTo("정말 재미없어요");
     }
 
@@ -48,12 +48,12 @@ class ReviewTest {
 
         Review review = Review.builder()
                 .reviewer(Reviewer.of(reviewerId, "wogjs", Progress.HALF))
-                .content(Content.of((byte) 5, "정말 재밋어요"))
+                .content(Content.of(5, "정말 재밋어요"))
                 .studyProductId("study-product-id").build();
 
         review.update(reviewerId, null, null);
 
-        assertThat(review.receiveRating()).isEqualTo((byte) 5);
+        assertThat(review.receiveRating()).isEqualTo(5);
         assertThat(review.receiveComment()).isEqualTo("정말 재밋어요");
     }
 
@@ -69,10 +69,10 @@ class ReviewTest {
 
         Review review = Review.builder()
                 .reviewer(Reviewer.of(reviewerId, "wogjs", Progress.HALF))
-                .content(Content.of((byte) 5, "정말 재밋어요"))
+                .content(Content.of(5, "정말 재밋어요"))
                 .studyProductId("study-product-id").build();
 
-        assertThatThrownBy(() -> review.update(anotherUserId, (byte) 3, "정말 재미없어요"))
+        assertThatThrownBy(() -> review.update(anotherUserId, 3, "정말 재미없어요"))
                 .isInstanceOf(NotPermissionException.class)
                 .hasMessage(PRIVATE_ACCESSIBLE);
     }
@@ -84,7 +84,7 @@ class ReviewTest {
         Long reviewerId = 1l;
         Review review = Review.builder()
                 .reviewer(Reviewer.of(reviewerId, "wogjs", Progress.HALF))
-                .content(Content.of((byte) 5, "정말 재밋어요"))
+                .content(Content.of(5, "정말 재밋어요"))
                 .studyProductId("study-product-id").build();
 
         review.delete(reviewerId);
@@ -101,7 +101,7 @@ class ReviewTest {
         Long anotherUserId = 50l;
         Review review = Review.builder()
                 .reviewer(Reviewer.of(reviewerId, "wogjs", Progress.HALF))
-                .content(Content.of((byte) 5, "정말 재밋어요"))
+                .content(Content.of(5, "정말 재밋어요"))
                 .studyProductId("study-product-id").build();
 
         assertThatThrownBy(() -> review.delete(anotherUserId))

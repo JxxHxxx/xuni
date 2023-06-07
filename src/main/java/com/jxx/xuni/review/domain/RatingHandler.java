@@ -10,9 +10,9 @@ import java.util.List;
 public class RatingHandler {
 
     public double calculateAvg(List<Review> reviews) {
-        List<Byte> ratings = reviews.stream().map(r -> r.receiveRating()).toList();
+        List<Integer> ratings = reviews.stream().map(r -> r.receiveRating()).toList();
         Integer totalRating = 0;
-        for (Byte rating : ratings) {
+        for (Integer rating : ratings) {
             totalRating += rating;
         }
 
