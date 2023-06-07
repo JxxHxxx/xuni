@@ -51,7 +51,7 @@ pipeline {
          stage('Deploy') {
             steps {
                 script {
-                    def addresses = ['13.124.210.71', '13.125.241.19']
+                    def addresses = ['3.39.2.83', '43.201.187.19']
 
                         dir('/var/lib/jenkins/workspace/xuni-deploy/build/libs') {
 
