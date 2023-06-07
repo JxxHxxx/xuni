@@ -25,7 +25,7 @@ public class AuthController {
 
     @PostMapping("/auth/codes")
     public ResponseEntity<AuthResult> createAndSendAuthCode(@RequestBody EmailForm form) {
-        authService.checkExistEmail(form);
+        authService.checkEmailAndAuthProvider(form);
         CreateAuthCodeEvent event = authService.createAuthCode(form);
         authMailService.sendAuthCode(event);
 

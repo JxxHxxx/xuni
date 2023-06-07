@@ -106,7 +106,9 @@ public class GoogleClient  {
 
         if (oMember.isPresent()) {
             Member member = oMember.get();
-            return new SimpleMemberDetails(member.getId(), member.receiveEmail(), member.getName(), member.getAuthority());
+            if (member.isAuthProvider(GOOGLE)) {
+                return new SimpleMemberDetails(member.getId(), member.receiveEmail(), member.getName(), member.getAuthority());
+            }
         }
 
         Member newMember = createNewMember(email, name);
