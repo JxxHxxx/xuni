@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-            API_SERVER_PEM_KEY = credentials('EC2-ACCESS')
+            API_SERVER_PEM_KEY = credentials('mt-dp-pem')
             API_REMOTE_SERVER_IP = credentials('apiServerIP')
             TEST_PROPERTIES = credentials('testProperties')
             DEV_PROPERTIES = credentials('v2-devProperties')
