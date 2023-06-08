@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-            API_SERVER_PEM_KEY = credentials('mt-dp-pem')
+            API_SERVER_PEM_KEY = credentials('EC2-ACCESS')
             API_REMOTE_SERVER_IP = credentials('apiServerIP')
             TEST_PROPERTIES = credentials('testProperties')
-            DEV_PROPERTIES = credentials('v2-devProperties')
+            DEV_PROPERTIES = credentials('devProperties')
             DEPLOY_SCRIPT = credentials('DEPLOY_SCRIPT')
         }
 
@@ -51,7 +51,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    def addresses = ['3.39.2.83', '43.201.187.19']
+                    def addresses = ['43.201.76.198']
 
                     dir('/var/lib/jenkins/workspace/xuni-deploy/build/libs') {
                         for (int i=0; i < addresses.size(); i++) {

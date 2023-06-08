@@ -8,7 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.jxx.xuni.statistics.MemberStatisticsSupporter.getBasicMemberStatistics;
-import static com.jxx.xuni.statistics.domain.exception.MemberStatisticsExceptionMessage.NOT_APPROPRIATE_PROGRESS;
+import static com.jxx.xuni.statistics.domain.exception.StatisticsExceptionMessage.NOT_APPROPRIATE_PROGRESS;
 
 
 class MemberStatisticsTest {
