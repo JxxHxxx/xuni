@@ -6,7 +6,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(AuthController.class)
+@WebMvcTest({AuthController.class, Oauth2Controller.class})
 @AutoConfigureRestDocs
 public class AuthCommon {
     @Autowired

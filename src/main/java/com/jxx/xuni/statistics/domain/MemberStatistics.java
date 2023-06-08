@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static com.jxx.xuni.statistics.domain.exception.MemberStatisticsExceptionMessage.NOT_APPROPRIATE_PROGRESS;
+import static com.jxx.xuni.statistics.domain.exception.StatisticsExceptionMessage.NOT_APPROPRIATE_PROGRESS;
 
 @Getter
 @Entity

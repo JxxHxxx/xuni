@@ -1,5 +1,7 @@
 package com.jxx.xuni.statistics.domain;
 
+import com.jxx.xuni.statistics.domain.exception.RatingOutOfBoundException;
+import com.jxx.xuni.statistics.domain.exception.ReviewCntOutOfBoundException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,7 +12,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-// TODO : 상품이 등록될 때 만들어져야함 Event
+import static com.jxx.xuni.statistics.domain.exception.StatisticsExceptionMessage.NOT_APPROPRIATE_RATING;
+import static com.jxx.xuni.statistics.domain.exception.StatisticsExceptionMessage.NOT_APPROPRIATE_REVIEW_CNT;
 
 @Getter
 @Entity
@@ -19,17 +22,51 @@ public class StudyProductStatistics {
 
     @Id @Column(name = "study_prodcut_id")
     private String id;
-    private Integer ratingAvg;
-    private Integer reviewCnt;
+    private Integer ratingSum ;
+    private Integer reviewCnt ;
     private LocalDateTime createdTime;
     private LocalDateTime lastModifiedTime;
 
     @Builder
-    public StudyProductStatistics(String id, Integer ratingAvg, Integer reviewCnt) {
+    private StudyProductStatistics(String id, Integer ratingSum, Integer reviewCnt) {
         this.id = id;
-        this.ratingAvg = ratingAvg;
+        this.ratingSum = ratingSum;
         this.reviewCnt = reviewCnt;
         this.createdTime = LocalDateTime.now();
         this.lastModifiedTime = LocalDateTime.now();
+    }
+
+    public void add(Integer rating) {
+        checkRatingRange(rating);
+
+        this.ratingSum += rating;
+        this.reviewCnt += 1;
+        this.lastModifiedTime = LocalDateTime.now();
+    }
+
+    public void update(Integer preRating, Integer updatedRating) {
+        checkRatingRange(preRating);
+        checkRatingRange(updatedRating);
+
+        this.ratingSum += updatedRating - preRating;
+        this.lastModifiedTime = LocalDateTime.now();
+    }
+
+    public void delete(Integer rating) {
+        checkRatingRange(rating);
+
+        this.ratingSum -= rating;
+        this.reviewCnt -= 1;
+        this.lastModifiedTime = LocalDateTime.now();
+
+        reviewCntRange();
+    }
+
+    private void checkRatingRange(Integer rating) {
+        if (rating > 5 || rating < 0) throw new RatingOutOfBoundException(NOT_APPROPRIATE_RATING);
+    }
+
+    private void reviewCntRange() {
+        if (this.reviewCnt < 0) throw new ReviewCntOutOfBoundException(NOT_APPROPRIATE_REVIEW_CNT);
     }
 }
