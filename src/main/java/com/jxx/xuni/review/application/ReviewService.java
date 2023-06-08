@@ -1,12 +1,16 @@
 package com.jxx.xuni.review.application;
 
 import com.jxx.xuni.auth.application.MemberDetails;
+import com.jxx.xuni.common.event.trigger.statistics.ReviewCreatedEvent;
+import com.jxx.xuni.common.event.trigger.statistics.ReviewDeletedEvent;
+import com.jxx.xuni.common.event.trigger.statistics.ReviewUpdatedEvent;
 import com.jxx.xuni.review.domain.*;
 import com.jxx.xuni.review.dto.request.ReviewForm;
 import com.jxx.xuni.review.dto.request.ReviewUpdateForm;
 import com.jxx.xuni.review.dto.response.RatingResponse;
 import com.jxx.xuni.review.dto.response.ReviewOneResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -19,6 +23,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final RatingHandler ratingHandler;
+    private final ApplicationEventPublisher eventPublisher;
 
     public void create(MemberDetails memberDetails, String studyProductId, ReviewForm form) {
         Review review = Review.builder()
@@ -27,7 +32,10 @@ public class ReviewService {
                 .content(Content.of(form.rating(), form.comment()))
                 .build();
 
-        reviewRepository.save(review);
+        Review saveReview = reviewRepository.save(review);
+
+        ReviewCreatedEvent event = new ReviewCreatedEvent(studyProductId, saveReview.receiveRating());
+        eventPublisher.publishEvent(event);
     }
 
     public List<ReviewOneResponse> read(String studyProductId) {
@@ -47,7 +55,12 @@ public class ReviewService {
     public void updateReview(Long reviewId, Long reviewerId, ReviewUpdateForm form) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new IllegalArgumentException(NOT_EXIST_ENTITY));
+        Integer ratingBeforeUpdate = review.receiveRating();
+
         review.update(reviewerId, form.rating(), form.comment());
+
+        ReviewUpdatedEvent event = new ReviewUpdatedEvent(review.getStudyProductId(), ratingBeforeUpdate, form.rating());
+        eventPublisher.publishEvent(event);
     }
 
     @Transactional
@@ -55,6 +68,9 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new IllegalArgumentException(NOT_EXIST_ENTITY));
         review.delete(reviewerId);
+
+        ReviewDeletedEvent event = new ReviewDeletedEvent(review.getStudyProductId(), review.receiveRating());
+        eventPublisher.publishEvent(event);
     }
 
     public RatingResponse readRatingAvg(String studyProductId) {
