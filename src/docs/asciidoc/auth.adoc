@@ -40,3 +40,9 @@ include::{snippets}/auth/login/response-headers.adoc[]
 
 === body
 include::{snippets}/auth/login/response-body.adoc[]
+
+== 소셜 로그인(google)
+=== HTTP request
+include::{snippets}/auth/oauth2/google/http-request.adoc[]
+=== HTTP response (Location 은 인증 코드 요청을 위한 url 입니다.)
+include::{snippets}/auth/oauth2/google/http-response.adoc[]
