@@ -31,6 +31,26 @@ public class StudyProductStatisticsService {
         studyProductStatisticsRepository.save(statistics);
     }
 
+    public List<StudyProductStatisticsReadResponse> readBy(Pageable pageable) {
+        Page<StudyProductStatistics> statistics = studyProductStatisticsRepository.readBy(pageable);
+
+        return statistics.stream().map(st -> new StudyProductStatisticsReadResponse(
+                st.getId(),
+                st.getRatingSum(),
+                st.getReviewCnt()
+        )).toList();
+    }
+
+    public StudyProductStatisticsReadResponse readOne(String studyProductId) {
+        StudyProductStatistics statistics = studyProductStatisticsRepository.findById(studyProductId).orElseThrow(
+                () -> new IllegalArgumentException(NOT_EXIST_ENTITY));
+
+        return new StudyProductStatisticsReadResponse(
+                statistics.getId(),
+                statistics.getRatingSum(),
+                statistics.getReviewCnt());
+    }
+
     @Transactional
     public void reflectReviewCreate(Integer rating, String studyProductId) {
         StudyProductStatistics statistics = studyProductStatisticsRepository.findById(studyProductId).orElseThrow(
