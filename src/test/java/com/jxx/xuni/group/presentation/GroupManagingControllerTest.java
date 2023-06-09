@@ -124,7 +124,7 @@ class GroupManagingControllerTest extends GroupCommon {
     @Test
     void group_close_request() throws Exception {
         //when - then
-        ResultActions result = mockMvc.perform(patch("/groups/{group-id}/close-recruitment", 1l)
+        ResultActions result = mockMvc.perform(patch("/groups/{group-id}/closing-recruitment", 1l)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", authToken));
 

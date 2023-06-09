@@ -35,7 +35,7 @@ public class GroupManagingController {
         return ResponseEntity.ok(GroupApiSimpleResult.leave());
     }
 
-    @PatchMapping("/groups/{group-id}/close-recruitment")
+    @PatchMapping("/groups/{group-id}/closing-recruitment")
     public ResponseEntity<GroupApiSimpleResult> close(@PathVariable ("group-id") Long groupId,
                                                       @AuthenticatedMember MemberDetails memberDetails) {
 

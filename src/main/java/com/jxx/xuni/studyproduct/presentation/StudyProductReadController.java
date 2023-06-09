@@ -34,7 +34,7 @@ public class StudyProductReadController {
     }
 
     @GetMapping("/study-products/cond")
-    public ResponseEntity<StudyProductApiReadResult> readAllBy(@RequestParam Category category) {
+    public ResponseEntity<StudyProductApiReadResult> readAllBy(@RequestParam(defaultValue = "JAVA") Category category) {
         List<StudyProductReadResponse> responses = studyProductReadService.readBy(category);
 
         return ResponseEntity.ok(new StudyProductApiReadResult(category.name() + " " + STUDY_PRODUCT_READ, responses));

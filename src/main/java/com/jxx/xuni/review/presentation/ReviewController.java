@@ -20,15 +20,13 @@ import static com.jxx.xuni.review.dto.response.ReviewApiMessage.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
-// TODO : API URL 형식 계층적이계 변경해야 함 study-products -> reviews
-
 @RestController
 @RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/reviews/study-products/{study-product-id}")
+    @PostMapping("/study-products/{study-product-id}/reviews")
     public ResponseEntity<ReviewApiSimpleResult> createReview(@AuthenticatedMember MemberDetails memberDetails,
                                                               @PathVariable("study-product-id") String studyProductId,
                                                               @RequestBody @Validated ReviewForm form) {
@@ -37,7 +35,7 @@ public class ReviewController {
         return new ResponseEntity<>(ReviewApiSimpleResult.create(REVIEW_CREATE), CREATED);
     }
 
-    @GetMapping("/reviews/study-products/{study-product-id}")
+    @GetMapping("/study-products/{study-product-id}/reviews")
     public ResponseEntity<ReviewApiResult> readReviewBy(@PathVariable("study-product-id") String studyProductId) {
         List<ReviewOneResponse> response = reviewService.read(studyProductId);
 
