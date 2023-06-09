@@ -2,6 +2,7 @@ package com.jxx.xuni.statistics.application;
 
 import com.jxx.xuni.statistics.domain.StudyProductStatistics;
 import com.jxx.xuni.statistics.domain.StudyProductStatisticsRepository;
+import com.jxx.xuni.statistics.dto.response.StudyProductStatisticsReadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,26 @@ public class StudyProductStatisticsService {
                 .reviewCnt(REVIEW_CNT_INIT).build();
 
         studyProductStatisticsRepository.save(statistics);
+    }
+
+    public List<StudyProductStatisticsReadResponse> readBy(Pageable pageable) {
+        Page<StudyProductStatistics> statistics = studyProductStatisticsRepository.readBy(pageable);
+
+        return statistics.stream().map(st -> new StudyProductStatisticsReadResponse(
+                st.getId(),
+                st.getRatingSum(),
+                st.getReviewCnt()
+        )).toList();
+    }
+
+    public StudyProductStatisticsReadResponse readOne(String studyProductId) {
+        StudyProductStatistics statistics = studyProductStatisticsRepository.findById(studyProductId).orElseThrow(
+                () -> new IllegalArgumentException(NOT_EXIST_ENTITY));
+
+        return new StudyProductStatisticsReadResponse(
+                statistics.getId(),
+                statistics.getRatingSum(),
+                statistics.getReviewCnt());
     }
 
     @Transactional
