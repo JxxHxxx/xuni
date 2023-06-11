@@ -49,7 +49,7 @@ class ReviewControllerTest extends ReviewCommon {
         SimpleMemberDetails memberDetails = new SimpleMemberDetails(1l, "xuni@naver.com", "유니");
         ReviewForm form = new ReviewForm(3, "ORM 기초를 쌓는데 정말 유익한 것 같아요", 50);
 
-        ResultActions result = mockMvc.perform(post("/reviews/study-products/{study-product-id}", studyProductId)
+        ResultActions result = mockMvc.perform(post("/study-products/{study-product-id}/reviews", studyProductId)
                 .header("Authorization", jwtTokenProvider.issue(memberDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(form)));
@@ -102,7 +102,7 @@ class ReviewControllerTest extends ReviewCommon {
 
         BDDMockito.given(reviewService.read(any())).willReturn(responses);
 
-        ResultActions result = mockMvc.perform(get("/reviews/study-products/{study-product-id}", studyProductId)
+        ResultActions result = mockMvc.perform(get("/study-products/{study-product-id}/reviews", studyProductId)
                 .contentType(MediaType.APPLICATION_JSON));
 
         result
