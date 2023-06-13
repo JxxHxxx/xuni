@@ -4,7 +4,9 @@ package com.jxx.xuni.statistics.presentation;
 import com.jxx.xuni.auth.support.JwtTokenManager;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.statistics.application.MemberStatisticsService;
+import com.jxx.xuni.statistics.application.StudyProductStatisticsService;
 import com.jxx.xuni.statistics.domain.MemberStatisticsRepository;
+import com.jxx.xuni.statistics.domain.StudyProductStatisticsRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +18,10 @@ public class StatisticsControllerTestConfig {
     MemberStatisticsRepository memberStatisticsRepository;
     @MockBean
     MemberStatisticsService memberStatisticsService;
+    @MockBean
+    StudyProductStatisticsRepository studyProductStatisticsRepository;
+    @MockBean
+    StudyProductStatisticsService studyProductStatisticsService;
     @Bean
     JwtTokenProvider jwtTokenProvider() {
         return new JwtTokenProvider();

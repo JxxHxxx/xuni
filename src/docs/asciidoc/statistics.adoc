@@ -18,3 +18,25 @@ include::{snippets}/statistics/progress/path-parameters.adoc[]
 include::{snippets}/statistics/progress/response-body.adoc[]
 ==== response body description
 include::{snippets}/statistics/progress/response-fields.adoc[]
+
+== 스터디 상품 통계 다건 조회
+=== HTTP request
+include::{snippets}/statistics/study_product/read_all/http-request.adoc[]
+==== query parameter
+include::{snippets}/statistics/study_product/read_all/query-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/statistics/study_product/read_all/response-body.adoc[]
+==== response body description
+include::{snippets}/statistics/study_product/read_all/response-fields.adoc[]
+
+== 스터디 상품 통계 단건 조회
+=== HTTP request
+include::{snippets}/statistics/study_product/read_one/http-request.adoc[]
+==== path parameter
+include::{snippets}/statistics/study_product/read_one/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/statistics/study_product/read_one/response-body.adoc[]
+==== response body description
+include::{snippets}/statistics/study_product/read_one/response-fields.adoc[]
