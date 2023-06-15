@@ -20,7 +20,7 @@ import static com.jxx.xuni.statistics.domain.exception.StatisticsExceptionMessag
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyProductStatistics {
 
-    @Id @Column(name = "study_prodcut_id")
+    @Id @Column(name = "study_product_statistics_id")
     private String id;
     private Integer ratingSum ;
     private Integer reviewCnt ;

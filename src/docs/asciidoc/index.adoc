@@ -6,10 +6,10 @@
 
 == API Documents
 * link:auth.html[auth]
-* link:groups[group]
-* link:study-products[study-product]
+* link:groups.html[group]
+* link:study-products.html[study-product]
 * link:statistics.html[statistics]
-* link:reviews[review]
+* link:reviews.html[review]
 
 |===
 | 상태 코드 | 설명
