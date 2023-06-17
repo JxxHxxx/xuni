@@ -6,8 +6,8 @@ import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
 
 @Getter
 public class GroupApiSimpleResult {
-    private Integer status;
-    private String message;
+    private final Integer status;
+    private final String message;
 
     private GroupApiSimpleResult(Integer status, String message) {
         this.status = status;

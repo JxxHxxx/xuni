@@ -7,14 +7,14 @@ import java.util.List;
 
 @Getter
 public class GroupReadOneResponse {
-    private Long groupId;
-    private Capacity capacity;
-    private GroupStatus groupStatus;
-    private Host host;
-    private Study study;
-    private Time time;
-    private Period period;
-    private List<GroupMemberDto> groupMembers;
+    private final Long groupId;
+    private final Capacity capacity;
+    private final GroupStatus groupStatus;
+    private final Host host;
+    private final Study study;
+    private final Time time;
+    private final Period period;
+    private final List<GroupMemberDto> groupMembers;
 
     public GroupReadOneResponse(Long groupId, Capacity capacity, GroupStatus groupStatus, Host host, Study study, Time time, Period period, List<GroupMemberDto> groupMembers) {
         this.groupId = groupId;

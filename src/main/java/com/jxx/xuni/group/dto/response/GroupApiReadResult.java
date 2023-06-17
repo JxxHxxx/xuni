@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class GroupApiReadResult<T> {
-    private Integer status;
-    private String message;
-    private T response;
+    private final Integer status;
+    private final String message;
+    private final T response;
 
     public GroupApiReadResult(String message, T response) {
         this.status = 200;

@@ -7,8 +7,8 @@ import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUD
 
 @Getter
 public class StudyProductApiSimpleResult {
-    private Integer status;
-    private String message;
+    private final Integer status;
+    private final String message;
 
     private StudyProductApiSimpleResult(Integer status, String message) {
         this.status = status;

@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class StudyProductApiReadResult<T> {
-    private Integer status;
-    private String message;
-    private T response;
+    private final Integer status;
+    private final String message;
+    private final T response;
 
     public StudyProductApiReadResult(String message, T response) {
         this.status = 200;

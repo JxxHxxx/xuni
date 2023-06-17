@@ -5,13 +5,13 @@ import lombok.Getter;
 
 @Getter
 public class GroupReadAllResponse {
-    private Long groupId;
-    private Capacity capacity;
-    private GroupStatus groupStatus;
-    private Host host;
-    private Study study;
-    private Time time;
-    private Period period;
+    private final Long groupId;
+    private final Capacity capacity;
+    private final GroupStatus groupStatus;
+    private final Host host;
+    private final Study study;
+    private final Time time;
+    private final Period period;
 
     public GroupReadAllResponse(Long groupId, Capacity capacity, GroupStatus groupStatus, Host host, Study study, Time time, Period period) {
         this.groupId = groupId;
