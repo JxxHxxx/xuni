@@ -6,11 +6,11 @@ import lombok.Getter;
 public class StudyProductApiResult<T> {
     private final Integer status;
     private final String message;
-    private final T Response;
+    private final T response;
 
     public StudyProductApiResult(Integer status, String message, T response) {
         this.status = status;
         this.message = message;
-        Response = response;
+        this.response = response;
     }
 }

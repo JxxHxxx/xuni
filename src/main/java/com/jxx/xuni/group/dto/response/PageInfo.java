@@ -4,12 +4,12 @@ import lombok.Getter;
 
 @Getter
 public class PageInfo {
-    private long offset;
-    private int size;
-    private int pageNumber;
-    private long totalElements;
-    private int totalPage;
-    private boolean last;
+    private final long offset;
+    private final int size;
+    private final int pageNumber;
+    private final long totalElements;
+    private final int totalPage;
+    private final boolean last;
 
     private PageInfo(long offset, int size, int pageNumber, long totalElements, int totalPage, boolean last) {
         this.offset = offset;

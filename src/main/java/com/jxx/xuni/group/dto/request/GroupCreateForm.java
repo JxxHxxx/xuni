@@ -7,14 +7,14 @@ import java.time.LocalTime;
 
 @Getter
 public class GroupCreateForm {
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private Integer capacity;
-    private String studyProductId;
-    private String subject;
-    private Category category;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
+    private final LocalTime startTime;
+    private final LocalTime endTime;
+    private final Integer capacity;
+    private final String studyProductId;
+    private final String subject;
+    private final Category category;
 
     public GroupCreateForm(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, Integer capacity, String studyProductId, String subject, Category category) {
         this.startDate = startDate;

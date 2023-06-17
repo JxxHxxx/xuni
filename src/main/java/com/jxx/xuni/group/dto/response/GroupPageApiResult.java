@@ -6,10 +6,10 @@ import java.util.List;
 
 @Getter
 public class GroupPageApiResult {
-    private Integer status;
-    private String message;
-    private List<GroupAllQueryResponse> response;
-    private PageInfo pageInfo;
+    private final Integer status;
+    private final String message;
+    private final List<GroupAllQueryResponse> response;
+    private final PageInfo pageInfo;
 
     public GroupPageApiResult(String message, List<GroupAllQueryResponse> response, PageInfo pageInfo) {
         this.status = 200;
