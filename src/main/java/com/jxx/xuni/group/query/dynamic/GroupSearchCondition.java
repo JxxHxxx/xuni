@@ -7,12 +7,14 @@ public class GroupSearchCondition {
     private String readType;
     private Boolean isAsc;
     private String sortProperty;
+    private String subject;
 
-    public GroupSearchCondition(Category category, String readType, Boolean isAsc, String sortProperty) {
+    public GroupSearchCondition(Category category, String readType, Boolean isAsc, String sortProperty, String subject) {
         this.category = category;
         this.readType = readType;
         this.isAsc = isAsc;
         this.sortProperty = sortProperty;
+        this.subject = subject;
     }
 
     public void nullHandle() {
@@ -33,5 +35,9 @@ public class GroupSearchCondition {
 
     public Boolean isAsc() {
         return isAsc;
+    }
+
+    public String getSubject() {
+        return subject;
     }
 }
