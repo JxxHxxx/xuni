@@ -35,7 +35,7 @@ public class TestGroupServiceSupporter {
         return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(5),
-                Study.of("UUID","자바의 정석", category),
+                Study.of("UUID","Real MySQL", category),
                 new Host(1l, "재헌"));
     }
 

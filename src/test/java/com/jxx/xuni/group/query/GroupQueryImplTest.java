@@ -67,7 +67,7 @@ class GroupQueryImplTest {
                 nullValues = "null", emptyValue = "empty")
     void search_group_no_set_any_condition(String description, Category category, String readType) {
         //given
-        GroupSearchCondition condition = new GroupSearchCondition(category, readType, false, null);
+        GroupSearchCondition condition = new GroupSearchCondition(category, readType, false, null, null);
         Integer forceInjectValue = 100;
         PageRequest pageable = PageRequest.of(0, forceInjectValue);
         //when
@@ -85,7 +85,7 @@ class GroupQueryImplTest {
     @Test
     void search_group_category_condition() {
         //given
-        GroupSearchCondition condition = new GroupSearchCondition(MYSQL, null, false, null);
+        GroupSearchCondition condition = new GroupSearchCondition(MYSQL, null, false, null, null);
         PageRequest pageable = PageRequest.of(0, 20);
         //when
         List<GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
@@ -99,7 +99,7 @@ class GroupQueryImplTest {
     @DisplayName("읽기 타입 조건을 검증한다. all 일 경우, GroupStatus = GATHERING, GATHER_COMPLETE, START, END 모두 조회한다.")
     @Test
     void search_group_read_type_condition_all() {
-        GroupSearchCondition condition = new GroupSearchCondition(null, "all", false, null);
+        GroupSearchCondition condition = new GroupSearchCondition(null, "all", false, null, null);
         PageRequest pageable = PageRequest.of(0, 20);
         //when
         List<GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
@@ -110,7 +110,7 @@ class GroupQueryImplTest {
     @DisplayName("읽기 타입 조건을 검증한다. gathering 일 경우, GroupStatus = GATHERING 만 조회한다.")
     @Test
     void search_group_read_type_condition_gathering() {
-        GroupSearchCondition condition = new GroupSearchCondition(null, "gathering", false, null);
+        GroupSearchCondition condition = new GroupSearchCondition(null, "gathering", false, null, null);
         PageRequest pageable = PageRequest.of(0, 20);
         //when
         List<GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
@@ -121,7 +121,7 @@ class GroupQueryImplTest {
     @DisplayName("읽기 타입 조건을 검증한다. default 일 경우, GroupStatus = GATHERING, GATHER_COMPLETE, START 만 조회한다.")
     @Test
     void search_group_read_type_condition_default() {
-        GroupSearchCondition condition = new GroupSearchCondition(null, "default", false, null);
+        GroupSearchCondition condition = new GroupSearchCondition(null, "default", false, null, null);
         PageRequest pageable = PageRequest.of(0, 20);
         //when
         List<GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
@@ -132,11 +132,24 @@ class GroupQueryImplTest {
     @DisplayName("읽기 타입 조건을 검증한다. 그 외 값이 들어올 경우 GroupStatus = GATHERING, GATHER_COMPLETE, START 만 조회한다.")
     @Test
     void search_group_read_type_condition_other_value() {
-        GroupSearchCondition condition = new GroupSearchCondition(null, "otherValue", false, null);
+        GroupSearchCondition condition = new GroupSearchCondition(null, "otherValue", false, null, null);
         PageRequest pageable = PageRequest.of(0, 20);
         //when
         List<GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
         //then
         assertThat(content).extracting("groupStatus").containsOnly(GATHERING, GATHER_COMPLETE, START);
+    }
+
+    @DisplayName("입력어 조건을 검증한다. 입력어가 포함(일치가 아니다.)되어 있는 그룹만 조회한다.")
+    @Test
+    void search_group_subject_condition() {
+        GroupSearchCondition condition = new GroupSearchCondition(null, null, false, null, "MySQL");
+        PageRequest pageable = PageRequest.of(0, 20);
+        //when
+        List<GroupAllQueryResponse> content = groupReadRepository.searchGroup(condition, pageable).getContent();
+        //then
+
+        assertThat(content).extracting("study.subject").containsOnly("Real MySQL");
+
     }
 }

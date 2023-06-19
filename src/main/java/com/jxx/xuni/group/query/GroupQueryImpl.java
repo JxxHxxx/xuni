@@ -42,7 +42,8 @@ public class GroupQueryImpl implements GroupQuery {
                 .from(group)
                 .where(
                         categoryEqual(condition.getCategory()),
-                        readTypeCond(condition.getReadType())
+                        readTypeCond(condition.getReadType()),
+                        studySubjectContain(condition.getSubject())
                 )
                 .offset(pageable.getOffset())
                 .limit(QueryLimitPolicy.LIMIT_OF_PAGE)
@@ -73,6 +74,10 @@ public class GroupQueryImpl implements GroupQuery {
         }
 
         return new OrderSpecifier(direction, group.period.startDate);
+    }
+
+    private BooleanExpression studySubjectContain(String subject) {
+        return subject != null && !subject.isEmpty() ? group.study.subject.contains(subject) : null;
     }
 
     private BooleanExpression categoryEqual(Category category) {
