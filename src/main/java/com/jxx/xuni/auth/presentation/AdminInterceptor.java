@@ -22,6 +22,10 @@ public class AdminInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if ("OPTIONS".equals(request.getMethod())) {
+            return true;
+        }
+
         Method method = getMethod(handler);
         if (isNotAdmin(method)) {
             return true;

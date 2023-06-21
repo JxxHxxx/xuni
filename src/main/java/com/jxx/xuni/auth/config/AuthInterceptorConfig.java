@@ -62,6 +62,7 @@ public class AuthInterceptorConfig implements WebMvcConfigurer{
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3030")
                 .exposedHeaders("Authorization")
+                .allowCredentials(true) // 클라이언트에서 Authorization 헤더를 보낼 때는 붙이는게 규정같음
                 .allowedMethods("GET","POST","PATCH","PUT","DELETE","OPTIONS");
     }
 }
