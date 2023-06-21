@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.HandlerInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.REQUIRED_LOGIN;
 
@@ -17,7 +16,7 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        if (notRequiredAuthentication(request)) {
+        if (notRequiredAuthentication(request) || "OPTIONS".equals(request.getMethod())) {
             return true;
         }
 
