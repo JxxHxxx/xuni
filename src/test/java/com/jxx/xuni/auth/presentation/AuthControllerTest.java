@@ -128,13 +128,22 @@ class AuthControllerTest extends AuthCommon{
                     ));
     }
 
+    class MockMemberDetails extends SimpleMemberDetails {
+
+        private String mockField;
+
+        public MockMemberDetails(Long userId, String email, String name, String mockField) {
+            super(userId, email, name);
+            this.mockField = mockField;
+        }
+    }
+
     @DisplayName("로그인 API")
     @Test
     void login_docs() throws Exception {
         LoginForm form = new LoginForm("leesin5498@xuni.com", "0000");
-
-        MemberDetails memberDetails = new SimpleMemberDetails(any(), "leesin5498@xuni.com", "김유니");
-        BDDMockito.given(authService.login(form)).willReturn(memberDetails);
+        MockMemberDetails mockMemberDetails = new MockMemberDetails(1l, "leesin5498@xuni.com", "김유니", any());
+        BDDMockito.given(authService.login(form)).willReturn(mockMemberDetails);
 
         ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -156,7 +165,8 @@ class AuthControllerTest extends AuthCommon{
 
                                 fieldWithPath("response").type(JsonFieldType.OBJECT).description("응답 본문"),
                                 fieldWithPath("response.email").type(JsonFieldType.STRING).description("이메일"),
-                                fieldWithPath("response.name").type(JsonFieldType.STRING).description("이름")
+                                fieldWithPath("response.name").type(JsonFieldType.STRING).description("이름"),
+                                fieldWithPath("response.userId").type(JsonFieldType.NUMBER).description("유저 식별자")
                         ),
 
                         HeaderDocumentation.responseHeaders(
