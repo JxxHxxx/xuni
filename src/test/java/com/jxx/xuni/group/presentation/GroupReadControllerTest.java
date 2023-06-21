@@ -298,6 +298,7 @@ class GroupReadControllerTest extends GroupCommon {
                 .param("isAsc", "true")
                 .param("sortProperty", "start-date")
                 .param("page", "0")
+                .param("subject","")
                 .contentType(MediaType.APPLICATION_JSON));
 
         result
@@ -308,11 +309,12 @@ class GroupReadControllerTest extends GroupCommon {
                         getDocumentRequest(), getDocumentResponse(),
 
                         queryParameters(
-                                RequestDocumentation.parameterWithName("category").description("스터디 주제"),
-                                RequestDocumentation.parameterWithName("readType").description("조회할 그룹 상태"),
-                                RequestDocumentation.parameterWithName("isAsc").description("오름차순 여부"),
-                                RequestDocumentation.parameterWithName("sortProperty").description("정렬 기준이 되는 속성"),
-                                RequestDocumentation.parameterWithName("page").description("현재 페이지")
+                                parameterWithName("category").description("스터디 주제"),
+                                parameterWithName("readType").description("조회할 그룹 상태"),
+                                parameterWithName("isAsc").description("오름차순 여부"),
+                                parameterWithName("sortProperty").description("정렬 기준이 되는 속성"),
+                                parameterWithName("subject").description("검색 입력어 (스터디 주제 이름)"),
+                                parameterWithName("page").description("현재 페이지")
                                 ),
 
                         responseFields(
@@ -381,8 +383,8 @@ class GroupReadControllerTest extends GroupCommon {
                                         HeaderDocumentation.headerWithName("Authorization").description("인증 토큰")
                                 ),
 
-                                RequestDocumentation.pathParameters(
-                                        RequestDocumentation.parameterWithName("group-id").description("그룹 식별자")
+                                pathParameters(
+                                        parameterWithName("group-id").description("그룹 식별자")
                                 ),
 
                                 PayloadDocumentation.responseFields(
@@ -436,8 +438,8 @@ class GroupReadControllerTest extends GroupCommon {
 
                 .andDo(MockMvcRestDocumentation.document("group/query/readOwn",
 
-                        RequestDocumentation.pathParameters(
-                                RequestDocumentation.parameterWithName("member-id").description("회원 식별자")
+                        pathParameters(
+                                parameterWithName("member-id").description("회원 식별자")
                         ),
 
                         HeaderDocumentation.requestHeaders(
