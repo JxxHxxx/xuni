@@ -4,7 +4,6 @@ import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.domain.Authority;
 import com.jxx.xuni.auth.support.JwtTokenManager;
 import com.jxx.xuni.common.exception.NotPermissionException;
-import io.jsonwebtoken.security.SecurityException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +11,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import java.lang.reflect.Method;
 
-import static com.jxx.xuni.common.exception.CommonExceptionMessage.ONLY_ADMIN;
-import static com.jxx.xuni.common.exception.CommonExceptionMessage.REQUIRED_LOGIN;
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.*;
 
 @RequiredArgsConstructor
 public class AdminInterceptor implements HandlerInterceptor {
@@ -53,7 +51,7 @@ public class AdminInterceptor implements HandlerInterceptor {
             jwtTokenManager.validateAccessToken(token);
             return jwtTokenManager.getMemberDetails(token);
         } catch (NullPointerException e) {
-            throw new SecurityException(REQUIRED_LOGIN);
+            throw new IllegalArgumentException("Authorization 헤더 " + EMPTY_VALUE);
         }
     }
 }
