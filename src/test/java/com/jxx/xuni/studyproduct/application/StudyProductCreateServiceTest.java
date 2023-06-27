@@ -88,8 +88,5 @@ class StudyProductCreateServiceTest extends ServiceCommon {
         Assertions.assertThatThrownBy(() -> studyProductCreateService.putContent(notExistStudyProductId, form1))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage(NOT_EXIST_STUDY_PRODUCT);
-
-
-
     }
 }
