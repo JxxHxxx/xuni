@@ -12,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.headers.HeaderDocumentation;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -49,7 +47,7 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
                 "최범균", "IMAGE URL");
         StudyProductReadResponse response2 = new StudyProductReadResponse(UUID.randomUUID().toString(),
                 "미즈구치 카츠야", Category.NETWORK, "모두의 네트워크", "IMAGE URL");
-        BDDMockito.given(studyProductReadService.readBy(PageRequest.of(0,10))).willReturn(List.of(response1, response2));
+        BDDMockito.given(studyProductReadService.readMany(PageRequest.of(0,10))).willReturn(List.of(response1, response2));
 
         ResultActions result = mockMvc.perform(get("/study-products")
                 .contentType(MediaType.APPLICATION_JSON)

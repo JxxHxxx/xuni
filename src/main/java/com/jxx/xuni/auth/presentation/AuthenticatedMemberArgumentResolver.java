@@ -3,6 +3,7 @@ package com.jxx.xuni.auth.presentation;
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.domain.exception.UnauthenticatedException;
 import com.jxx.xuni.auth.support.JwtTokenManager;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,5 +42,8 @@ public class AuthenticatedMemberArgumentResolver implements HandlerMethodArgumen
         } catch (StringIndexOutOfBoundsException exception) {
             throw new UnauthenticatedException(REQUIRED_LOGIN);
         }
+//        catch (ExpiredJwtException exception) {
+//            throw new UnauthenticatedException(REQUIRED_LOGIN);
+//        }
     }
 }

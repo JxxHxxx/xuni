@@ -57,13 +57,12 @@ class StudyProductReadCachingTest extends ServiceCommon {
         assertThat(response).isEqualTo(cacheResponse);
     }
 
-    @DisplayName("이미 호출한 적이 없는 스터디 상품은 캐시 저장소에 응답이 저장되어 있지 않다.")
+    @DisplayName("호출한 적이 없는 스터디 상품은 캐시 저장소에 응답이 저장되어 있지 않다.")
     @Test
     void cache_miss() {
         //then
         StudyProductContentReadResponse cache = cacheManager.getCache("study-product")
                 .get(studyProductId, StudyProductContentReadResponse.class);
-
         assertThat(cache).isNull();
     }
 }
