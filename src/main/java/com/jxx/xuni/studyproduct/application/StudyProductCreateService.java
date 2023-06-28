@@ -23,6 +23,7 @@ public class StudyProductCreateService {
     private final StudyProductRepository studyProductRepository;
     private final ApplicationEventPublisher eventPublisher;
 
+    @Transactional
     public StudyProductCreateResponse create(StudyProductForm form, String imageURL) {
         StudyProduct studyProduct = StudyProduct.builder()
                 .name(form.name())

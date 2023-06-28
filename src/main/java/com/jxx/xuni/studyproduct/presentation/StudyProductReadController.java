@@ -26,15 +26,15 @@ public class StudyProductReadController {
     private final StudyProductReadService studyProductReadService;
 
     @GetMapping("/study-products")
-    public ResponseEntity<StudyProductApiReadResult> readAll(@RequestParam(required = false, defaultValue = "0") int page,
-                                                             @RequestParam(required = false, defaultValue = "10") int size) {
-        List<StudyProductReadResponse> responses = studyProductReadService.readBy(PageRequest.of(page, size));
+    public ResponseEntity<StudyProductApiReadResult> readMany(@RequestParam(required = false, defaultValue = "0") int page,
+                                                              @RequestParam(required = false, defaultValue = "10") int size) {
+        List<StudyProductReadResponse> responses = studyProductReadService.readMany(PageRequest.of(page, size));
 
         return ResponseEntity.ok(new StudyProductApiReadResult(STUDY_PRODUCT_READ, responses));
     }
 
     @GetMapping("/study-products/cond")
-    public ResponseEntity<StudyProductApiReadResult> readAllBy(@RequestParam(defaultValue = "JAVA") Category category) {
+    public ResponseEntity<StudyProductApiReadResult> readManyBy(@RequestParam(defaultValue = "JAVA") Category category) {
         List<StudyProductReadResponse> responses = studyProductReadService.readBy(category);
 
         return ResponseEntity.ok(new StudyProductApiReadResult(category.name() + " " + STUDY_PRODUCT_READ, responses));

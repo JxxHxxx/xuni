@@ -1,6 +1,5 @@
 package com.jxx.xuni.statistics.application;
 
-import com.jxx.xuni.auth.application.AuthMailService;
 import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.common.event.trigger.statistics.ReviewCreatedEvent;
 import com.jxx.xuni.common.event.trigger.statistics.ReviewDeletedEvent;
@@ -19,6 +18,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.transaction.TestTransaction;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,10 +54,10 @@ class StudyProductNotifierTest extends ServiceCommon {
         //when
         StudyProductCreateResponse response = studyProductCreateService.create(
                 new StudyProductForm("남궁성", Category.JAVA, "남궁성"), "img-url");
-
-        String studyProductId = response.studyProductId();
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
         //then
-        assertThat(studyProductStatisticsRepository.findById(studyProductId)).isPresent();
+        assertThat(studyProductStatisticsRepository.findById(response.studyProductId())).isPresent();
     }
 
     @DisplayName("리뷰 생성 이벤트 처리 " +
@@ -76,6 +77,8 @@ class StudyProductNotifierTest extends ServiceCommon {
         //when
         ReviewCreatedEvent event = new ReviewCreatedEvent(studyProductId, 3);
         eventPublisher.publishEvent(event);
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
 
         StudyProductStatistics updateStatistics = studyProductStatisticsRepository.findById(studyProductId).get();
         //then
@@ -100,6 +103,8 @@ class StudyProductNotifierTest extends ServiceCommon {
         //when
         ReviewUpdatedEvent event = new ReviewUpdatedEvent(studyProductId, 3, 5);
         eventPublisher.publishEvent(event);
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
         //then
         StudyProductStatistics updateStatistics = studyProductStatisticsRepository.findById(studyProductId).get();
         //then
@@ -124,6 +129,8 @@ class StudyProductNotifierTest extends ServiceCommon {
         //when
         ReviewDeletedEvent event = new ReviewDeletedEvent(studyProductId, 3);
         eventPublisher.publishEvent(event);
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
         //then
         StudyProductStatistics updateStatistics = studyProductStatisticsRepository.findById(studyProductId).get();
         //then

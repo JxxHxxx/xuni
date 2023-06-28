@@ -23,7 +23,7 @@ public class StudyProductReadService {
     private final StudyProductReadRepository studyProductReadRepository;
 
     @Cacheable(cacheNames = "study-products", cacheManager = "localCacheManager")
-    public List<StudyProductReadResponse> readBy(Pageable pageable) {
+    public List<StudyProductReadResponse> readMany(Pageable pageable) {
         Page<StudyProduct> studyProducts = studyProductReadRepository.readBy(pageable);
 
         return studyProducts.stream().map(sp -> new StudyProductReadResponse(
