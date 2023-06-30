@@ -91,7 +91,7 @@ class ReviewControllerTest extends ReviewCommon {
                 Progress.HALF);
 
         ReviewOneResponse response2 = new ReviewOneResponse(
-                1l,
+                2l,
                 "김영한 그는 JPA의 신이야",
                 3, LocalDateTime.of(2023,5, 15, 10, 20),
                 15l,
@@ -122,7 +122,7 @@ class ReviewControllerTest extends ReviewCommon {
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
 
                                         fieldWithPath("response").type(JsonFieldType.ARRAY).description("조회 데이터"),
-                                        fieldWithPath("response[].reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별자"),
+                                        fieldWithPath("response[].reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별자, unique"),
                                         fieldWithPath("response[].comment").type(JsonFieldType.STRING).description("한 줄 평"),
                                         fieldWithPath("response[].rating").type(JsonFieldType.NUMBER).description("평점"),
                                         fieldWithPath("response[].lastModifiedTime").type(JsonFieldType.STRING).description("마지막 수정일"),
