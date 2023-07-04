@@ -29,7 +29,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "study_group", indexes = @Index(name = "study_group_category", columnList = "category"))
 public class Group {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "group_id")
     private Long id;
 
@@ -118,23 +119,27 @@ public class Group {
         }
     }
 
-    public List<Task> receiveGroupTasks(Long userId) {
-        return this.tasks.stream().filter(s -> s.isSameMember(userId)).toList();
+    public List<Task> receiveTasksOf(Long memberId) {
+        return this.tasks.stream().filter(s -> s.isSameMember(memberId)).toList();
     }
 
-    public int calculateProgress(Long memberId) {
-        List<Task> taskOfMember = this.tasks.stream().filter(t -> t.isSameMember(memberId)).toList();
-        int taskAmount = taskOfMember.size();
-        long doneTaskAmount = taskOfMember.stream().filter(tm -> tm.isDone()).count();
+    public int receiveProgress(Long memberId) {
+        List<Task> memberTasks = receiveTasksOf(memberId);
+        int totalTaskAmount = memberTasks.size();
+        long doneTaskAmount = memberTasks.stream().filter(tm -> tm.isDone()).count();
 
-        double middleResult = (double) doneTaskAmount / taskAmount;
+        return calculateProgress(totalTaskAmount, (double) doneTaskAmount);
+    }
+
+    private int calculateProgress(int taskAmount, double doneTaskAmount) {
+        double middleResult = doneTaskAmount / taskAmount;
         return (int) (middleResult * 100);
     }
 
     private Optional<GroupMember> getRequestMember(Long userId) {
         return this.groupMembers.stream()
-                .filter(g -> g.isSameMemberId(userId))
-                .filter(g -> g.hasNotLeft()).findFirst();
+                .filter(gm -> gm.isSameMemberId(userId))
+                .filter(gm -> gm.hasNotLeft()).findFirst();
     }
 
     private boolean isGroupMember(Optional<GroupMember> requestMember) {
@@ -150,9 +155,10 @@ public class Group {
 
     private GroupMember validateAbleToLeaveMember(Long groupMemberId) {
         return groupMembers.stream()
-                .filter(g -> g.getGroupMemberId().equals(groupMemberId))
-                .filter(g -> g.hasNotLeft())
-                .findAny().orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP_MEMBER));
+                .filter(gm -> gm.isSameMemberId(groupMemberId))
+                .filter(gm -> gm.hasNotLeft())
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP_MEMBER));
     }
 
     private void exceptInGroup(GroupMember groupMember) {
@@ -174,18 +180,22 @@ public class Group {
     }
 
     protected void initGroupTask(List<GroupTaskForm> groupTaskForms) {
-        List<GroupMember> realGroupMember = groupMembers.stream().filter(groupMember -> groupMember.hasNotLeft()).toList();
-        for (GroupMember groupMember : realGroupMember) {
-            List<Task> tasks = groupTaskForms.stream()
-                    .map(s -> Task.init(groupMember.getGroupMemberId(), s.chapterId(), s.title(), this))
-                    .toList();
+        List<GroupMember> notLeftGroupMembers = groupMembers.stream().filter(groupMember -> groupMember.hasNotLeft()).toList();
 
-            this.tasks.addAll(tasks);
-        }
+        notLeftGroupMembers.stream()
+                .map(groupMember -> prepareTasks(groupTaskForms, groupMember)
+                )
+                .forEach(initializedTasks -> tasks.addAll(initializedTasks));
+    }
+
+    private List<Task> prepareTasks(List<GroupTaskForm> groupTaskForms, GroupMember groupMember) {
+        return groupTaskForms.stream()
+                .map(form -> Task.init(groupMember.getGroupMemberId(), form.chapterId(), form.title(), this))
+                .toList();
     }
 
     private void checkEmptyOrNullGroupTaskForm(List<GroupTaskForm> groupTaskForms) {
-        if (groupTaskForms == null || groupTaskForms.isEmpty()) throw new GroupStartException("커리큘럼은 필수입니다.");
+        if (groupTaskForms == null || groupTaskForms.isEmpty()) throw new GroupStartException(CURRICULUM_REQUIRED);
     }
 
     protected void checkGroupState(GroupStatus status) {
