@@ -8,10 +8,7 @@ import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,6 +37,7 @@ public class StudyProductReadController {
         return ResponseEntity.ok(new StudyProductApiReadResult(category.name() + " " + STUDY_PRODUCT_READ, responses));
     }
 
+    // TODO : 상품 Content 가 존재하지 않을 때 조회할 수 없는 현상
     @GetMapping("/study-products/{study-product-id}")
     public ResponseEntity<StudyProductApiReadResult> readOne(@PathVariable("study-product-id") String studyProductId) {
         StudyProductContentReadResponse response = studyProductReadService.readContent(studyProductId);

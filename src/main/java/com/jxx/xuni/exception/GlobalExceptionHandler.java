@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
+import static com.jxx.xuni.common.exception.CommonExceptionMessage.REQUIRED_LOGIN;
 import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
@@ -49,7 +50,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MalformedJwtException.class)
     public ResponseEntity<ExceptionResponse> malformedJwtExceptionHandle() {
-        ExceptionResponse response = ExceptionResponse.of(401, "비정상적인 요청입니다.");
+        ExceptionResponse response = ExceptionResponse.of(401, REQUIRED_LOGIN);
         return new ResponseEntity<>(response, UNAUTHORIZED);
     }
 

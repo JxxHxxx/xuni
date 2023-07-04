@@ -32,7 +32,6 @@ public class StudyProductCreateController {
     private String s3ImageOrigin;
 
     @Admin
-    @CacheEvict(cacheNames = "study-products", allEntries = true, cacheManager = "localCacheManager")
     @PostMapping("/study-products")
     public ResponseEntity<StudyProductApiResult> createStudyProduct(@RequestPart(value = "image", required = false) MultipartFile file,
                                                                     @RequestPart("data") StudyProductForm form) throws IOException {
