@@ -21,6 +21,6 @@ public class GroupEventNotifier implements ReviewCreatedConnector {
     public int receive(GroupAccessedEvent event) {
         Group group = groupReadRepository.findBy(event.memberId(), event.studyProductId()).orElseThrow(
                 () -> new IllegalArgumentException(NOT_EXIST_ENTITY));
-        return group.calculateProgress(event.memberId());
+        return group.receiveProgress(event.memberId());
     }
 }

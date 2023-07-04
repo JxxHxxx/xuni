@@ -452,11 +452,11 @@ class GroupTest {
         Group group = TestGroupServiceSupporter.startedGroupSample(1l, 5);
         //when
         group.doTask(1l, 1l);
-        List<Task> myStudyChecks = group.receiveGroupTasks(1l);
+        List<Task> myTasks = group.receiveTasksOf(1l);
 
-        List<Task> otherMemberStudyChecks = group.receiveGroupTasks(2l);
+        List<Task> anotherMemberTasks = group.receiveTasksOf(2l);
         //then
-        assertThat(myStudyChecks).extracting("isDone").containsExactly(true, false, false);
-        assertThat(otherMemberStudyChecks).extracting("isDone").containsExactly(false, false, false);
+        assertThat(myTasks).extracting("isDone").containsExactly(true, false, false);
+        assertThat(anotherMemberTasks).extracting("isDone").containsExactly(false, false, false);
     }
 }
