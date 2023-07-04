@@ -9,6 +9,7 @@ public class GroupApiMessage {
     public static final String GROUP_UNCREATED = "스터디 그룹을 생성할 수 없습니다.";
     public static final String NOT_APPROPRIATE_GROUP_STATUS = "현재 그룹 상태에서는 해당 요청을 처리할 수 없습니다.";
     public static final String NOT_APPROPRIATE_GROUP_CAPACITY = "그룹 정원은 최소 1명, 최대 20명입니다.";
+    public static final String CURRICULUM_REQUIRED = "커리큘럼은 필수입니다.";
     public static final String GROUP_JOIN = "스터디 그룹에 정상적으로 참여하셨습니다.";
     public static final String NOT_PERMISSION = "권한이 존재하지 않습니다.";
     public static final String GROUP_CLOSE_RECRUITMENT = "스터디 그룹 모집을 마감합니다.";
