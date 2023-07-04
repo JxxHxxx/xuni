@@ -8,6 +8,8 @@ import com.jxx.xuni.studyproduct.dto.request.StudyProductContentForm;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductForm;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductCreateResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ public class StudyProductCreateService {
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
+    @Caching(evict = {@CacheEvict(cacheNames = "study-products", allEntries = true, cacheManager = "localCacheManager"),
+                      @CacheEvict(cacheNames="study-product-category", key="#form.category()", cacheManager = "localCacheManager")})
     public StudyProductCreateResponse create(StudyProductForm form, String imageURL) {
         StudyProduct studyProduct = StudyProduct.builder()
                 .name(form.name())
