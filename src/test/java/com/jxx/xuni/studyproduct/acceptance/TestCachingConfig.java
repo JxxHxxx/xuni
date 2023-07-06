@@ -1,16 +1,20 @@
-package com.jxx.xuni.config;
+package com.jxx.xuni.studyproduct.acceptance;
 
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import java.util.List;
 
-@EnableCaching
-@Configuration
-public class CacheConfig {
+@TestConfiguration
+public class TestCachingConfig {
+
+    @MockBean
+    JavaMailSender mailSender;
+
     @Bean
     public CacheManager localCacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();

@@ -1,21 +1,23 @@
 package com.jxx.xuni.studyproduct.application;
 
 import com.jxx.xuni.common.domain.Category;
+import com.jxx.xuni.studyproduct.acceptance.TestCachingConfig;
 import com.jxx.xuni.studyproduct.domain.*;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductContentForm;
-import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.NOT_EXIST_STUDY_PRODUCT;
 
 @ServiceTest
-class StudyProductCreateServiceTest extends ServiceCommon {
+@Import(TestCachingConfig.class)
+class StudyProductCreateServiceTest {
 
     @Autowired
     StudyProductRepository studyProductRepository;
@@ -36,8 +38,8 @@ class StudyProductCreateServiceTest extends ServiceCommon {
     }
 
     @DisplayName("스터디 상품 상세 생성 규칙 " +
-            "1. createDetail()는 StudyProductDetail 를 생성한다. 데이터 베이스를 조회했을 시 StudyProductDetail가 저장되어야 한다." +
-            "2. createDetail()는 호출 시 마다 StudyProductDetail chapterId를 1부터 매핑한다. 즉 chapterId는 고유하지 않다.")
+            "1. putContent()는 Content 를 생성한다. 데이터 베이스를 조회했을 시 Content가 저장되어야 한다." +
+            "2. putContent()는 호출 시 마다 Contnet의 chapterNo를 1부터 연속적으로 증가한다.. 즉 chapterNo는 고유하지 않다.")
     @Test
     void create_detail_success_and_role() {
         //given - 2번 검증을 위해 study-product 2개 생성
