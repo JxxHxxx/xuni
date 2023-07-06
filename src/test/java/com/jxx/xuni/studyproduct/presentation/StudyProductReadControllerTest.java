@@ -87,7 +87,7 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
                 "JAVA의 정석", Category.JAVA, "남궁성", "IMAGE URL");
         StudyProductReadResponse response2 = new StudyProductReadResponse(UUID.randomUUID().toString(),
                 "이펙티브 자바 3/E", Category.JAVA, "조슈아 블로치", "IMAGE URL");
-        BDDMockito.given(studyProductReadService.readBy(Category.JAVA)).willReturn(List.of(response1, response2));
+        BDDMockito.given(studyProductReadService.readManyBy(Category.JAVA)).willReturn(List.of(response1, response2));
 
         ResultActions result = mockMvc.perform(get("/study-products/cond")
                 .param("category", Category.JAVA.name())
@@ -136,7 +136,7 @@ public class StudyProductReadControllerTest extends StudyProductCommon{
                         new Content(8l, "8장 네트워크의 전체 흐름 살펴보기"),
                         new Content(9l, "9장 무선 랜 이해하기")));
 
-        BDDMockito.given(studyProductReadService.readContent(any())).willReturn(response);
+        BDDMockito.given(studyProductReadService.readDetailBy(any())).willReturn(response);
 
         ResultActions result = mockMvc.perform(get("/study-products/{study-product-id}", "uuid")
                 .contentType(MediaType.APPLICATION_JSON));
