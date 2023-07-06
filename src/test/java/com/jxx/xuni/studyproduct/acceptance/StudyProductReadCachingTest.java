@@ -1,11 +1,14 @@
 package com.jxx.xuni.studyproduct.acceptance;
 
 import com.jxx.xuni.common.domain.Category;
+import com.jxx.xuni.studyproduct.application.StudyProductCreateService;
 import com.jxx.xuni.studyproduct.application.StudyProductReadService;
 import com.jxx.xuni.studyproduct.domain.Content;
 import com.jxx.xuni.studyproduct.domain.StudyProduct;
 import com.jxx.xuni.studyproduct.domain.StudyProductRepository;
+import com.jxx.xuni.studyproduct.dto.request.StudyProductForm;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductContentReadResponse;
+import com.jxx.xuni.studyproduct.dto.response.StudyProductReadResponse;
 import com.jxx.xuni.support.ServiceCommon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -27,6 +32,8 @@ class StudyProductReadCachingTest extends ServiceCommon {
     StudyProductReadService studyProductReadService;
     @Autowired
     StudyProductRepository studyProductRepository;
+    @Autowired
+    StudyProductCreateService studyProductCreateService;
     @Autowired
     CacheManager cacheManager;
 
@@ -64,5 +71,18 @@ class StudyProductReadCachingTest extends ServiceCommon {
         StudyProductContentReadResponse cache = cacheManager.getCache("study-product")
                 .get(studyProductId, StudyProductContentReadResponse.class);
         assertThat(cache).isNull();
+    }
+
+    @DisplayName("새 상품이 등록되면 해당 카테고리의 키 값을 가진 캐시 key 값이 삭제되어야 한다.")
+    @Test
+    void cache_evict() {
+        //given - 조회할 시 캐시에 저장됨 위 테스트에서 검증했음
+        List<StudyProductReadResponse> responses = studyProductReadService.readBy(Category.JAVA);
+        //when
+        studyProductCreateService.create(new StudyProductForm("Effective Java" ,Category.JAVA, "조슈아 블랑"), null);
+
+        //then
+        List<StudyProductReadResponse> evictedKeyOfCache = cacheManager.getCache("study-product-category").get(Category.JAVA, List.class);
+        assertThat(evictedKeyOfCache).isNull();
     }
 }
