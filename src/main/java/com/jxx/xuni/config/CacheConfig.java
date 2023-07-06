@@ -6,11 +6,15 @@ import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @EnableCaching
 @Configuration
 public class CacheConfig {
     @Bean
     public CacheManager localCacheManager() {
-        return new CaffeineCacheManager();
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
+        cacheManager.setCacheNames(List.of("study-products", "study-product", "study-product-category"));
+        return cacheManager;
     }
 }

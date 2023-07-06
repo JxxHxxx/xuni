@@ -32,7 +32,7 @@ public class StudyProductReadController {
 
     @GetMapping("/study-products/cond")
     public ResponseEntity<StudyProductApiReadResult> readManyBy(@RequestParam(defaultValue = "JAVA") Category category) {
-        List<StudyProductReadResponse> responses = studyProductReadService.readBy(category);
+        List<StudyProductReadResponse> responses = studyProductReadService.readManyBy(category);
 
         return ResponseEntity.ok(new StudyProductApiReadResult(category.name() + " " + STUDY_PRODUCT_READ, responses));
     }
@@ -40,7 +40,7 @@ public class StudyProductReadController {
     // TODO : 상품 Content 가 존재하지 않을 때 조회할 수 없는 현상
     @GetMapping("/study-products/{study-product-id}")
     public ResponseEntity<StudyProductApiReadResult> readOne(@PathVariable("study-product-id") String studyProductId) {
-        StudyProductContentReadResponse response = studyProductReadService.readContent(studyProductId);
+        StudyProductContentReadResponse response = studyProductReadService.readDetailBy(studyProductId);
 
         return ResponseEntity.ok(new StudyProductApiReadResult(STUDY_PRODUCT_DETAIL_READ, response));
     }

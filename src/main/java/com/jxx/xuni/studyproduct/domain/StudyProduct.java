@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Entity
@@ -36,5 +36,22 @@ public class StudyProduct {
         this.creator = creator;
         this.thumbnail = thumbnail;
         this.category = category;
+    }
+
+    public void putContent(Long chapterNo, String title) {
+        this.contents.add(Content.of(chapterNo, title));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StudyProduct that = (StudyProduct) o;
+        return id.equals(that.id) && name.equals(that.name) && creator.equals(that.creator) && thumbnail.equals(that.thumbnail) && category == that.category;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, creator, thumbnail, category);
     }
 }
