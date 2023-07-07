@@ -13,6 +13,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.REQUIRED_LOGIN;
+import static org.apache.http.HttpHeaders.*;
 
 @RequiredArgsConstructor
 public class OptionalAuthenticationArgumentResolver implements HandlerMethodArgumentResolver {
@@ -31,7 +32,7 @@ public class OptionalAuthenticationArgumentResolver implements HandlerMethodArgu
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         try {
-            String token = request.getHeader("Authorization");
+            String token = request.getHeader(AUTHORIZATION);
             return jwtTokenManager.getMemberDetails(token.substring(7));
         } catch (NullPointerException exception) {
             return SimpleMemberDetails.GUEST();

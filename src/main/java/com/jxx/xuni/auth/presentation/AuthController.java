@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.*;
+import static org.apache.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -50,7 +51,7 @@ public class AuthController {
     @PostMapping("/auth/login")
     public ResponseEntity<AuthResult> login(@RequestBody LoginForm loginForm, HttpServletResponse response) {
         MemberDetails memberDetails = authService.login(loginForm);
-        response.addHeader("Authorization", jwtTokenProvider.issue(memberDetails));
+        response.addHeader(AUTHORIZATION, jwtTokenProvider.issue(memberDetails));
         return ResponseEntity.ok(new AuthResult<>(200, LOGIN, LoginResponse.from(memberDetails)));
     }
 }
