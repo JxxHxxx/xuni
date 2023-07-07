@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN;
+import static org.apache.http.HttpHeaders.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class Oauth2Controller {
     @GetMapping("/login/oauth2/code/google")
     public ResponseEntity<AuthResult> login(@RequestParam("code") String accessCode, HttpServletResponse response) {
         MemberDetails memberDetails = googleClient.login(accessCode);
-        response.addHeader("Authorization", jwtTokenProvider.issue(memberDetails));
+        response.addHeader(AUTHORIZATION, jwtTokenProvider.issue(memberDetails));
         return ResponseEntity.ok(new AuthResult<>(200, LOGIN, LoginResponse.from(memberDetails)));
     }
 }

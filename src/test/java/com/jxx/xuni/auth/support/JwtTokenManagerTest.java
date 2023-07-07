@@ -11,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -36,7 +37,7 @@ class JwtTokenManagerTest {
     @Test
     void validate_token_success() {
         //when - then
-        Assertions.assertThatCode(() -> jwtTokenManager.validateAccessToken(testToken))
+        assertThatCode(() -> jwtTokenManager.validateAccessToken(testToken))
                 .doesNotThrowAnyException();
     }
 
@@ -46,7 +47,7 @@ class JwtTokenManagerTest {
             "Bearer zs42w12893ujaksdnwqy8281.dasudlk21j31k.dasiduaoq1sdl, 유효한 토큰이 아닙니다."}
     , nullValues = "N/A")
     void validate_token_fail(String invalidToken, String message) {
-        Assertions.assertThatThrownBy(() -> jwtTokenManager.validateAccessToken(invalidToken))
+        assertThatThrownBy(() -> jwtTokenManager.validateAccessToken(invalidToken))
                 .hasMessage(message);
 
     }
@@ -65,5 +66,33 @@ class JwtTokenManagerTest {
         assertThat(memberDetails.getUserId()).isEqualTo(123l);
         assertThat(memberDetails.getEmail()).isEqualTo("leesin5498@naver.com");
         assertThat(memberDetails.getName()).isEqualTo("재헌");
+    }
+
+    @DisplayName("토큰은 Bearer_xxx.xxx.xxx 형태이다. 메서드 실행 시 Bearer_이 떼어진 xxx.xxx.xxx 형태를 반환한다. " +
+            "_ 은 공백을 의미한다.")
+    @Test
+    void extract_token_from_bearer() {
+        String prefix = "Bearer ";
+        //given
+        MemberDetails memberDetails = new SimpleMemberDetails(11l, "leesin5498@xuni.com", "xuni");
+        String bearerToken = jwtTokenProvider.issue(memberDetails);
+        assertThat(bearerToken).startsWith(prefix);
+        //when
+        String extractedToken = jwtTokenManager.extractTokenFromBearer(bearerToken);
+        //then
+        assertThat(extractedToken).doesNotContain(prefix);
+    }
+
+    @DisplayName("토큰의 접두사가 Bearer_이 아닐 경우 " +
+            "IllegalArgumentException 예외 " +
+            "헤더 값의 형식이 올바르지 못합니다. 예외 메시지를 반환한다.")
+    @Test
+    void extract_token_from_bearer_fail_cause_prefix_is_not_Bearer_() {
+        //given
+        String isNotBearerToken = "doesNotBearer_xxx.xxx.xxx";
+        //when - then
+        assertThatThrownBy(() -> jwtTokenManager.extractTokenFromBearer(isNotBearerToken))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("헤더 값의 형식이 올바르지 못합니다.");
     }
 }
