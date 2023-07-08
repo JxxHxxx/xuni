@@ -20,6 +20,10 @@ public class Capacity {
         this.totalCapacity = capacity;
         this.leftCapacity = capacity;
     }
+
+    public static Capacity of(Integer capacity) {
+        return new Capacity(capacity);
+    }
     protected void subtractOneLeftCapacity() {
         this.leftCapacity -= 1;
     }

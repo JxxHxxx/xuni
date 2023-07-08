@@ -120,7 +120,7 @@ public class Group {
     }
 
     public List<Task> receiveTasksOf(Long memberId) {
-        return this.tasks.stream().filter(s -> s.isSameMember(memberId)).toList();
+        return tasks.stream().filter(task -> task.isSameMember(memberId)).toList();
     }
 
     public int receiveProgress(Long memberId) {
@@ -137,9 +137,9 @@ public class Group {
     }
 
     private Optional<GroupMember> getRequestMember(Long userId) {
-        return this.groupMembers.stream()
-                .filter(gm -> gm.isSameMemberId(userId))
-                .filter(gm -> gm.hasNotLeft()).findFirst();
+        return groupMembers.stream()
+                .filter(groupMember -> groupMember.hasSameId(userId))
+                .filter(GroupMember::hasNotLeft).findFirst();
     }
 
     private boolean isGroupMember(Optional<GroupMember> requestMember) {
@@ -148,15 +148,15 @@ public class Group {
 
     private Task validateCheckAuthority(Long chapterId, Long groupMemberId) {
         return tasks.stream()
-                .filter(s -> s.isSameChapter(chapterId))
-                .filter(s -> s.isSameMember(groupMemberId))
+                .filter(task -> task.isSameChapter(chapterId))
+                .filter(task -> task.isSameMember(groupMemberId))
                 .findAny().orElseThrow(() -> new IllegalArgumentException(BAD_REQUEST));
     }
 
     private GroupMember validateAbleToLeaveMember(Long groupMemberId) {
         return groupMembers.stream()
-                .filter(gm -> gm.isSameMemberId(groupMemberId))
-                .filter(gm -> gm.hasNotLeft())
+                .filter(groupMember -> groupMember.hasSameId(groupMemberId))
+                .filter(GroupMember::hasNotLeft)
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP_MEMBER));
     }
@@ -183,8 +183,7 @@ public class Group {
         List<GroupMember> notLeftGroupMembers = groupMembers.stream().filter(groupMember -> groupMember.hasNotLeft()).toList();
 
         notLeftGroupMembers.stream()
-                .map(groupMember -> prepareTasks(groupTaskForms, groupMember)
-                )
+                .map(groupMember -> prepareTasks(groupTaskForms, groupMember))
                 .forEach(initializedTasks -> tasks.addAll(initializedTasks));
     }
 
@@ -210,7 +209,10 @@ public class Group {
     }
 
     private void addInGroup(GroupMember member) {
-        Optional<GroupMember> optionalGroupMember = groupMembers.stream().filter(g -> g.isLeftMember(member)).findFirst();
+        Optional<GroupMember> optionalGroupMember = groupMembers.stream()
+                .filter(groupMember -> groupMember.isLeftMember(member))
+                .findFirst();
+
         if (optionalGroupMember.isPresent()) {
             optionalGroupMember.get().comeBack();
         }
@@ -227,7 +229,7 @@ public class Group {
 
     // 그룹 내 존재, 탈퇴 플래그 false(그룹에 나간 상태가 아니다.) -> 이미 소속되어 있는 상태이니 예외를 던져라.
     private void checkAlreadyJoin(GroupMember member) {
-        if (groupMembers.stream().anyMatch(groupMember -> (groupMember.isSameMemberId(member.getGroupMemberId()) && groupMember.hasNotLeft())))
+        if (groupMembers.stream().anyMatch(groupMember -> (groupMember.hasSameId(member.getGroupMemberId()) && groupMember.hasNotLeft())))
             throw new GroupJoinException(ALREADY_JOIN);
     }
 
