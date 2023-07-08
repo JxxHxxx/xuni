@@ -49,7 +49,7 @@ class GroupTest {
         assertThat(group.getGroupStatus()).isEqualTo(GroupStatus.GATHERING);
 
         assertThat(group.getGroupMembers().stream()
-                .anyMatch(groupMember -> groupMember.isSameMemberId(group.getHost().getHostId()))).isTrue();
+                .anyMatch(groupMember -> groupMember.hasSameId(group.getHost().getHostId()))).isTrue();
     }
 
     @DisplayName("스터디 그룹의 인원은 최소 1인에서 최대 20인 까지 가능합니다. " +
@@ -85,7 +85,7 @@ class GroupTest {
         group.join(groupMember);
 
         GroupMember findGroupMember = group.getGroupMembers().stream()
-                .filter(g -> g.isSameMemberId(2l)).findFirst().get();
+                .filter(g -> g.hasSameId(2l)).findFirst().get();
 
         group.leave(2l);
 
@@ -277,7 +277,7 @@ class GroupTest {
         group.leave(2l);
         //then - isLeft 프로퍼티가 True 로 변경되었는지 검증
         GroupMember findGroupMember = group.getGroupMembers().stream()
-                .filter(g -> g.isSameMemberId(2l))
+                .filter(g -> g.hasSameId(2l))
                 .findAny().get();
         assertThat(findGroupMember.getIsLeft()).isTrue();
 

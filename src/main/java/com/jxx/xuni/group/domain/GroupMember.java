@@ -33,7 +33,7 @@ public class GroupMember {
         this.group = group;
     }
 
-    protected boolean isSameMemberId(Long groupMemberId) {
+    protected boolean hasSameId(Long groupMemberId) {
         return this.groupMemberId.equals(groupMemberId);
     }
 
