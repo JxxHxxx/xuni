@@ -14,7 +14,7 @@ class TaskTest {
     @Test
     void check() {
         //given
-        Task task = Task.init(1l, 1l, "spring loc", null);
+        Task task = Task.initialize(1l, 1l, "spring loc", null);
         Assertions.assertThat(task.isDone()).isFalse();
         //when
         task.updateDone();

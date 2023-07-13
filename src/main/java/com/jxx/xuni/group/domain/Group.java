@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.BAD_REQUEST;
-import static com.jxx.xuni.group.domain.Capacity.*;
+import static com.jxx.xuni.group.domain.GroupMember.*;
 import static com.jxx.xuni.group.domain.GroupStatus.*;
 import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -65,13 +65,23 @@ public class Group {
         this.version = 0l;
         this.createdDate = LocalDateTime.now();
 
-        this.groupMembers.add(new GroupMember(host.getHostId(), host.getHostName(), this));
+        this.groupMembers.add(enrollHost(host, this));
         this.capacity.subtractOneLeftCapacity();
     }
 
     public void verifyCreateRule() {
         checkGroupState(GATHERING);
         checkCapacityRange();
+    }
+
+    protected void checkCapacityRange() {
+        if (capacity.hasNotTotalCapacityWithinRange()) {
+            throw new CapacityOutOfBoundException(NOT_APPROPRIATE_GROUP_CAPACITY);
+        }
+    }
+
+    protected void checkGroupState(GroupStatus status) {
+        if (!groupStatus.equals(status)) throw new NotAppropriateGroupStatusException(NOT_APPROPRIATE_GROUP_STATUS);
     }
 
     public void join(GroupMember member) {
@@ -81,13 +91,42 @@ public class Group {
 
         addInGroup(member);
     }
+    // 그룹 내 존재, 탈퇴 플래그 false(그룹에 나간 상태가 아니다.) -> 이미 소속되어 있는 상태이니 예외를 던져라.
+    private void checkAlreadyJoin(GroupMember member) {
+        if (groupMembers.stream().anyMatch(groupMember -> (groupMember.hasEqualId(member.getGroupMemberId()) && groupMember.hasNotLeft())))
+            throw new GroupJoinException(ALREADY_JOIN);
+    }
+
+    private void checkLeftCapacity() {
+        if (capacity.hasNotLeftCapacity()) throw new GroupJoinException(NOT_LEFT_CAPACITY);
+    }
+
+    private void checkAccessibleGroupStatus() {
+        if (!GATHERING.equals(groupStatus)) throw new GroupJoinException(NOT_ACCESSIBLE_GROUP);
+    }
 
     public void leave(Long groupMemberId) {
         checkNotHost(groupMemberId);
         checkAbleToLeaveGroupStatus();
 
-        GroupMember leavableMember = validateAbleToLeaveMember(groupMemberId);
-        exceptInGroup(leavableMember);
+        GroupMember canLeaveMember = validateAbleToLeaveMember(groupMemberId);
+        exceptInGroup(canLeaveMember);
+    }
+
+    private void checkNotHost(Long memberId) {
+        if (host.isHost(memberId)) throw new NotPermissionException(NOT_PERMISSION);
+    }
+
+    private void checkAbleToLeaveGroupStatus() {
+        if (groupStatus.equals(END)) throw new NotAppropriateGroupStatusException(NOT_APPROPRIATE_GROUP_STATUS);
+    }
+
+    private GroupMember validateAbleToLeaveMember(Long groupMemberId) {
+        return groupMembers.stream()
+                .filter(groupMember -> groupMember.hasEqualId(groupMemberId))
+                .filter(GroupMember::hasNotLeft)
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP_MEMBER));
     }
 
     public void closeRecruitment(Long memberId) {
@@ -97,36 +136,81 @@ public class Group {
         changeGroupStatusTo(GATHER_COMPLETE);
     }
 
+    protected void changeGroupStatusTo(GroupStatus groupStatus) {
+        this.groupStatus = groupStatus;
+    }
+
+    // 호스트인지 검증 - 호스트라면 통과 아니면 예외
+    private void checkHost(Long memberId) {
+        if (host.isNotHost(memberId)) throw new NotPermissionException(NOT_PERMISSION);
+    }
+
     public void start(Long memberId, List<GroupTaskForm> groupTaskForms) {
         checkHost(memberId);
         checkGroupState(GATHER_COMPLETE);
         checkEmptyOrNullGroupTaskForm(groupTaskForms);
-        initGroupTask(groupTaskForms);
+        initializeGroupTask(groupTaskForms);
 
         changeGroupStatusTo(START);
     }
 
+    private void checkEmptyOrNullGroupTaskForm(List<GroupTaskForm> groupTaskForms) {
+        if (groupTaskForms == null || groupTaskForms.isEmpty()) throw new GroupStartException(CURRICULUM_REQUIRED);
+    }
+
+    protected void initializeGroupTask(List<GroupTaskForm> groupTaskForms) {
+        List<GroupMember> notLeftGroupMembers = groupMembers.stream().filter(groupMember -> groupMember.hasNotLeft()).toList();
+
+        notLeftGroupMembers.stream()
+                .map(groupMember -> prepareTasks(groupTaskForms, groupMember))
+                .forEach(initializedTasks -> tasks.addAll(initializedTasks));
+    }
+
     public void doTask(Long chapterId, Long groupMemberId) {
         checkGroupState(START);
-        Task task = validateCheckAuthority(chapterId, groupMemberId);
+        Task task = validateTaskManagingAuthority(chapterId, groupMemberId);
         task.updateDone();
     }
 
-    public void updateGroupMemberLastVisitedTime(Long userId) {
-        Optional<GroupMember> requestMember = getRequestMember(userId);
+    private Task validateTaskManagingAuthority(Long chapterId, Long groupMemberId) {
+        return tasks.stream()
+                .filter(task -> task.isSameChapter(chapterId))
+                .filter(task -> task.isEqualMemberId(groupMemberId))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException(BAD_REQUEST));
+    }
+
+    public void updateGroupMemberLastVisitedTime(Long memberId) {
+        Optional<GroupMember> requestMember = getRequestMember(memberId);
         if (isGroupMember(requestMember)) {
             requestMember.get().updateLastVisitedTime();
         }
     }
 
+    private Optional<GroupMember> getRequestMember(Long memberId) {
+        return groupMembers.stream()
+                .filter(groupMember -> groupMember.hasEqualId(memberId))
+                .filter(GroupMember::hasNotLeft)
+                .findFirst();
+    }
+    
+    private boolean isGroupMember(Optional<GroupMember> requestMember) {
+        return requestMember.isPresent();
+    }
+
     public List<Task> receiveTasksOf(Long memberId) {
-        return tasks.stream().filter(task -> task.isSameMember(memberId)).toList();
+        return tasks.stream()
+                .filter(task -> task.isEqualMemberId(memberId))
+                .toList();
     }
 
     public int receiveProgress(Long memberId) {
         List<Task> memberTasks = receiveTasksOf(memberId);
         int totalTaskAmount = memberTasks.size();
-        long doneTaskAmount = memberTasks.stream().filter(tm -> tm.isDone()).count();
+        
+        long doneTaskAmount = memberTasks.stream()
+                .filter(Task::isDone)
+                .count();
 
         return calculateProgress(totalTaskAmount, (double) doneTaskAmount);
     }
@@ -136,76 +220,19 @@ public class Group {
         return (int) (middleResult * 100);
     }
 
-    private Optional<GroupMember> getRequestMember(Long userId) {
-        return groupMembers.stream()
-                .filter(groupMember -> groupMember.hasSameId(userId))
-                .filter(GroupMember::hasNotLeft).findFirst();
-    }
-
-    private boolean isGroupMember(Optional<GroupMember> requestMember) {
-        return requestMember.isPresent();
-    }
-
-    private Task validateCheckAuthority(Long chapterId, Long groupMemberId) {
-        return tasks.stream()
-                .filter(task -> task.isSameChapter(chapterId))
-                .filter(task -> task.isSameMember(groupMemberId))
-                .findAny().orElseThrow(() -> new IllegalArgumentException(BAD_REQUEST));
-    }
-
-    private GroupMember validateAbleToLeaveMember(Long groupMemberId) {
-        return groupMembers.stream()
-                .filter(groupMember -> groupMember.hasSameId(groupMemberId))
-                .filter(GroupMember::hasNotLeft)
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(NOT_EXISTED_GROUP_MEMBER));
-    }
-
     private void exceptInGroup(GroupMember groupMember) {
         groupMember.leave();
         capacity.addOneLeftCapacity();
     }
 
-    private void checkAbleToLeaveGroupStatus() {
-        if (groupStatus.equals(END)) throw new NotAppropriateGroupStatusException(NOT_APPROPRIATE_GROUP_STATUS);
-    }
-
-    private void checkNotHost(Long memberId) {
-        if (host.isHost(memberId)) throw new NotPermissionException(NOT_PERMISSION);
-    }
-
-    // 호스트인지 검증 - 호스트라면 통과 아니면 예외
-    private void checkHost(Long memberId) {
-        if (host.isNotHost(memberId)) throw new NotPermissionException(NOT_PERMISSION);
-    }
-
-    protected void initGroupTask(List<GroupTaskForm> groupTaskForms) {
-        List<GroupMember> notLeftGroupMembers = groupMembers.stream().filter(groupMember -> groupMember.hasNotLeft()).toList();
-
-        notLeftGroupMembers.stream()
-                .map(groupMember -> prepareTasks(groupTaskForms, groupMember))
-                .forEach(initializedTasks -> tasks.addAll(initializedTasks));
-    }
-
     private List<Task> prepareTasks(List<GroupTaskForm> groupTaskForms, GroupMember groupMember) {
         return groupTaskForms.stream()
-                .map(form -> Task.init(groupMember.getGroupMemberId(), form.chapterId(), form.title(), this))
+                .map(groupTaskForm -> Task.initialize(
+                        groupMember.getGroupMemberId(),
+                        groupTaskForm.chapterId(),
+                        groupTaskForm.title(),
+                        this))
                 .toList();
-    }
-
-    private void checkEmptyOrNullGroupTaskForm(List<GroupTaskForm> groupTaskForms) {
-        if (groupTaskForms == null || groupTaskForms.isEmpty()) throw new GroupStartException(CURRICULUM_REQUIRED);
-    }
-
-    protected void checkGroupState(GroupStatus status) {
-        if (!groupStatus.equals(status)) throw new NotAppropriateGroupStatusException(NOT_APPROPRIATE_GROUP_STATUS);
-
-    }
-
-    protected void checkCapacityRange() {
-        if (capacity.getTotalCapacity() > CAPACITY_MAX || capacity.getTotalCapacity() < CAPACITY_MIN) {
-            throw new CapacityOutOfBoundException(NOT_APPROPRIATE_GROUP_CAPACITY);
-        }
     }
 
     private void addInGroup(GroupMember member) {
@@ -220,24 +247,6 @@ public class Group {
             groupMembers.add(member);
         }
 
-        this.capacity.subtractOneLeftCapacity();
-    }
-
-    private void checkLeftCapacity() {
-        if (capacity.hasNotLeftCapacity()) throw new GroupJoinException(NOT_LEFT_CAPACITY);
-    }
-
-    // 그룹 내 존재, 탈퇴 플래그 false(그룹에 나간 상태가 아니다.) -> 이미 소속되어 있는 상태이니 예외를 던져라.
-    private void checkAlreadyJoin(GroupMember member) {
-        if (groupMembers.stream().anyMatch(groupMember -> (groupMember.hasSameId(member.getGroupMemberId()) && groupMember.hasNotLeft())))
-            throw new GroupJoinException(ALREADY_JOIN);
-    }
-
-    private void checkAccessibleGroupStatus() {
-        if (!GATHERING.equals(groupStatus)) throw new GroupJoinException(NOT_ACCESSIBLE_GROUP);
-    }
-
-    protected void changeGroupStatusTo(GroupStatus groupStatus) {
-        this.groupStatus = groupStatus;
+        capacity.subtractOneLeftCapacity();
     }
 }

@@ -33,7 +33,11 @@ public class GroupMember {
         this.group = group;
     }
 
-    protected boolean hasSameId(Long groupMemberId) {
+    public static GroupMember enrollHost(Host host, Group group) {
+        return new GroupMember(host.getHostId(), host.getHostName(), group);
+    }
+
+    protected boolean hasEqualId(Long groupMemberId) {
         return this.groupMemberId.equals(groupMemberId);
     }
 
