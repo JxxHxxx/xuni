@@ -1,9 +1,12 @@
 package com.jxx.xuni.group.domain;
 
+import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import static com.jxx.xuni.group.dto.response.GroupApiMessage.NOT_APPROPRIATE_GROUP_CAPACITY;
 
 
 @Getter
@@ -24,6 +27,11 @@ public class Capacity {
     public static Capacity of(Integer capacity) {
         return new Capacity(capacity);
     }
+
+    protected boolean hasNotTotalCapacityWithinRange(){
+        return totalCapacity < CAPACITY_MIN || totalCapacity > CAPACITY_MAX;
+    }
+
     protected void subtractOneLeftCapacity() {
         this.leftCapacity -= 1;
     }

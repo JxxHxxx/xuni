@@ -49,7 +49,7 @@ class GroupTest {
         assertThat(group.getGroupStatus()).isEqualTo(GroupStatus.GATHERING);
 
         assertThat(group.getGroupMembers().stream()
-                .anyMatch(groupMember -> groupMember.hasSameId(group.getHost().getHostId()))).isTrue();
+                .anyMatch(groupMember -> groupMember.hasEqualId(group.getHost().getHostId()))).isTrue();
     }
 
     @DisplayName("스터디 그룹의 인원은 최소 1인에서 최대 20인 까지 가능합니다. " +
@@ -58,7 +58,8 @@ class GroupTest {
     @ValueSource(ints = {-1, 0, 21})
     void check_group_capacity(Integer capacity) {
         Group group = makeTestGroup(capacity);
-        assertThatThrownBy(() -> group.checkCapacityRange()).isInstanceOf(CapacityOutOfBoundException.class);
+        assertThatThrownBy(() -> group.checkCapacityRange())
+                .isInstanceOf(CapacityOutOfBoundException.class);
     }
 
     @DisplayName("초기 가입")
@@ -85,7 +86,7 @@ class GroupTest {
         group.join(groupMember);
 
         GroupMember findGroupMember = group.getGroupMembers().stream()
-                .filter(g -> g.hasSameId(2l)).findFirst().get();
+                .filter(g -> g.hasEqualId(2l)).findFirst().get();
 
         group.leave(2l);
 
@@ -277,7 +278,7 @@ class GroupTest {
         group.leave(2l);
         //then - isLeft 프로퍼티가 True 로 변경되었는지 검증
         GroupMember findGroupMember = group.getGroupMembers().stream()
-                .filter(g -> g.hasSameId(2l))
+                .filter(g -> g.hasEqualId(2l))
                 .findAny().get();
         assertThat(findGroupMember.getIsLeft()).isTrue();
 
@@ -364,7 +365,7 @@ class GroupTest {
         group.doTask(2l, 1l);
 
         Task studyCheckAfterVerifyCheckRule = group.getTasks().stream()
-                .filter(s -> s.isSameMember(1l))
+                .filter(s -> s.isEqualMemberId(1l))
                 .filter(s -> s.isSameChapter(2l)).findAny().get();
         //then
         assertThat(studyCheckAfterVerifyCheckRule.isDone()).isTrue();
@@ -378,7 +379,7 @@ class GroupTest {
         //given - 그룹 시작 상태로 변경
         Group group = makeTestGroup(5);
         group.changeGroupStatusTo(status);
-        group.initGroupTask(TestGroupServiceSupporter.studyCheckForms);
+        group.initializeGroupTask(TestGroupServiceSupporter.studyCheckForms);
 
         //when - then
         assertThatThrownBy(() -> group.doTask(2l, 1l))
@@ -393,7 +394,7 @@ class GroupTest {
         //given - 그룹 시작 상태로 변경
         Group group = makeTestGroup(5);
         group.changeGroupStatusTo(START);
-        group.initGroupTask(TestGroupServiceSupporter.studyCheckForms); // chapter 는 1,2,3 까지 존재합니다.
+        group.initializeGroupTask(TestGroupServiceSupporter.studyCheckForms); // chapter 는 1,2,3 까지 존재합니다.
 
         //when - then
         //
