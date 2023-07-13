@@ -32,7 +32,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class GroupTest {
 
     protected static Group makeTestGroup(Integer capacity) {
-        return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
+        return new Group(
+                "test-group",
+                Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(capacity),
                 Study.of("UUID","자바의 정석", Category.JAVA),

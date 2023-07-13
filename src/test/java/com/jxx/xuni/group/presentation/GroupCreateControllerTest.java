@@ -63,6 +63,7 @@ public class GroupCreateControllerTest extends GroupCommon {
                 .andExpect(jsonPath("$.message").value(GroupApiMessage.GROUP_CREATED))
                     .andDo(MockMvcRestDocumentation.document("group/create",
                         requestFields(
+                                fieldWithPath("name").type(JsonFieldType.STRING).description("그룹 이름"),
                                 fieldWithPath("subject").type(JsonFieldType.STRING).description("스터디 주제"),
                                 fieldWithPath("startDate").type(JsonFieldType.STRING).description("스터디 시작일"),
                                 fieldWithPath("endDate").type(JsonFieldType.STRING).description("스터디 종료일"),
@@ -115,7 +116,15 @@ public class GroupCreateControllerTest extends GroupCommon {
     }
 
     private GroupCreateForm makeGroupCreateForm(Integer capacity) {
-        return new GroupCreateForm(LocalDate.now(), LocalDate.of(2023, 7, 15),
-                LocalTime.NOON, LocalTime.MIDNIGHT, capacity,"UUID", "자바의 정석", JAVA);
+        return new GroupCreateForm(
+                "groupName",
+                LocalDate.now(),
+                LocalDate.of(2023, 7, 15),
+                LocalTime.NOON,
+                LocalTime.MIDNIGHT,
+                capacity,
+                "study-product-id",
+                "자바의 정석",
+                JAVA);
     }
 }

@@ -15,6 +15,7 @@ public class GroupCreateService {
     public void create(Long memberId, GroupCreateForm form) {
         Host host = hostCreator.createHost(memberId);
         Group group = Group.builder()
+                .name(form.name())
                 .period(Period.of(form.startDate(), form.endDate()))
                 .time(Time.of(form.startTime(), form.endTime()))
                 .capacity(Capacity.of(form.capacity()))

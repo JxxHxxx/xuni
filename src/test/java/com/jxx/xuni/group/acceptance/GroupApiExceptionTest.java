@@ -55,6 +55,7 @@ public class GroupApiExceptionTest {
     @Test
     void create_group_exp_cause_required_value_is_empty() throws Exception {
         GroupCreateForm form = new GroupCreateForm(
+                "groupName",
                 LocalDate.now(),
                 LocalDate.now().plusDays(10l),
                 LocalTime.MIDNIGHT,

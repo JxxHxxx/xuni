@@ -33,7 +33,7 @@ public class Group {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "group_id")
     private Long id;
-
+    private String name;
     @Enumerated(value = EnumType.STRING)
     private GroupStatus groupStatus;
     private LocalDateTime createdDate;
@@ -55,8 +55,9 @@ public class Group {
     private List<Task> tasks = new ArrayList<>();
 
     @Builder
-    public Group(Period period, Time time, Capacity capacity, Study study, Host host) {
+    public Group(String name, Period period, Time time, Capacity capacity, Study study, Host host) {
         this.groupStatus = GATHERING;
+        this.name = name;
         this.period = period;
         this.time = time;
         this.capacity = capacity;
