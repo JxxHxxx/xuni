@@ -154,7 +154,9 @@ class GroupRepositoryTest {
     }
 
     private Group givenGroupWithSettingStartDate(LocalDate startDate) {
-        return new Group(Period.of(startDate, LocalDate.of(9999, 12, 31)),
+        return new Group(
+                "test-group",
+                Period.of(startDate, LocalDate.of(9999, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(5),
                 Study.of("UUID", "자바의 정석", Category.JAVA),
@@ -162,7 +164,9 @@ class GroupRepositoryTest {
     }
 
     private Group givenGroupWithSettingEndDate(LocalDate endDate) {
-        return new Group(Period.of(LocalDate.of(2020, 12, 31), endDate),
+        return new Group(
+                "test-group",
+                Period.of(LocalDate.of(2020, 12, 31), endDate),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(5),
                 Study.of("UUID", "자바의 정석", Category.JAVA),
