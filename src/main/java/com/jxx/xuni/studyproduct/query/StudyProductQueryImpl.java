@@ -46,6 +46,7 @@ public class StudyProductQueryImpl implements StudyProductQuery {
                         nameLike(condition.name())
                 )
                 .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         long total = queryFactory
@@ -68,6 +69,7 @@ public class StudyProductQueryImpl implements StudyProductQuery {
         return ConditionUtils.isNotNullAndBlank(creator) ? studyProduct.creator.eq(creator) : null;
     }
 
+    /** SELECT ~ WHERE COLUMN LIKE %name% */
     private BooleanExpression nameLike(String name) {
         return ConditionUtils.isNotNullAndBlank(name) ? studyProduct.name.contains(name) : null;
 

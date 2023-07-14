@@ -11,6 +11,7 @@ import com.jxx.xuni.studyproduct.query.dynamic.StudyProductSearchCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +65,8 @@ public class StudyProductReadService {
                 contents);
     }
 
-    public Page<StudyProductQueryResponse> searchStudyProduct(StudyProductSearchCondition condition, Pageable pageable) {
-        return studyProductReadRepository.searchStudyProduct(condition, pageable);
+    public Page<StudyProductQueryResponse> searchStudyProduct(StudyProductSearchCondition condition, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return studyProductReadRepository.searchStudyProduct(condition, pageRequest);
     }
 }

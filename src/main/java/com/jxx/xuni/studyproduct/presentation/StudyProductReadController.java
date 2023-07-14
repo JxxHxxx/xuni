@@ -9,7 +9,6 @@ import com.jxx.xuni.studyproduct.query.dynamic.StudyProductSearchCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,10 +48,13 @@ public class StudyProductReadController {
     }
 
     @GetMapping("/study-products/search")
-    public ResponseEntity<StudyProductPageApiResult> search(StudyProductSearchCondition condition, Pageable pageable) {
-        Page<StudyProductQueryResponse> page = studyProductReadService.searchStudyProduct(condition, pageable);
-        List<StudyProductQueryResponse> contents = page.getContent();
-        PageInfo pageInfo = pageConverter.toPageInfo(pageable, page.getTotalElements(), page.getTotalPages());
+    public ResponseEntity<StudyProductPageApiResult> search(@ModelAttribute StudyProductSearchCondition condition,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "20") int size) {
+
+        Page<StudyProductQueryResponse> pageResponse = studyProductReadService.searchStudyProduct(condition, page, size);
+        List<StudyProductQueryResponse> contents = pageResponse.getContent();
+        PageInfo pageInfo = pageConverter.toPageInto(pageResponse);
         return ResponseEntity.ok(new StudyProductPageApiResult(SEARCH_STUDY_PRODUCT_COND, contents, pageInfo));
     }
 }
