@@ -3,6 +3,7 @@ package com.jxx.xuni.studyproduct.presentation;
 import com.jxx.xuni.auth.support.JwtTokenManager;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.common.service.AmazonS3Handler;
+import com.jxx.xuni.group.query.converter.PageConverter;
 import com.jxx.xuni.studyproduct.application.StudyProductCreateService;
 import com.jxx.xuni.studyproduct.application.StudyProductReadService;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -16,6 +17,8 @@ public class StudyProductControllerTestConfig {
     StudyProductCreateService studyProductCreateService;
     @MockBean
     StudyProductReadService studyProductReadService;
+    @MockBean
+    PageConverter pageConverter;
     @MockBean
     AmazonS3Handler amazonS3Handler;
     @Bean
