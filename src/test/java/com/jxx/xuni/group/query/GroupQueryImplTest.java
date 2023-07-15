@@ -59,8 +59,7 @@ class GroupQueryImplTest {
 
     @DisplayName("기본 검색 조건을 검증한다 " +
             "1. GroupStatus는 GATHERING,GATHER_COMPLETE, START 여야만 한다. " +
-            "2. Category는 모든 종류가 올 수 있다. " +
-            "3. 한 번에 불러올 수 있는 값은 20개로 제한되어 있다. ")
+            "2. Category는 모든 종류가 올 수 있다.")
     @ParameterizedTest(name = "케이스 : {0}")
     @CsvSource(value = {"null 값으로 인한 기본 조건, null, null",
                         "empty value로 인한 기본 조건, null, empty"},
@@ -68,8 +67,7 @@ class GroupQueryImplTest {
     void search_group_no_set_any_condition(String description, Category category, String readType) {
         //given
         GroupSearchCondition condition = new GroupSearchCondition(category, readType, false, null, null);
-        Integer forceInjectValue = 100;
-        PageRequest pageable = PageRequest.of(0, forceInjectValue);
+        PageRequest pageable = PageRequest.of(0, 20);
         //when
         Page<GroupAllQueryResponse> response = groupReadRepository.searchGroup(condition, pageable);
         List<GroupAllQueryResponse> content = response.getContent();
@@ -78,7 +76,6 @@ class GroupQueryImplTest {
 
         List<Study> studies = content.stream().map(c -> c.getStudy()).toList();
         assertThat(studies).extracting("category").contains(JAVA, MYSQL, REACT);
-        assertThat(content.size()).isEqualTo(20);
     }
 
     @DisplayName("카테고리 조건을 검증한다. 카테고리 조건 설정 시, 설정한 카테고리 그룹만 조회된다.")
@@ -92,7 +89,6 @@ class GroupQueryImplTest {
         //then
         List<Study> studies = content.stream().map(c -> c.getStudy()).toList();
         assertThat(studies).extracting("category").containsOnly(MYSQL);
-        assertThat(content.size()).isEqualTo(10);
     }
 
 

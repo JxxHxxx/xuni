@@ -1,7 +1,7 @@
 package com.jxx.xuni.studyproduct.query;
 
 import com.jxx.xuni.common.domain.Category;
-import com.jxx.xuni.group.query.dynamic.ConditionUtils;
+import com.jxx.xuni.common.query.ConditionUtils;
 import com.jxx.xuni.studyproduct.dto.response.QStudyProductQueryResponse;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductQueryResponse;
 import com.jxx.xuni.studyproduct.query.dynamic.StudyProductSearchCondition;

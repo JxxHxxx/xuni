@@ -1,7 +1,7 @@
 package com.jxx.xuni.studyproduct.presentation;
 
-import com.jxx.xuni.group.dto.response.PageInfo;
-import com.jxx.xuni.group.query.converter.PageConverter;
+import com.jxx.xuni.common.query.PageInfo;
+import com.jxx.xuni.common.query.PageConverter;
 import com.jxx.xuni.studyproduct.application.StudyProductReadService;
 import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.studyproduct.dto.response.*;
@@ -54,7 +54,7 @@ public class StudyProductReadController {
 
         Page<StudyProductQueryResponse> pageResponse = studyProductReadService.searchStudyProduct(condition, page, size);
         List<StudyProductQueryResponse> contents = pageResponse.getContent();
-        PageInfo pageInfo = pageConverter.toPageInto(pageResponse);
+        PageInfo pageInfo = pageConverter.toPageInfo(pageResponse);
         return ResponseEntity.ok(new StudyProductPageApiResult(SEARCH_STUDY_PRODUCT_COND, contents, pageInfo));
     }
 }

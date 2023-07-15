@@ -2,10 +2,11 @@ package com.jxx.xuni.group.presentation;
 
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
+import com.jxx.xuni.common.query.PageInfo;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.domain.*;
 import com.jxx.xuni.group.dto.response.*;
-import com.jxx.xuni.group.query.converter.PageConverter;
+import com.jxx.xuni.common.query.PageConverter;
 import com.jxx.xuni.common.domain.Category;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,6 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
@@ -114,7 +114,7 @@ class GroupReadControllerTest extends GroupCommon {
                                 fieldWithPath("response[].study.id").type(JsonFieldType.STRING).description("스터디 상품 식별자"),
                                 fieldWithPath("response[].study.subject").type(JsonFieldType.STRING).description("스터디 이름"),
                                 fieldWithPath("response[].study.category").type(JsonFieldType.STRING).description("스터디 카테고리")
-                            )
+                        )
                 ));
     }
 
@@ -130,7 +130,7 @@ class GroupReadControllerTest extends GroupCommon {
                 Study.of("UUID", "JAVA의 정석", Category.JAVA),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 Period.of(LocalDate.now(), LocalDate.of(2123, 12, 31)),
-                List.of(new GroupMemberDto(1l, "이재헌" , false , LocalDateTime.now()),
+                List.of(new GroupMemberDto(1l, "이재헌", false, LocalDateTime.now()),
                         new GroupMemberDto(12l, "김유니", false, LocalDateTime.now())
                 ));
 
@@ -285,20 +285,20 @@ class GroupReadControllerTest extends GroupCommon {
 
         List<GroupAllQueryResponse> content = List.of(response1, response2);
 
-        BDDMockito.given(groupReadService.searchGroup(any(), any()))
+        BDDMockito.given(groupReadService.searchGroup(any(), anyInt(), anyInt()))
                 .willReturn(new PageImpl<>(content, pageable, content.size()));
 
-        BDDMockito.given(pageConverter.toPageInfo(any(), anyLong(), anyInt()))
+        BDDMockito.given(pageConverter.toPageInfo(any()))
                 .willReturn(PageInfo.of(0, 20, 1, 2, 1, true));
-
         ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders
                 .get("/groups/cd-cp")
                 .param("category", Category.MYSQL.name())
                 .param("readType", "default")
                 .param("isAsc", "true")
                 .param("sortProperty", "start-date")
+                .param("subject", "")
                 .param("page", "0")
-                .param("subject","")
+                .param("size", "20")
                 .contentType(MediaType.APPLICATION_JSON));
 
         result
@@ -314,8 +314,9 @@ class GroupReadControllerTest extends GroupCommon {
                                 parameterWithName("isAsc").description("오름차순 여부"),
                                 parameterWithName("sortProperty").description("정렬 기준이 되는 속성"),
                                 parameterWithName("subject").description("검색 입력어 (스터디 주제 이름)"),
-                                parameterWithName("page").description("현재 페이지")
-                                ),
+                                parameterWithName("page").description("현재 페이지"),
+                                parameterWithName("size").description("한 페이지에 포현할 컨텐츠 수")
+                        ),
 
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
@@ -354,8 +355,8 @@ class GroupReadControllerTest extends GroupCommon {
                                 fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("총 레코드 수"),
                                 fieldWithPath("pageInfo.totalPage").type(JsonFieldType.NUMBER).description("총 페이지 수"),
                                 fieldWithPath("pageInfo.last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부")
-                            )
-                    ));
+                        )
+                ));
     }
 
     @DisplayName("그룹 스터디 체크 조회 API")
@@ -369,8 +370,8 @@ class GroupReadControllerTest extends GroupCommon {
         BDDMockito.given(groupReadService.readGroupTask(any(), any())).willReturn(List.of(response1, response2));
 
         ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.get("/groups/{group-id}/chapters", 1l)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", jwtTokenProvider.issue(memberDetails)));
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", jwtTokenProvider.issue(memberDetails)));
 
         result
                 .andExpect(status().isOk())
