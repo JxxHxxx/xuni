@@ -51,7 +51,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    def addresses = ['43.201.76.198']
+                    def addresses = ['52.79.243.249']
 
                     dir('/var/lib/jenkins/workspace/xuni-deploy/build/libs') {
                         for (int i=0; i < addresses.size(); i++) {
