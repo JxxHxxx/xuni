@@ -1,6 +1,6 @@
 package com.jxx.xuni.studyproduct.dto.response;
 
-import com.jxx.xuni.group.dto.response.PageInfo;
+import com.jxx.xuni.common.query.PageInfo;
 import lombok.Getter;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.jxx.xuni.group.dto.response;
+package com.jxx.xuni.common.query;
 
 import lombok.Getter;
 

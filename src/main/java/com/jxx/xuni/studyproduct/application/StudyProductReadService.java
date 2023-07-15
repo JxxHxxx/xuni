@@ -1,6 +1,8 @@
 package com.jxx.xuni.studyproduct.application;
 
 import com.jxx.xuni.common.domain.Category;
+import com.jxx.xuni.common.query.PagingModifier;
+import com.jxx.xuni.common.query.ModifiedPagingForm;
 import com.jxx.xuni.studyproduct.domain.Content;
 import com.jxx.xuni.studyproduct.domain.StudyProduct;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductContentReadResponse;
@@ -24,6 +26,7 @@ import static com.jxx.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENT
 public class StudyProductReadService {
 
     private final StudyProductReadRepository studyProductReadRepository;
+    private final PagingModifier pagingModifier;
 
     @Cacheable(cacheNames = "study-products", key = "#root.methodName", cacheManager = "localCacheManager")
     public List<StudyProductReadResponse> readMany(Pageable pageable) {
@@ -66,7 +69,7 @@ public class StudyProductReadService {
     }
 
     public Page<StudyProductQueryResponse> searchStudyProduct(StudyProductSearchCondition condition, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return studyProductReadRepository.searchStudyProduct(condition, pageRequest);
+        ModifiedPagingForm form = pagingModifier.modify(page, size);
+        return studyProductReadRepository.searchStudyProduct(condition, PageRequest.of(form.page(), form.size()));
     }
 }
