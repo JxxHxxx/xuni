@@ -1,5 +1,7 @@
 package com.jxx.xuni.group.application;
 
+import com.jxx.xuni.common.query.ModifiedPagingForm;
+import com.jxx.xuni.common.query.PagingModifier;
 import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.domain.Task;
 import com.jxx.xuni.group.dto.response.*;
@@ -15,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.BAD_REQUEST;
-import static com.jxx.xuni.common.query.QueryLimitPolicy.*;
 
 @Service
 @RequiredArgsConstructor
 public class GroupReadService {
 
     private final GroupReadRepository groupReadRepository;
+    private final PagingModifier pagingModifier;
 
     public List<GroupReadAllResponse> readAll() {
         List<Group> groups = groupReadRepository.readAllWithFetch();
@@ -76,11 +78,8 @@ public class GroupReadService {
     public Page<GroupAllQueryResponse> searchGroup(GroupSearchCondition condition, int page, int size) {
         condition.nullHandle();
 
-        if (size > 20) {
-            return groupReadRepository.searchGroup(condition, PageRequest.of(page, LIMIT_SIZE));
-        }
-
-        return groupReadRepository.searchGroup(condition, PageRequest.of(page, size));
+        ModifiedPagingForm form = pagingModifier.modify(page, size);
+        return groupReadRepository.searchGroup(condition, PageRequest.of(form.page(), form.size()));
     }
 
     public List<GroupAllQueryResponse> readOwn(Long groupMemberId) {
