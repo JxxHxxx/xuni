@@ -14,11 +14,14 @@ public class GroupCreateService {
 
     public void create(Long memberId, GroupCreateForm form) {
         Host host = hostCreator.createHost(memberId);
-        Group group = new Group(Period.of(form.getStartDate(), form.getEndDate()),
-                                Time.of(form.getStartTime(), form.getEndTime()),
-                                new Capacity(form.getCapacity()),
-                                Study.of(form.getStudyProductId(), form.getSubject(), form.getCategory()),
-                                host);
+        Group group = Group.builder()
+                .name(form.name())
+                .period(Period.of(form.startDate(), form.endDate()))
+                .time(Time.of(form.startTime(), form.endTime()))
+                .capacity(Capacity.of(form.capacity()))
+                .study(Study.of(form.studyProductId(), form.subject(), form.category()))
+                .host(host)
+                .build();
 
         group.verifyCreateRule();
         groupRepository.save(group);

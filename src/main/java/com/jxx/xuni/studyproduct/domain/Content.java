@@ -20,6 +20,10 @@ public class Content {
         this.title = title;
     }
 
+    protected static Content of(Long chapterNo, String title) {
+        return new Content(chapterNo,title);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

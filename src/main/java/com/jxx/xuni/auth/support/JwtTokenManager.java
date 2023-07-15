@@ -23,6 +23,7 @@ public class JwtTokenManager {
     @Value("${jwt.secret.key}")
     private String secretKey;
     private static final String CLAIMS_MEMBER_DETAILS_KEY = "memberDetails";
+    private static final String TOKEN_PREFIX = "Bearer ";
 
     public void validateAccessToken(String token) {
         checkNull(token);
@@ -33,6 +34,25 @@ public class JwtTokenManager {
         Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
         Object memberClaims = claims.get(CLAIMS_MEMBER_DETAILS_KEY);
         return claimsToMemberDetails(memberClaims);
+    }
+
+    /**
+     * jwt token 형태는 Bearer_xxx.xxx.xxx 입니다.
+     * prefix인 Bearer_ 를 떼어내 xxx.xxx.xxx 를 반환하는 작업
+     *
+     * 참고 : Bearer 뒤에 붙은 _ 는 공백을 의미한다.
+     * 작성일시 : 2023-07-07
+     * 작성자 : jxxHxxx
+     */
+    public String extractTokenFromBearer(String authorizationHeaderValue) {
+        checkPrefixOf(authorizationHeaderValue);
+        return authorizationHeaderValue.substring(7);
+    }
+
+    private void checkPrefixOf(String value) {
+        if(!value.startsWith(TOKEN_PREFIX)) {
+            throw new IllegalArgumentException("헤더 값의 형식이 올바르지 못합니다.");
+        }
     }
 
     private void checkNull(String token) {

@@ -8,7 +8,7 @@ import com.jxx.xuni.group.application.GroupManagingService;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.domain.GroupRepository;
 import com.jxx.xuni.group.domain.SimpleHostCreator;
-import com.jxx.xuni.group.query.converter.PageConverter;
+import com.jxx.xuni.common.query.PageConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;

@@ -39,17 +39,17 @@ public class Review {
 
     public void update(Long reviewerId, Integer rating, String comment) {
         // 본인 검증
-        checkWriter(reviewerId);
+        checkReviewer(reviewerId);
         this.content.update(rating, comment);
         updateLastModifiedTime();
     }
 
     public void delete(Long reviewerId) {
-        checkWriter(reviewerId);
+        checkReviewer(reviewerId);
         this.isDeleted = true;
     }
 
-    private void checkWriter(Long reviewerId) {
+    private void checkReviewer(Long reviewerId) {
         if (!this.receiveReviewerId().equals(reviewerId)) {
             throw new NotPermissionException(PRIVATE_ACCESSIBLE);
         }

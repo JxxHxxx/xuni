@@ -1,4 +1,4 @@
-package com.jxx.xuni.group.dto.response;
+package com.jxx.xuni.studyproduct.dto.response;
 
 import com.jxx.xuni.common.query.PageInfo;
 import lombok.Getter;
@@ -6,13 +6,13 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class GroupPageApiResult {
+public class StudyProductPageApiResult<T> {
     private final Integer status;
     private final String message;
-    private final List<GroupAllQueryResponse> response;
+    private final List<T> response;
     private final PageInfo pageInfo;
 
-    public GroupPageApiResult(String message, List<GroupAllQueryResponse> response, PageInfo pageInfo) {
+    public StudyProductPageApiResult(String message, List<T> response, PageInfo pageInfo) {
         this.status = 200;
         this.message = message;
         this.response = response;

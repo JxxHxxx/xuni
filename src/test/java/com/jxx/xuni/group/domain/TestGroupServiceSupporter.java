@@ -16,7 +16,9 @@ import static com.jxx.xuni.auth.domain.Authority.USER;
 public class TestGroupServiceSupporter {
 
     public static Group receiveSampleGroup(Long hostId) {
-        return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
+        return new Group(
+                "test-group",
+                Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(5),
                 Study.of("UUID","자바의 정석", Category.JAVA),
@@ -24,7 +26,9 @@ public class TestGroupServiceSupporter {
     }
 
     public static Group receiveSampleGroup(Long hostId, Category category) {
-        return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
+        return new Group(
+                "test-group",
+                Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(5),
                 Study.of("UUID","자바의 정석", category),
@@ -32,7 +36,9 @@ public class TestGroupServiceSupporter {
     }
 
     public static Group receiveSampleGroup(Category category) {
-        return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
+        return new Group(
+                "test-group",
+                Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(5),
                 Study.of("UUID","Real MySQL", category),
@@ -40,7 +46,9 @@ public class TestGroupServiceSupporter {
     }
 
     public static Group receiveSampleGroup(Long hostId, Integer capacity) {
-        return new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
+        return new Group(
+                "test-group",
+                Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(capacity),
                 Study.of("UUID","자바의 정석", Category.JAVA),
@@ -86,7 +94,9 @@ public class TestGroupServiceSupporter {
             new GroupTaskForm(3l, "인터페이스"));
 
     public static Group startedGroupSample(Long hostId, Integer capacity) {
-        Group group = new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
+        Group group = new Group(
+                "test-group",
+                Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(capacity),
                 Study.of("UUID", "자바의 정석", Category.JAVA),
@@ -99,7 +109,9 @@ public class TestGroupServiceSupporter {
     }
 
     public static Group startGroup(String studyProductId, Long hostId) {
-        Group group = new Group(Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
+        Group group = new Group(
+                "test-group",
+                Period.of(LocalDate.now(), LocalDate.of(2023, 12, 31)),
                 Time.of(LocalTime.MIDNIGHT, LocalTime.NOON),
                 new Capacity(5),
                 Study.of(studyProductId, "자바의 정석", Category.JAVA),

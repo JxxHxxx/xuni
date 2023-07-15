@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static com.jxx.xuni.auth.domain.AuthProvider.XUNI;
+import static org.assertj.core.api.Assertions.*;
 
 @ServiceTest
 class GroupCreateServiceTest extends ServiceCommon {
@@ -47,13 +48,21 @@ class GroupCreateServiceTest extends ServiceCommon {
     @Test
     void create_success() {
         //given
-        GroupCreateForm groupCreateForm = new GroupCreateForm(LocalDate.now(), LocalDate.of(2099, 12, 31),
-                LocalTime.MIDNIGHT, LocalTime.NOON, 10, "Request Product API", "JAVA 스터디", Category.JAVA);
+        GroupCreateForm groupCreateForm = new GroupCreateForm(
+                "groupName",  // GroupName
+                LocalDate.now(),  // startDate
+                LocalDate.of(2099, 12, 31), // endDate
+                LocalTime.MIDNIGHT,  // startTime
+                LocalTime.NOON, // endTime
+                10, // capacity
+                "study-product-id", // studyProductId
+                "JAVA 스터디", // subject - meaning studyProductName
+                Category.JAVA);
 
         //when - then
-        Assertions.assertThatCode(() -> groupCreateService.create(MemberId, groupCreateForm))
+        assertThatCode(() -> groupCreateService.create(MemberId, groupCreateForm))
                 .doesNotThrowAnyException();
 
-        Assertions.assertThat(groupRepository.findAll().get(0)).isNotNull();
+        assertThat(groupRepository.findAll().get(0)).isNotNull();
     }
 }

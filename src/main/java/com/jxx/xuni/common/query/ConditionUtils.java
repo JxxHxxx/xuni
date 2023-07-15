@@ -1,4 +1,4 @@
-package com.jxx.xuni.group.query.dynamic;
+package com.jxx.xuni.common.query;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConditionUtils {
 
-    public static boolean isValid(String condition) {
+    public static boolean isNotNullAndBlank(String condition) {
         return condition != null && !condition.isBlank();
     }
 }

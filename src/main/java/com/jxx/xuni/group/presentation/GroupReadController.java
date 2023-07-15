@@ -3,26 +3,21 @@ package com.jxx.xuni.group.presentation;
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.presentation.AuthenticatedMember;
 import com.jxx.xuni.auth.presentation.OptionalAuthentication;
+import com.jxx.xuni.common.query.PageInfo;
 import com.jxx.xuni.group.application.GroupReadService;
 import com.jxx.xuni.group.dto.response.*;
 import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
-import com.jxx.xuni.group.query.converter.PageConverter;
+import com.jxx.xuni.common.query.PageConverter;
 import com.jxx.xuni.common.domain.Category;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class GroupReadController {
@@ -53,12 +48,15 @@ public class GroupReadController {
     }
 
     @GetMapping("/groups/cd-cp")
-    public ResponseEntity<GroupPageApiResult> searchCond(GroupSearchCondition condition, Pageable pageable) {
-        Page<GroupAllQueryResponse> page = groupReadService.searchGroup(condition, pageable);
-        List<GroupAllQueryResponse> response = page.getContent();
-        PageInfo pageInfo = pageConverter.toPageInfo(page.getPageable(), page.getTotalElements(), page.getTotalPages());
+    public ResponseEntity<GroupPageApiResult> searchCond(@ModelAttribute GroupSearchCondition condition,
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "20") int size) {
 
-        return ResponseEntity.ok(new GroupPageApiResult(SEARCH_GROUP_COND, response, pageInfo));
+        Page<GroupAllQueryResponse> pageResponse = groupReadService.searchGroup(condition, page, size);
+        List<GroupAllQueryResponse> content = pageResponse.getContent();
+        PageInfo pageInfo = pageConverter.toPageInfo(pageResponse);
+
+        return ResponseEntity.ok(new GroupPageApiResult(SEARCH_GROUP_COND, content, pageInfo));
     }
 
     @GetMapping("/groups/{group-id}/chapters")

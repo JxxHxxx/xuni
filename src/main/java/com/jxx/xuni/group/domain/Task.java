@@ -31,7 +31,7 @@ public class Task {
         this.group =  group;
     }
 
-    public static Task init(Long memberId, Long chapterId, String title, Group group) {
+    public static Task initialize(Long memberId, Long chapterId, String title, Group group) {
         return new Task(memberId, chapterId, title, false, group);
     }
 
@@ -43,7 +43,7 @@ public class Task {
         return this.chapterId.equals(chapterId);
     }
 
-    public boolean isSameMember(Long memberId) {
+    public boolean isEqualMemberId(Long memberId) {
         return this.memberId.equals(memberId);
     }
 }

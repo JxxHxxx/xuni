@@ -1,5 +1,7 @@
 package com.jxx.xuni.group.application;
 
+import com.jxx.xuni.common.query.ModifiedPagingForm;
+import com.jxx.xuni.common.query.PagingModifier;
 import com.jxx.xuni.group.domain.Group;
 import com.jxx.xuni.group.domain.Task;
 import com.jxx.xuni.group.dto.response.*;
@@ -8,7 +10,7 @@ import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
 import com.jxx.xuni.common.domain.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import static com.jxx.xuni.common.exception.CommonExceptionMessage.BAD_REQUEST;
 public class GroupReadService {
 
     private final GroupReadRepository groupReadRepository;
+    private final PagingModifier pagingModifier;
 
     public List<GroupReadAllResponse> readAll() {
         List<Group> groups = groupReadRepository.readAllWithFetch();
@@ -41,7 +44,11 @@ public class GroupReadService {
         group.updateGroupMemberLastVisitedTime(userId);
 
         List<GroupMemberDto> groupMembers = group.getGroupMembers().stream()
-                .map(gm -> new GroupMemberDto(gm.getGroupMemberId(), gm.getGroupMemberName(), gm.getIsLeft(), gm.getLastVisitedTime()))
+                .map(groupMember -> new GroupMemberDto(
+                        groupMember.getGroupMemberId(),
+                        groupMember.getGroupMemberName(),
+                        groupMember.getIsLeft(),
+                        groupMember.getLastVisitedTime()))
                 .toList();
 
         return new GroupReadOneResponse(
@@ -68,9 +75,11 @@ public class GroupReadService {
                 group.getPeriod())).toList();
     }
 
-    public Page<GroupAllQueryResponse> searchGroup(GroupSearchCondition condition, Pageable pageable) {
+    public Page<GroupAllQueryResponse> searchGroup(GroupSearchCondition condition, int page, int size) {
         condition.nullHandle();
-        return groupReadRepository.searchGroup(condition, pageable);
+
+        ModifiedPagingForm form = pagingModifier.modify(page, size);
+        return groupReadRepository.searchGroup(condition, PageRequest.of(form.page(), form.size()));
     }
 
     public List<GroupAllQueryResponse> readOwn(Long groupMemberId) {
@@ -80,11 +89,11 @@ public class GroupReadService {
     public List<GroupStudyCheckResponse> readGroupTask(Long groupId, Long userId) {
         Group group = groupReadRepository.readTaskWithFetch(groupId, userId)
                 .orElseThrow(() -> new IllegalArgumentException(BAD_REQUEST));
-        List<Task> studyChecks = group.receiveGroupTasks(userId);
+        List<Task> tasks = group.receiveTasksOf(userId);
 
-        return studyChecks.stream().map(s -> new GroupStudyCheckResponse(
-                s.getChapterId(),
-                s.getTitle(),
-                s.isDone())).toList();
+        return tasks.stream().map(task -> new GroupStudyCheckResponse(
+                task.getChapterId(),
+                task.getTitle(),
+                task.isDone())).toList();
     }
 }

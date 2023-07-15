@@ -59,7 +59,7 @@ class StudyProductReadServiceTest extends ServiceCommon {
     @Test
     void read_by_category() {
         //when
-        List<StudyProductReadResponse> responses = studyProductReadService.readBy(Category.JAVA);
+        List<StudyProductReadResponse> responses = studyProductReadService.readManyBy(Category.JAVA);
         //then
         assertThat(responses.size()).isEqualTo(2);
         assertThat(responses).extracting("category").containsOnly(Category.JAVA);
@@ -78,7 +78,7 @@ class StudyProductReadServiceTest extends ServiceCommon {
         StudyProduct savedStudyProduct = studyProductRepository.save(studyProduct);
         String studyProductId = savedStudyProduct.getId();
         //when
-        StudyProductContentReadResponse response = studyProductReadService.readContent(studyProductId);
+        StudyProductContentReadResponse response = studyProductReadService.readDetailBy(studyProductId);
         //then
         assertThat(response.name()).isEqualTo("JAVA의 정석");
         assertThat(response.contents()).extracting("title").contains("객체 지향", "인터페이스","변수 타입");

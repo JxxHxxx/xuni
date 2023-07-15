@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.EMPTY_VALUE;
+import static org.springframework.http.HttpHeaders.*;
+import static org.springframework.http.HttpMethod.*;
 
 @RequiredArgsConstructor
 public class JwtAuthInterceptor implements HandlerInterceptor {
@@ -25,16 +27,16 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
     }
 
     private boolean notRequiredAuthentication(HttpServletRequest request) {
-        return "GET".equals(request.getMethod());
+        return GET.name().equals(request.getMethod());
     }
 
     private boolean isPreflight(HttpServletRequest request) {
-        return "OPTIONS".equals(request.getMethod());
+        return OPTIONS.name().equals(request.getMethod());
     }
 
     private String extractAuthorizationHeader(HttpServletRequest request) {
         try {
-            return request.getHeader("Authorization").substring(7);
+            return jwtTokenManager.extractTokenFromBearer(request.getHeader(AUTHORIZATION));
         } catch (NullPointerException exception) {
             throw new IllegalArgumentException("Authorization 헤더 " + EMPTY_VALUE);
         }

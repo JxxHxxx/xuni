@@ -2,9 +2,8 @@ package com.jxx.xuni.group.query;
 
 import com.jxx.xuni.group.dto.response.GroupAllQueryResponse;
 import com.jxx.xuni.group.dto.response.QGroupAllQueryResponse;
-import com.jxx.xuni.group.query.dynamic.ConditionUtils;
+import com.jxx.xuni.common.query.ConditionUtils;
 import com.jxx.xuni.group.query.dynamic.GroupSearchCondition;
-import com.jxx.xuni.group.query.dynamic.QueryLimitPolicy;
 import com.jxx.xuni.common.domain.Category;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -19,6 +18,9 @@ import static com.jxx.xuni.group.domain.GroupStatus.*;
 import static com.jxx.xuni.group.domain.QGroup.group;
 import static com.jxx.xuni.group.domain.QGroupMember.*;
 
+/** Queydsl을 통해 쿼리문을 작성할 시 아래의 규칙에 따라 작성해주십시오.
+ * @See <a href="https://github.com/JxxHxxx/xuni-api-server/wiki/coding-convention#method_rules_querydsl_condition" />
+ */
 public class GroupQueryImpl implements GroupQuery {
 
     private final JPAQueryFactory queryFactory;
@@ -46,15 +48,16 @@ public class GroupQueryImpl implements GroupQuery {
                         studySubjectContain(condition.getSubject())
                 )
                 .offset(pageable.getOffset())
-                .limit(QueryLimitPolicy.LIMIT_OF_PAGE)
+                .limit(pageable.getPageSize())
                 .orderBy(searchGroupOrderSpec(condition))
                 .fetch();
-
+        // TODO : 무언가 where 문이 이상한데?
         long total = queryFactory
                 .selectFrom(group)
                 .where(
                         categoryEqual(condition.getCategory()),
-                        readTypeCond(condition.getReadType())
+                        readTypeCond(condition.getReadType()),
+                        studySubjectContain(condition.getSubject())
                 )
                 .fetchCount();
 
@@ -85,7 +88,7 @@ public class GroupQueryImpl implements GroupQuery {
     }
 
     private BooleanExpression readTypeCond(String readType) {
-        if (ConditionUtils.isValid(readType)) {
+        if (ConditionUtils.isNotNullAndBlank(readType)) {
             if ("default".equals(readType)) {
                 return group.groupStatus.in(GATHERING, GATHER_COMPLETE, START);
             }

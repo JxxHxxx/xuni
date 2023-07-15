@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
+import static org.springframework.http.HttpHeaders.*;
+
 @Slf4j
 @RequiredArgsConstructor
 public class ActuatorFilter implements Filter {
@@ -29,10 +31,10 @@ public class ActuatorFilter implements Filter {
         chain.doFilter(request, response);
     }
 
-    private void checkAdminAuthority(HttpServletRequest httpRequest) {
+    private void checkAdminAuthority(HttpServletRequest request) {
         String token = null;
         try {
-            token = httpRequest.getHeader("Authorization").substring(7);
+            token = jwtTokenManager.extractTokenFromBearer(request.getHeader(AUTHORIZATION));
         }
         catch (NullPointerException e) {
             throw new NullPointerException("토큰 없음");
@@ -43,7 +45,7 @@ public class ActuatorFilter implements Filter {
 
     }
 
-    private static boolean isActuatorEndpoint(HttpServletRequest httpRequest) {
-        return httpRequest.getRequestURI().startsWith("/actuator");
+    private static boolean isActuatorEndpoint(HttpServletRequest request) {
+        return request.getRequestURI().startsWith("/actuator");
     }
 }
