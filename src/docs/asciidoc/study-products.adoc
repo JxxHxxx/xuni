@@ -47,3 +47,13 @@ include::{snippets}/studyproduct/query/readOne/path-parameters.adoc[]
 
 === HTTP response
 include::{snippets}/studyproduct/query/readOne/response-body.adoc[]
+
+== 스터디 상품 다중 조건 조회
+
+=== HTTP request
+include::{snippets}/studyproduct/query/search/http-request.adoc[]
+===== query parameters
+include::{snippets}/studyproduct/query/search/query-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/studyproduct/query/search/response-body.adoc[]
