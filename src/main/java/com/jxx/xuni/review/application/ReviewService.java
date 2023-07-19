@@ -48,7 +48,8 @@ public class ReviewService {
                 r.getLastModifiedTime(),
                 r.receiveReviewerId(),
                 r.receiveReviewerName(),
-                r.receiveProgress())).toList();
+                r.receiveProgress(),
+                reviewRepository.countReviewLike(r.getId()))).toList();
     }
 
     @Transactional
