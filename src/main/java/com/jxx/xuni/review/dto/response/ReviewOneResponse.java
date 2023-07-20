@@ -12,6 +12,6 @@ public record ReviewOneResponse(
         Long reviewerId,
         String reviewerName,
         Progress progress,
-        Long likeCnt
+        Integer likeCnt
 ) {
 }

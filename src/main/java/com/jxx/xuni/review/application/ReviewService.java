@@ -41,15 +41,15 @@ public class ReviewService {
     public List<ReviewOneResponse> read(String studyProductId) {
         List<Review> reviews = reviewRepository.readBy(studyProductId);
 
-        return reviews.stream().map(r -> new ReviewOneResponse(
-                r.getId(),
-                r.receiveComment(),
-                r.receiveRating(),
-                r.getLastModifiedTime(),
-                r.receiveReviewerId(),
-                r.receiveReviewerName(),
-                r.receiveProgress(),
-                reviewRepository.countReviewLike(r.getId()))).toList();
+        return reviews.stream().map(review -> new ReviewOneResponse(
+                review.getId(),
+                review.receiveComment(),
+                review.receiveRating(),
+                review.getLastModifiedTime(),
+                review.receiveReviewerId(),
+                review.receiveReviewerName(),
+                review.receiveProgress(),
+                review.getLikeTotalCnt())).toList();
     }
 
     @Transactional

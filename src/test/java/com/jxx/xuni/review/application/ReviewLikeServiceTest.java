@@ -1,9 +1,9 @@
 package com.jxx.xuni.review.application;
 
-import com.jxx.xuni.review.domain.ReviewLike;
-import com.jxx.xuni.review.domain.ReviewLikeRepository;
+import com.jxx.xuni.review.domain.*;
 import com.jxx.xuni.support.ServiceCommon;
 import com.jxx.xuni.support.ServiceTest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,9 +18,22 @@ class ReviewLikeServiceTest extends ServiceCommon {
     ReviewLikeService reviewLikeService;
     @Autowired
     ReviewLikeRepository reviewLikeRepository;
+    @Autowired
+    ReviewRepository reviewRepository;
+
+    Review review;
 
     @BeforeEach
     void beforeEach() {
+        review = reviewRepository.save(Review.builder()
+                .reviewer(Reviewer.of(100l, "reviewer1", Progress.HALF))
+                .content(Content.of(3, "reviewer's comment"))
+                .studyProductId("study-product-id")
+                .build());
+    }
+
+    @AfterEach
+    void afterEach() {
         reviewLikeRepository.deleteAll();
     }
 
@@ -28,7 +41,7 @@ class ReviewLikeServiceTest extends ServiceCommon {
     @Test
     void execute_first_time() {
         //given
-        Long reviewId = 123123l;
+        Long reviewId = review.getId();
         Long memberId = 1141l;
         //when
         reviewLikeService.execute(reviewId, memberId);
@@ -41,9 +54,9 @@ class ReviewLikeServiceTest extends ServiceCommon {
     @Test
     void execute_already_exist_and_liked_state_true() {
         //given
-        Long reviewId = 123123l;
+        Long reviewId = review.getId();
         Long memberId = 1141l;
-        reviewLikeRepository.save(new ReviewLike(reviewId, memberId));
+        reviewLikeRepository.save(new ReviewLike(memberId, review));
         //when
         reviewLikeService.execute(reviewId, memberId);
         //then
@@ -55,9 +68,9 @@ class ReviewLikeServiceTest extends ServiceCommon {
     @Test
     void execute_already_exist_and_liked_state_false() {
         //given
-        Long reviewId = 123123l;
+        Long reviewId = review.getId();
         Long memberId = 1141l;
-        reviewLikeRepository.save(new ReviewLike(reviewId, memberId));
+        reviewLikeRepository.save(new ReviewLike(memberId, review));
         reviewLikeService.execute(reviewId, memberId); // isLike 필드 -> false 로 변경
         //when
         reviewLikeService.execute(reviewId, memberId);

@@ -12,8 +12,4 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "where r.studyProductId =:studyProductId " +
             "and r.isDeleted = false ")
     List<Review> readBy(@Param("studyProductId") String studyProductId);
-
-    @Query(value = "select count(rl) from ReviewLike rl " +
-            "where rl.reviewId =:reviewId and rl.isLiked = true ")
-    Long countReviewLike(Long reviewId);
 }

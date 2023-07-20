@@ -25,6 +25,7 @@ public class Review {
     private String studyProductId;
     @Embedded
     private Content content;
+    private Integer likeTotalCnt;
     private LocalDateTime lastModifiedTime;
     private Boolean isDeleted;
 
@@ -33,6 +34,7 @@ public class Review {
         this.reviewer = reviewer;
         this.studyProductId = studyProductId;
         this.content = content;
+        this.likeTotalCnt = 0;
         this.lastModifiedTime = LocalDateTime.now();
         this.isDeleted = false;
     }
@@ -77,6 +79,14 @@ public class Review {
 
     public String receiveReviewerName() {
         return this.reviewer.getName();
+    }
+
+    public void onLikeEvent() {
+        likeTotalCnt += 1;
+    }
+
+    public void onLikeCancelEvent() {
+        likeTotalCnt -= 1;
     }
 
 }
