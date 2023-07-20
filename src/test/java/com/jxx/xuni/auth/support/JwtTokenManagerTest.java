@@ -2,7 +2,11 @@ package com.jxx.xuni.auth.support;
 
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
+import com.jxx.xuni.auth.domain.exception.ExpiredTokenException;
 import com.jxx.xuni.support.ServiceOnlyTest;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,10 +32,14 @@ class JwtTokenManagerTest {
     JwtTokenProvider jwtTokenProvider;
 
     String testToken;
+    MemberDetails memberDetails;
+    @Value("${jwt.secret.key}")
+    private String secretKey;
 
-    @BeforeEach // class given
+    @BeforeEach
+        // class given
     void beforeEach() {
-        MemberDetails memberDetails = new SimpleMemberDetails(123l, "leesin5498@naver.com", "재헌");
+        memberDetails = new SimpleMemberDetails(123l, "leesin5498@naver.com", "재헌");
         String BearerToken = jwtTokenProvider.issue(memberDetails);
         testToken = BearerToken.substring(7);
     }
@@ -45,7 +56,7 @@ class JwtTokenManagerTest {
     @ParameterizedTest(name = "[{index}] 예외 메시지 : {1} | 토큰 값 : {0}")
     @CsvSource(value = {"N/A, 토큰이 없습니다.",
             "Bearer zs42w12893ujaksdnwqy8281.dasudlk21j31k.dasiduaoq1sdl, 유효한 토큰이 아닙니다."}
-    , nullValues = "N/A")
+            , nullValues = "N/A")
     void validate_token_fail(String invalidToken, String message) {
         assertThatThrownBy(() -> jwtTokenManager.validateAccessToken(invalidToken))
                 .hasMessage(message);
@@ -94,5 +105,28 @@ class JwtTokenManagerTest {
         assertThatThrownBy(() -> jwtTokenManager.extractTokenFromBearer(isNotBearerToken))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("헤더 값의 형식이 올바르지 못합니다.");
+    }
+
+    @DisplayName("만료된 토큰을 들고 검증을 수행할 경우" +
+            "예외 ExpiredTokenException 발생," +
+            "메시지 만료된 토큰입니다.")
+    @Test
+    void validate_access_token_fail_cuz_expired_token() throws InterruptedException {
+        Claims claims = jwtTokenProvider.makeClaims(memberDetails);
+        Date now = new Date(); // exiredTime
+
+        String token = Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(now)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+
+        Thread.sleep(1l);
+
+        //when - then
+        assertThatThrownBy(() -> jwtTokenManager.validateAccessToken(token))
+                .isInstanceOf(ExpiredTokenException.class)
+                .hasMessage("만료된 토큰입니다.");
+
     }
 }
