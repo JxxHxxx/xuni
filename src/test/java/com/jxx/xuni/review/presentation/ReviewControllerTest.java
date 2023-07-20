@@ -88,7 +88,8 @@ class ReviewControllerTest extends ReviewCommon {
                 3, LocalDateTime.now(),
                 10l,
                 "유니",
-                Progress.HALF);
+                Progress.HALF,
+                5l);
 
         ReviewOneResponse response2 = new ReviewOneResponse(
                 2l,
@@ -96,7 +97,8 @@ class ReviewControllerTest extends ReviewCommon {
                 3, LocalDateTime.of(2023,5, 15, 10, 20),
                 15l,
                 "허니",
-                Progress.ALMOST);
+                Progress.ALMOST,
+                0l);
 
         List<ReviewOneResponse> responses = List.of(response1, response2);
 
@@ -128,7 +130,8 @@ class ReviewControllerTest extends ReviewCommon {
                                         fieldWithPath("response[].lastModifiedTime").type(JsonFieldType.STRING).description("마지막 수정일"),
                                         fieldWithPath("response[].reviewerId").type(JsonFieldType.NUMBER).description("리뷰어 식별자"),
                                         fieldWithPath("response[].reviewerName").type(JsonFieldType.STRING).description("리뷰어 이름"),
-                                        fieldWithPath("response[].progress").type(JsonFieldType.STRING).description("스터디 진행률")
+                                        fieldWithPath("response[].progress").type(JsonFieldType.STRING).description("스터디 진행률"),
+                                        fieldWithPath("response[].likeCnt").type(JsonFieldType.NUMBER).description("리뷰 좋아요 수")
                                 )
 
                         )

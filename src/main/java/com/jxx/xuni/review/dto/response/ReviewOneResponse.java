@@ -11,6 +11,7 @@ public record ReviewOneResponse(
         LocalDateTime lastModifiedTime,
         Long reviewerId,
         String reviewerName,
-        Progress progress
+        Progress progress,
+        Long likeCnt
 ) {
 }
