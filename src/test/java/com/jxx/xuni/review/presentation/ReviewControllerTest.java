@@ -89,7 +89,7 @@ class ReviewControllerTest extends ReviewCommon {
                 10l,
                 "유니",
                 Progress.HALF,
-                5l);
+                5);
 
         ReviewOneResponse response2 = new ReviewOneResponse(
                 2l,
@@ -98,7 +98,7 @@ class ReviewControllerTest extends ReviewCommon {
                 15l,
                 "허니",
                 Progress.ALMOST,
-                0l);
+                0);
 
         List<ReviewOneResponse> responses = List.of(response1, response2);
 

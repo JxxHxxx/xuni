@@ -1,6 +1,6 @@
 package com.jxx.xuni.review.domain;
 
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
@@ -11,13 +11,22 @@ import static org.assertj.core.api.Assertions.*;
 
 class ReviewLikeTest {
 
+    Review review;
+
+    @BeforeEach
+    void beforeEach() {
+        review = Review.builder()
+                .reviewer(Reviewer.of(100l, "reviewer1", Progress.HALF))
+                .content(Content.of(3, "reviewer's comment"))
+                .studyProductId("study-product-id")
+                .build();
+    }
+
     @Test
     void init()  {
         Long memberId = 1l;
-        Long reviewId = 100l;
-        ReviewLike reviewLike = new ReviewLike(reviewId, memberId);
+        ReviewLike reviewLike = new ReviewLike(memberId, review);
 
-        assertThat(reviewLike.getReviewId()).isEqualTo(100l);
         assertThat(reviewLike.getLikeStatus()).isEqualTo(INIT);
         assertThat(reviewLike.isLiked()).isTrue();
     }
@@ -25,12 +34,12 @@ class ReviewLikeTest {
     @Test
     void execute() {
         Long memberId = 1l;
-        Long reviewId = 100l;
-        ReviewLike reviewLike = new ReviewLike(reviewId, memberId);
+        ReviewLike reviewLike = new ReviewLike(memberId, review);
 
         reviewLike.execute();
-        Assertions.assertThat(reviewLike.isLiked()).isFalse();
-        Assertions.assertThat(reviewLike.getLikeStatus()).isEqualTo(DISLIKE);
+        assertThat(reviewLike.getReview()).isEqualTo(review);
+        assertThat(reviewLike.isLiked()).isFalse();
+        assertThat(reviewLike.getLikeStatus()).isEqualTo(DISLIKE);
     }
 
 }
