@@ -9,6 +9,7 @@ import com.jxx.xuni.auth.domain.MemberRepository;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.common.domain.Category;
 import com.jxx.xuni.group.dto.request.GroupCreateForm;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,11 @@ public class GroupApiExceptionTest {
                 "유니",
                 AuthProvider.XUNI));
         memberId = member.getId();
+    }
+
+    @AfterEach
+    void afterEach() {
+        memberRepository.deleteAll();
     }
 
     @DisplayName("그룹 생성 요청 시 필수 값을 지정하지 않은 채 요청을 보낼 경우 " +

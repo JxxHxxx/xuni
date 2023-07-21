@@ -35,11 +35,6 @@ public class ReviewController {
         return new ResponseEntity<>(ReviewApiSimpleResult.create(REVIEW_CREATE), CREATED);
     }
 
-    /**
-     * TODO : 리뷰가 여러개일 경우 count query를 리뷰 수 만큼 날림
-     * 해결책 1. Review 엔티티에 LikeCnt 필드 추가 -> count query를 날리지 않아도 됨, 그러나 좋아요 이벤트가 발생할 때 마다 업데이트 필요
-     * 해결책 2. Review <-> ReviewLike 간에 연관관계를 맺고 애플리케이션 레벨에서 좋아요 수를 구함 -> 테이블간에 강한 의존, 메모리 상의 부하 증가 예상
-     */
     @GetMapping("/study-products/{study-product-id}/reviews")
     public ResponseEntity<ReviewApiResult> readReviewBy(@PathVariable("study-product-id") String studyProductId) {
         List<ReviewOneResponse> response = reviewService.read(studyProductId);

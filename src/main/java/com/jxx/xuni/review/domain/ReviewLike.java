@@ -22,7 +22,7 @@ public class ReviewLike {
     private LikeStatus likeStatus;
     private LocalDateTime createdTime;
     private LocalDateTime lastModifiedTime;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     private Review review;
 
@@ -34,11 +34,13 @@ public class ReviewLike {
         this.createdTime = LocalDateTime.now();
         this.lastModifiedTime = LocalDateTime.now();
 
+        this.review.checkReviewDeleted();
         this.review.onLikeEvent();
     }
 
     public void execute() {
         lastModifiedTime = LocalDateTime.now();
+        review.checkReviewDeleted();
         changeIsLiked();
         changeLikeStatus();
     }

@@ -1,6 +1,7 @@
 package com.jxx.xuni.review.domain;
 
 import com.jxx.xuni.common.exception.NotPermissionException;
+import com.jxx.xuni.review.domain.exception.ReviewDeletedException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.*;
+import static com.jxx.xuni.review.domain.exception.ReviewExceptionMessage.REVIEW_DELETED;
 
 @Getter
 @Entity
@@ -81,12 +83,17 @@ public class Review {
         return this.reviewer.getName();
     }
 
-    public void onLikeEvent() {
+    protected void onLikeEvent() {
         likeTotalCnt += 1;
     }
 
-    public void onLikeCancelEvent() {
+    protected void onLikeCancelEvent() {
         likeTotalCnt -= 1;
     }
 
+    protected void checkReviewDeleted() {
+        if (isDeleted) {
+            throw new ReviewDeletedException(REVIEW_DELETED);
+        }
+    }
 }
