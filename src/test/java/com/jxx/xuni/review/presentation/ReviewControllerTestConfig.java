@@ -2,7 +2,9 @@ package com.jxx.xuni.review.presentation;
 
 import com.jxx.xuni.auth.support.JwtTokenManager;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
+import com.jxx.xuni.review.application.ReviewLikeService;
 import com.jxx.xuni.review.application.ReviewService;
+import com.jxx.xuni.review.domain.ReviewLikeRepository;
 import com.jxx.xuni.review.domain.ReviewRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,6 +17,10 @@ public class ReviewControllerTestConfig {
     ReviewRepository reviewRepository;
     @MockBean
     ReviewService reviewService;
+    @MockBean
+    ReviewLikeService reviewLikeService;
+    @MockBean
+    ReviewLikeRepository reviewLikeRepository;
     @Bean
     JwtTokenProvider jwtTokenProvider() {
         return new JwtTokenProvider();

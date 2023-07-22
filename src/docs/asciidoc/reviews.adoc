@@ -55,3 +55,29 @@ include::{snippets}/review/delete/path-parameters.adoc[]
 include::{snippets}/review/delete/response-body.adoc[]
 ==== response body description
 include::{snippets}/review/delete/response-fields.adoc[]
+
+== 리뷰 좋아요(해당 리뷰에 처음으로 좋아요 요청)
+=== HTTP request
+include::{snippets}/review/like/first/http-request.adoc[]
+==== request header
+include::{snippets}/review/like/first/request-headers.adoc[]
+==== path parameter
+include::{snippets}/review/like/first/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/review/like/first/response-body.adoc[]
+==== response body description
+include::{snippets}/review/like/first/response-fields.adoc[]
+
+== 리뷰 좋아요(해당 리뷰에 이미 좋아요 요청을 성공한 이력이 있을 경우)
+=== HTTP request
+include::{snippets}/review/like/not_first/http-request.adoc[]
+==== request header
+include::{snippets}/review/like/not_first/request-headers.adoc[]
+==== path parameter
+include::{snippets}/review/like/not_first/path-parameters.adoc[]
+
+=== HTTP response
+include::{snippets}/review/like/not_first/response-body.adoc[]
+==== response body description
+include::{snippets}/review/like/not_first/response-fields.adoc[]
