@@ -39,8 +39,6 @@ class ReviewControllerTest extends ReviewCommon {
     JwtTokenProvider jwtTokenProvider;
     @Autowired
     ReviewService reviewService;
-    @Autowired
-    ObjectMapper objectMapper;
 
     String studyProductId = "study-product-identifier";
 

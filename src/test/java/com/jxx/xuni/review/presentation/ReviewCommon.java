@@ -6,7 +6,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(ReviewController.class)
+@WebMvcTest({ReviewController.class, ReviewLikeController.class})
 @AutoConfigureRestDocs
 public class ReviewCommon {
     @Autowired
