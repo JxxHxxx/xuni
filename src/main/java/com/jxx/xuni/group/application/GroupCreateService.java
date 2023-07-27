@@ -12,7 +12,7 @@ public class GroupCreateService {
     private final GroupRepository groupRepository;
     private final SimpleHostCreator hostCreator;
 
-    public void create(Long memberId, GroupCreateForm form) {
+    public Long create(Long memberId, GroupCreateForm form) {
         Host host = hostCreator.createHost(memberId);
         Group group = Group.builder()
                 .name(form.name())
@@ -24,6 +24,7 @@ public class GroupCreateService {
                 .build();
 
         group.verifyCreateRule();
-        groupRepository.save(group);
+        Group savedGroup = groupRepository.save(group);
+        return savedGroup.getId();
     }
 }

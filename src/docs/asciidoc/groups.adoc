@@ -9,7 +9,15 @@
 == 그룹 생성
 === HTTP request
 include::{snippets}/group/create/http-request.adoc[]
+=== HTTP request headers
+include::{snippets}/group/create/request-headers.adoc[]
+=== HTTP request body
+include::{snippets}/group/create/request-body.adoc[]
 
+=== HTTP response
+include::{snippets}/group/create/http-response.adoc[]
+=== HTTP response headers
+include::{snippets}/group/create/response-headers.adoc[]
 === HTTP response body
 include::{snippets}/group/create/response-body.adoc[]
 
