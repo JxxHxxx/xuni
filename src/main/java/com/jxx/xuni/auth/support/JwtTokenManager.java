@@ -2,12 +2,10 @@ package com.jxx.xuni.auth.support;
 
 import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
+import com.jxx.xuni.auth.domain.exception.ExpiredTokenException;
 import com.jxx.xuni.common.support.ServiceOnly;
 import com.jxx.xuni.auth.domain.Authority;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -69,8 +67,15 @@ public class JwtTokenManager {
 
     private boolean isInvalidToken(String token) {
         try {
-            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
-            return isExpired(claims);
+            Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token);
+
+            return false;
+        } catch (ExpiredJwtException e) {
+            log.info(e.getMessage());
+            throw new ExpiredTokenException("만료된 토큰입니다.");
         } catch (JwtException e) {
             return true;
         }

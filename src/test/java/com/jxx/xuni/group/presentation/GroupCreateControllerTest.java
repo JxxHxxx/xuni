@@ -1,11 +1,13 @@
 package com.jxx.xuni.group.presentation;
 
+import com.jxx.xuni.ApiDocumentUtils;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.group.dto.request.GroupCreateForm;
 import com.jxx.xuni.group.dto.response.GroupApiMessage;
 import com.jxx.xuni.auth.domain.LoginInfo;
 import com.jxx.xuni.auth.domain.Member;
+import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -13,15 +15,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.headers.HeaderDocumentation;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import static com.jxx.xuni.ApiDocumentUtils.*;
 import static com.jxx.xuni.common.domain.Category.JAVA;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -61,7 +67,17 @@ public class GroupCreateControllerTest extends GroupCommon {
         //then
         result.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value(GroupApiMessage.GROUP_CREATED))
-                    .andDo(MockMvcRestDocumentation.document("group/create",
+                .andDo(MockMvcRestDocumentation.document("group/create",
+                        getDocumentRequest(), getDocumentResponse(),
+
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")
+                        ),
+
+                        responseHeaders(
+                                headerWithName(HttpHeaders.LOCATION).description("리소스 생성 위치")
+                        ),
+
                         requestFields(
                                 fieldWithPath("name").type(JsonFieldType.STRING).description("그룹 이름"),
                                 fieldWithPath("subject").type(JsonFieldType.STRING).description("스터디 주제"),
