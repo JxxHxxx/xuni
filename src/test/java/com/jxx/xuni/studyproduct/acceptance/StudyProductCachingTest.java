@@ -104,7 +104,7 @@ class StudyProductCachingTest {
         List<StudyProductReadResponse> response = studyProductReadService.readMany(PageRequest.of(0, 10));
         //then
         List<StudyProductReadResponse> cachedResponse = cacheManager.getCache("study-products")
-                .get("readMany", List.class);
+                .get("0_10", List.class);
 
         assertThat(response).isEqualTo(cachedResponse);
     }
