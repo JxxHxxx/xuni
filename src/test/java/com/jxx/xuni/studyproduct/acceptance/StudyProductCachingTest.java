@@ -124,4 +124,23 @@ class StudyProductCachingTest {
         List<StudyProductReadResponse> studyProductsCache = cacheManager.getCache("study-products").get("readMany", List.class);
         assertThat(studyProductsCache).isNull();
     }
+
+    @DisplayName("다건 조회의 경우 캐시 key 값은 '{page}_{size}' 로 결정 된다. " +
+            "따라서 page 혹은 size 가 다르다면 캐시 내용도 다르다.")
+    @Test
+    void cache_miss_diff_key() {
+        //when : readContent 호출 시 @Cacheable 로 인해 캐시 값 저장
+        List<StudyProductReadResponse> response1 = studyProductReadService.readMany(PageRequest.of(0, 1));
+        List<StudyProductReadResponse> response2 = studyProductReadService.readMany(PageRequest.of(0, 2));
+        //then
+        List<StudyProductReadResponse> cachedResponse1 = cacheManager.getCache("study-products")
+                .get("0_1", List.class);
+
+        List<StudyProductReadResponse> cachedResponse2 = cacheManager.getCache("study-products")
+                .get("0_2", List.class);
+
+        assertThat(cachedResponse1).isEqualTo(response1);
+        assertThat(cachedResponse2).isEqualTo(response2);
+        assertThat(cachedResponse1).isNotEqualTo(cachedResponse2);
+    }
 }

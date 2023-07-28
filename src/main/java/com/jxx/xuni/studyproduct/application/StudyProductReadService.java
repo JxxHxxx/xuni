@@ -28,7 +28,8 @@ public class StudyProductReadService {
     private final StudyProductReadRepository studyProductReadRepository;
     private final PagingModifier pagingModifier;
 
-    @Cacheable(cacheNames = "study-products", key = "#root.methodName", cacheManager = "localCacheManager")
+    //TODO : 캐시 Key 설계 잘 못 했음
+    @Cacheable(cacheNames = "study-products", key = "#pageable.pageNumber + '_' + #pageable.pageSize", cacheManager = "localCacheManager")
     public List<StudyProductReadResponse> readMany(Pageable pageable) {
         Page<StudyProduct> studyProducts = studyProductReadRepository.readBy(pageable);
 
