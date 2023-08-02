@@ -20,6 +20,7 @@ public class ReviewLikeController {
 
     private final ReviewLikeService reviewLikeService;
 
+    // TODO : 리로스 위치를 URI 통해 식별할 수 없는 경우 CREATE (201) 상태 코드를 응답하는 것이 맞는지 판단
     @PostMapping("/reviews/{review-id}/like")
     public ResponseEntity<ReviewApiSimpleResult> execute(@AuthenticatedMember MemberDetails memberDetails,
                                                          @PathVariable("review-id") Long reviewId) {

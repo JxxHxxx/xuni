@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.jxx.xuni.review.dto.response.ReviewApiMessage.*;
+import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -27,12 +28,14 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/study-products/{study-product-id}/reviews")
-    public ResponseEntity<ReviewApiSimpleResult> createReview(@AuthenticatedMember MemberDetails memberDetails,
+    public ResponseEntity<ReviewApiSimpleResult> createReview(@RequestBody @Validated ReviewForm form,
                                                               @PathVariable("study-product-id") String studyProductId,
-                                                              @RequestBody @Validated ReviewForm form) {
+                                                              @AuthenticatedMember MemberDetails memberDetails) {
+        Long reviewId = reviewService.create(memberDetails, studyProductId, form);
 
-        reviewService.create(memberDetails, studyProductId, form);
-        return new ResponseEntity<>(ReviewApiSimpleResult.create(REVIEW_CREATE), CREATED);
+        return ResponseEntity.status(CREATED)
+                             .headers(httpHeaders -> httpHeaders.add(LOCATION, "/reviews/" + reviewId))
+                             .body(ReviewApiSimpleResult.create(REVIEW_CREATE));
     }
 
     @GetMapping("/study-products/{study-product-id}/reviews")
