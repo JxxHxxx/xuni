@@ -10,8 +10,6 @@ import com.jxx.xuni.studyproduct.dto.response.StudyProductApiSimpleResult;
 import com.jxx.xuni.studyproduct.dto.response.StudyProductCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +18,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_CREATED;
+import static org.springframework.http.HttpHeaders.*;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,7 +39,8 @@ public class StudyProductCreateController {
         String objectKey = amazonS3Handler.putS3Object(file);
         StudyProductCreateResponse response = studyProductCreateService.create(form, s3ImageOrigin + objectKey);
 
-        return new ResponseEntity(new StudyProductApiResult<>(201, STUDY_PRODUCT_CREATED, response), HttpStatus.CREATED);
+        return ResponseEntity.status(CREATED)
+                .body(new StudyProductApiResult(CREATED.value(), STUDY_PRODUCT_CREATED, response));
     }
 
     @Admin
@@ -48,6 +49,10 @@ public class StudyProductCreateController {
                                                                                  @RequestBody List<StudyProductContentForm> StudyProductDetailForms) {
 
         studyProductCreateService.putContent(studyProductId, StudyProductDetailForms);
-        return new ResponseEntity(StudyProductApiSimpleResult.createDetail(), HttpStatus.CREATED);
+
+        return ResponseEntity.status(CREATED)
+                .headers(httpHeaders -> httpHeaders.add(LOCATION, "/study-products/" + studyProductId))
+                .body(StudyProductApiSimpleResult.createDetail());
+
     }
 }

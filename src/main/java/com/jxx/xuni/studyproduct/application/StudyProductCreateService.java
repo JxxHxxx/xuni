@@ -2,7 +2,6 @@ package com.jxx.xuni.studyproduct.application;
 
 import com.jxx.xuni.common.event.trigger.StudyProductCreatedEvent;
 import com.jxx.xuni.studyproduct.domain.StudyProduct;
-import com.jxx.xuni.studyproduct.domain.Content;
 import com.jxx.xuni.studyproduct.domain.StudyProductRepository;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductContentForm;
 import com.jxx.xuni.studyproduct.dto.request.StudyProductForm;

@@ -12,7 +12,6 @@ import com.jxx.xuni.studyproduct.dto.response.StudyProductCreateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
@@ -20,8 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -33,14 +30,18 @@ import static com.jxx.xuni.common.exception.CommonExceptionMessage.ONLY_ADMIN;
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_CREATED;
 import static com.jxx.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_DETAIL_CREATED;
 import static org.mockito.ArgumentMatchers.*;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.LOCATION;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @Import(StudyProductControllerTestConfig.class)
-class StudyProductCreateControllerTest extends StudyProductCommon{
+class StudyProductCreateControllerTest extends StudyProductCommon {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
     @Autowired
@@ -51,7 +52,7 @@ class StudyProductCreateControllerTest extends StudyProductCommon{
 
     @BeforeEach
     void beforeEach() throws JsonProcessingException {
-        StudyProductForm studyProductForm = new StudyProductForm("JAVA의 정석",Category.JAVA, "남궁성");
+        StudyProductForm studyProductForm = new StudyProductForm("JAVA의 정석", Category.JAVA, "남궁성");
         byteForm = objectMapper.writeValueAsBytes(studyProductForm);
     }
 
@@ -75,12 +76,12 @@ class StudyProductCreateControllerTest extends StudyProductCommon{
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(STUDY_PRODUCT_CREATED))
 
                 .andDo(MockMvcRestDocumentation.document("studyproduct/create/self",
-                        PayloadDocumentation.requestPartFields("data",
+                        requestPartFields("data",
                                 fieldWithPath("name").type(JsonFieldType.STRING).description("상품 이름"),
                                 fieldWithPath("category").type(JsonFieldType.STRING).description("스터디 상품 카테고리"),
                                 fieldWithPath("creator").type(JsonFieldType.STRING).description("스터디 상품 저자")
                         ),
-                        PayloadDocumentation.responseFields(
+                        responseFields(
                                 fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
                                 fieldWithPath("response").type(JsonFieldType.OBJECT).description("응답 본문"),
@@ -122,7 +123,7 @@ class StudyProductCreateControllerTest extends StudyProductCommon{
         ResultActions result = mockMvc.perform(post("/study-products/{study-product-id}", studyProductId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(form))
-                .header("Authorization", AdminToken));
+                .header(AUTHORIZATION, AdminToken));
 
         //then
         result
@@ -131,15 +132,19 @@ class StudyProductCreateControllerTest extends StudyProductCommon{
 
                 .andDo(MockMvcRestDocumentation.document("studyproduct/create/detail",
                         getDocumentRequest(), getDocumentResponse(),
-
-                        RequestDocumentation.pathParameters(
-                                RequestDocumentation.parameterWithName("study-product-id").description("스터디 상품 식별자")
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("인증 코드")
                         ),
-
-                        PayloadDocumentation.requestFields(
+                        responseHeaders(
+                                headerWithName(LOCATION).description("리소스 생성 위치")
+                        ),
+                        pathParameters(
+                                parameterWithName("study-product-id").description("스터디 상품 식별자")
+                        ),
+                        requestFields(
                                 fieldWithPath("[]title").type(JsonFieldType.STRING).description("스터디 상품 상세 주제")
                         ),
-                        PayloadDocumentation.responseFields(
+                        responseFields(
                                 fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지")
                         )
