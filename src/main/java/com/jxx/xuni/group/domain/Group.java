@@ -73,6 +73,13 @@ public class Group {
     public void verifyCreateRule() {
         checkGroupState(GATHERING);
         checkCapacityRange();
+        period.verifyPeriod();
+        time.verifyTime();
+    }
+    // TODO : 아직 미작업
+    public void initialize() {
+        groupMembers.add(enrollHost(host, this));
+        capacity.subtractOneLeftCapacity();
     }
 
     protected void checkCapacityRange() {
