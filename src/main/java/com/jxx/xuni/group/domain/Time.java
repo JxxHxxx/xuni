@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
+import static com.jxx.xuni.group.domain.exception.GroupExceptionMessage.INCORRECT_TIME;
+
 @Getter
 @Embeddable
 @NoArgsConstructor
@@ -21,5 +23,11 @@ public class Time {
 
     public static Time of(LocalTime startTime, LocalTime endTime) {
         return new Time(startTime, endTime);
+    }
+
+    protected void verifyTime() {
+        if (startTime.isAfter(endTime)) {
+            throw new IllegalArgumentException(INCORRECT_TIME);
+        }
     }
 }

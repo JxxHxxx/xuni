@@ -1,10 +1,7 @@
 package com.jxx.xuni.group.domain;
 
 import com.jxx.xuni.common.exception.NotPermissionException;
-import com.jxx.xuni.group.domain.exception.CapacityOutOfBoundException;
-import com.jxx.xuni.group.domain.exception.GroupJoinException;
-import com.jxx.xuni.group.domain.exception.GroupStartException;
-import com.jxx.xuni.group.domain.exception.NotAppropriateGroupStatusException;
+import com.jxx.xuni.group.domain.exception.*;
 import com.jxx.xuni.group.dto.request.GroupTaskForm;
 import com.jxx.xuni.common.domain.Category;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +17,7 @@ import java.util.List;
 
 import static com.jxx.xuni.common.exception.CommonExceptionMessage.BAD_REQUEST;
 import static com.jxx.xuni.group.domain.GroupStatus.*;
+import static com.jxx.xuni.group.domain.exception.GroupExceptionMessage.*;
 import static com.jxx.xuni.group.dto.response.GroupApiMessage.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -461,5 +459,43 @@ class GroupTest {
         //then
         assertThat(myTasks).extracting("isDone").containsExactly(true, false, false);
         assertThat(anotherMemberTasks).extracting("isDone").containsExactly(false, false, false);
+    }
+
+    @DisplayName("그룹 생성 시, 기간(period)은 시작일이 종료일보다 앞서야 한다. " +
+            "그렇지 않을 경우 IllegalArgumentException 예외" +
+            "INCORRECT_PERIOD 메시지 발생")
+    @Test
+    void init_role_1_period() {
+        //given
+        Group group = Group.builder()
+                .period(Period.of(LocalDate.of(2023, 12, 24), LocalDate.of(2022, 12, 24)))
+                .host(new Host(1l, "xuni"))
+                .capacity(Capacity.of(5))
+                .build();
+
+        Period period = group.getPeriod();
+
+        assertThatCode(() -> period.verifyPeriod())
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(INCORRECT_PERIOD);
+    }
+
+    @DisplayName("그룹 생성 시, 시간(time)은 시작 시간이 종료 시간보다 앞서야 한다. " +
+            "그렇지 않을 경우 IllegalArgumentException 예외" +
+            "INCORRECT_TIME 메시지 발생")
+    @Test
+    void init_role_1_time() {
+        //given
+        Group group = Group.builder()
+                .time(Time.of(LocalTime.of(23, 0, 0), LocalTime.of(22, 0, 0)))
+                .host(new Host(1l, "xuni"))
+                .capacity(Capacity.of(5))
+                .build();
+
+        Time time = group.getTime();
+
+        assertThatCode(() -> time.verifyTime())
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(INCORRECT_TIME);
     }
 }
