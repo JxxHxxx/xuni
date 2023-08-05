@@ -6,13 +6,13 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class PageResponseBody<T, PAGE extends PageInfo> {
+public class PageResponse<T, PAGE extends PageInfo> {
     private final Integer status;
     private final String message;
     private final List<T> response;
     private final PAGE pageInfo;
 
-    public PageResponseBody(String message, List<T> response, PAGE pageInfo) {
+    public PageResponse(String message, List<T> response, PAGE pageInfo) {
         this.status = 200;
         this.message = message;
         this.response = response;
