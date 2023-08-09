@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+// TODO : 스터디 상품 등록 방식 변경 1. 관리자의 상품 등록 -> 마스터 채널로 슬랙 메시지 -> 마스터의 검수 -> 관리자 상품 등록
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
