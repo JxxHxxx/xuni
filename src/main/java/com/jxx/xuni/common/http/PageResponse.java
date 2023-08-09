@@ -1,4 +1,4 @@
-package com.jxx.xuni.studyproduct.dto.response;
+package com.jxx.xuni.common.http;
 
 import com.jxx.xuni.common.query.PageInfo;
 import lombok.Getter;
@@ -6,13 +6,13 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class StudyProductPageApiResult<T> {
+public class PageResponse<T, PAGE extends PageInfo> {
     private final Integer status;
     private final String message;
     private final List<T> response;
-    private final PageInfo pageInfo;
+    private final PAGE pageInfo;
 
-    public StudyProductPageApiResult(String message, List<T> response, PageInfo pageInfo) {
+    public PageResponse(String message, List<T> response, PAGE pageInfo) {
         this.status = 200;
         this.message = message;
         this.response = response;

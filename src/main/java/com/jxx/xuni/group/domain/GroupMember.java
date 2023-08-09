@@ -33,7 +33,7 @@ public class GroupMember {
         this.group = group;
     }
 
-    public static GroupMember enrollHost(Host host, Group group) {
+    protected static GroupMember enrollHost(Host host, Group group) {
         return new GroupMember(host.getHostId(), host.getHostName(), group);
     }
 

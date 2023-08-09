@@ -1,5 +1,7 @@
 package com.jxx.xuni.studyproduct.presentation;
 
+import com.jxx.xuni.common.http.DataResponse;
+import com.jxx.xuni.common.http.PageResponse;
 import com.jxx.xuni.common.query.PageInfo;
 import com.jxx.xuni.common.query.PageConverter;
 import com.jxx.xuni.studyproduct.application.StudyProductReadService;
@@ -25,36 +27,36 @@ public class StudyProductReadController {
     private final PageConverter pageConverter;
 
     @GetMapping("/study-products")
-    public ResponseEntity<StudyProductApiReadResult> readMany(@RequestParam(required = false, defaultValue = "0") int page,
-                                                              @RequestParam(required = false, defaultValue = "10") int size) {
+    public ResponseEntity<DataResponse> readMany(@RequestParam(required = false, defaultValue = "0") int page,
+                                                 @RequestParam(required = false, defaultValue = "10") int size) {
         List<StudyProductReadResponse> responses = studyProductReadService.readMany(PageRequest.of(page, size));
 
-        return ResponseEntity.ok(new StudyProductApiReadResult(STUDY_PRODUCT_READ, responses));
+        return ResponseEntity.ok(new DataResponse(200, STUDY_PRODUCT_READ, responses));
     }
 
     @GetMapping("/study-products/cond")
-    public ResponseEntity<StudyProductApiReadResult> readManyBy(@RequestParam(defaultValue = "JAVA") Category category) {
+    public ResponseEntity<DataResponse> readManyBy(@RequestParam(defaultValue = "JAVA") Category category) {
         List<StudyProductReadResponse> responses = studyProductReadService.readManyBy(category);
 
-        return ResponseEntity.ok(new StudyProductApiReadResult(category.name() + " " + STUDY_PRODUCT_READ, responses));
+        return ResponseEntity.ok(new DataResponse(200,category.name() + " " + STUDY_PRODUCT_READ, responses));
     }
 
     // TODO : 상품 Content 가 존재하지 않을 때 조회할 수 없는 현상
     @GetMapping("/study-products/{study-product-id}")
-    public ResponseEntity<StudyProductApiReadResult> readOne(@PathVariable("study-product-id") String studyProductId) {
+    public ResponseEntity<DataResponse> readOne(@PathVariable("study-product-id") String studyProductId) {
         StudyProductContentReadResponse response = studyProductReadService.readDetailBy(studyProductId);
 
-        return ResponseEntity.ok(new StudyProductApiReadResult(STUDY_PRODUCT_DETAIL_READ, response));
+        return ResponseEntity.ok(new DataResponse(200, STUDY_PRODUCT_DETAIL_READ, response));
     }
 
     @GetMapping("/study-products/search")
-    public ResponseEntity<StudyProductPageApiResult> search(@ModelAttribute StudyProductSearchCondition condition,
-                                                            @RequestParam(defaultValue = "0") int page,
-                                                            @RequestParam(defaultValue = "20") int size) {
+    public ResponseEntity<PageResponse> search(@ModelAttribute StudyProductSearchCondition condition,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "20") int size) {
 
         Page<StudyProductQueryResponse> pageResponse = studyProductReadService.searchStudyProduct(condition, page, size);
         List<StudyProductQueryResponse> contents = pageResponse.getContent();
         PageInfo pageInfo = pageConverter.toPageInfo(pageResponse);
-        return ResponseEntity.ok(new StudyProductPageApiResult(SEARCH_STUDY_PRODUCT_COND, contents, pageInfo));
+        return ResponseEntity.ok(new PageResponse(SEARCH_STUDY_PRODUCT_COND, contents, pageInfo));
     }
 }

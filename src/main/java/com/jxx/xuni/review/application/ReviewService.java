@@ -25,7 +25,7 @@ public class ReviewService {
     private final RatingHandler ratingHandler;
     private final ApplicationEventPublisher eventPublisher;
 
-    public void create(MemberDetails memberDetails, String studyProductId, ReviewForm form) {
+    public Long create(MemberDetails memberDetails, String studyProductId, ReviewForm form) {
         Review review = Review.builder()
                 .reviewer(Reviewer.of(memberDetails.getUserId(), memberDetails.getName(), Progress.rate(form.progress())))
                 .studyProductId(studyProductId)
@@ -36,6 +36,7 @@ public class ReviewService {
 
         ReviewCreatedEvent event = new ReviewCreatedEvent(studyProductId, saveReview.receiveRating());
         eventPublisher.publishEvent(event);
+        return saveReview.getId();
     }
 
     public List<ReviewOneResponse> read(String studyProductId) {

@@ -54,6 +54,7 @@ public class Group {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "group")
     private List<Task> tasks = new ArrayList<>();
 
+    // TODO : 생성자에서 add, subtractOne 과 같은 메서드를 포함시켜야 하는지 고민해야봐함
     @Builder
     public Group(String name, Period period, Time time, Capacity capacity, Study study, Host host) {
         this.groupStatus = GATHERING;
@@ -73,6 +74,13 @@ public class Group {
     public void verifyCreateRule() {
         checkGroupState(GATHERING);
         checkCapacityRange();
+        period.verifyPeriod();
+        time.verifyTime();
+    }
+    // TODO : 아직 미작업
+    public void initialize() {
+        groupMembers.add(enrollHost(host, this));
+        capacity.subtractOneLeftCapacity();
     }
 
     protected void checkCapacityRange() {

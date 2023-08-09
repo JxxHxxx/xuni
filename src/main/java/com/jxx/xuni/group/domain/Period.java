@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+import static com.jxx.xuni.group.domain.exception.GroupExceptionMessage.INCORRECT_PERIOD;
+
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,5 +23,11 @@ public class Period {
 
     public static Period of(LocalDate startDate, LocalDate endDate) {
         return new Period(startDate, endDate);
+    }
+
+    protected void verifyPeriod() {
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException(INCORRECT_PERIOD);
+        };
     }
 }

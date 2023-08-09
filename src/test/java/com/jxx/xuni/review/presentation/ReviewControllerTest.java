@@ -1,6 +1,5 @@
 package com.jxx.xuni.review.presentation;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jxx.xuni.auth.application.SimpleMemberDetails;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
 import com.jxx.xuni.review.application.ReviewService;
@@ -24,6 +23,7 @@ import static com.jxx.xuni.ApiDocumentUtils.getDocumentResponse;
 import static com.jxx.xuni.review.dto.response.ReviewApiMessage.*;
 import static java.nio.charset.StandardCharsets.*;
 import static org.mockito.ArgumentMatchers.*;
+import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -48,7 +48,7 @@ class ReviewControllerTest extends ReviewCommon {
         ReviewForm form = new ReviewForm(3, "ORM 기초를 쌓는데 정말 유익한 것 같아요", 50);
 
         ResultActions result = mockMvc.perform(post("/study-products/{study-product-id}/reviews", studyProductId)
-                .header("Authorization", jwtTokenProvider.issue(memberDetails))
+                .header(AUTHORIZATION, jwtTokenProvider.issue(memberDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(form)));
 
@@ -58,19 +58,19 @@ class ReviewControllerTest extends ReviewCommon {
 
                 .andDo(document("review/create",
                         requestHeaders(
-                                headerWithName("Authorization").description("인증 토큰")
+                                headerWithName(AUTHORIZATION).description("인증 토큰")
                         ),
-
+                        responseHeaders(
+                                headerWithName(LOCATION).description("리소스 생성 위치")
+                        ),
                         pathParameters(
                                 parameterWithName("study-product-id").description("스터디 상품 식별자")
                         ),
-
                         requestFields(
                                 fieldWithPath("rating").type(JsonFieldType.NUMBER).description("평점"),
                                 fieldWithPath("comment").type(JsonFieldType.STRING).description("한 줄 평"),
                                 fieldWithPath("progress").type(JsonFieldType.NUMBER).description("스터디 상품 진행률 [API 호출을 통해 불러온다]")
                         ),
-
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지")
@@ -112,11 +112,9 @@ class ReviewControllerTest extends ReviewCommon {
                 .andDo(
                         document("review/read",
                                 getDocumentRequest(), getDocumentResponse(),
-
                                 pathParameters(
                                         parameterWithName("study-product-id").description("스터디 상품 식별자")
                                 ),
-
                                 responseFields(
                                         fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태 코드"),
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
