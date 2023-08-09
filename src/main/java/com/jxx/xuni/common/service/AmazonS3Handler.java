@@ -31,7 +31,7 @@ public class AmazonS3Handler {
         String objectKey = createObjectKey(multipartFile);
 
         try {
-            PutObjectRequest putObjectRequest = createPutObjectRequest(multipartFile, "thumbnail/" + objectKey);
+            PutObjectRequest putObjectRequest = createPutObjectRequest(multipartFile, "image/" + objectKey);
 
             InputStream inputStream = multipartFile.getInputStream();
             PutObjectResponse response = s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, multipartFile.getSize()));
