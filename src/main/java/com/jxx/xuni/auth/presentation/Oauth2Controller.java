@@ -2,9 +2,9 @@ package com.jxx.xuni.auth.presentation;
 
 import com.jxx.xuni.auth.application.GoogleClient;
 import com.jxx.xuni.auth.application.MemberDetails;
-import com.jxx.xuni.auth.dto.response.AuthResult;
 import com.jxx.xuni.auth.dto.response.LoginResponse;
 import com.jxx.xuni.auth.support.JwtTokenProvider;
+import com.jxx.xuni.common.http.DataResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -27,9 +27,9 @@ public class Oauth2Controller {
     }
 
     @GetMapping("/login/oauth2/code/google")
-    public ResponseEntity<AuthResult> login(@RequestParam("code") String accessCode, HttpServletResponse response) {
+    public ResponseEntity<DataResponse> login(@RequestParam("code") String accessCode, HttpServletResponse response) {
         MemberDetails memberDetails = googleClient.login(accessCode);
         response.addHeader(AUTHORIZATION, jwtTokenProvider.issue(memberDetails));
-        return ResponseEntity.ok(new AuthResult<>(200, LOGIN, LoginResponse.from(memberDetails)));
+        return ResponseEntity.ok(new DataResponse(200, LOGIN, LoginResponse.from(memberDetails)));
     }
 }

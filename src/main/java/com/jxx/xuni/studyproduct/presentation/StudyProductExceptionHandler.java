@@ -1,7 +1,6 @@
 package com.jxx.xuni.studyproduct.presentation;
 
 import com.jxx.xuni.exception.ExceptionResponse;
-import com.jxx.xuni.studyproduct.dto.response.StudyProductExceptionMessage;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
