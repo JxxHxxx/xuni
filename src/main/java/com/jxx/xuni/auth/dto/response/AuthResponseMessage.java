@@ -11,4 +11,6 @@ public class AuthResponseMessage {
 
     public static final String SEND_AUTH_CODE = "인증 코드 전송이 완료되었습니다";
     public static final String AUTHENTICATE_CODE = "인증 코드 검증이 완료되었습니다";
+
+    public static final String READ_MEMBER_DETAILS = "유저 정보 조회 완료";
 }

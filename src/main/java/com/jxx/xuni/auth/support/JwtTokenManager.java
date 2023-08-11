@@ -23,6 +23,13 @@ public class JwtTokenManager {
     private static final String CLAIMS_MEMBER_DETAILS_KEY = "memberDetails";
     private static final String TOKEN_PREFIX = "Bearer ";
 
+    public MemberDetails getTokenInformation(String token) {
+        String pureToken = extractTokenFromBearer(token);
+        validateAccessToken(pureToken);
+
+        return getMemberDetails(pureToken);
+    }
+
     public void validateAccessToken(String token) {
         checkNull(token);
         checkTokenValidation(token);
