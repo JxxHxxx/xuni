@@ -1,5 +1,6 @@
 package com.jxx.xuni.auth.presentation;
 
+import com.jxx.xuni.auth.application.MemberDetails;
 import com.jxx.xuni.auth.support.JwtTokenManager;
 import com.jxx.xuni.common.exception.NotPermissionException;
 import com.jxx.xuni.auth.domain.Authority;
@@ -32,14 +33,9 @@ public class ActuatorFilter implements Filter {
     }
 
     private void checkAdminAuthority(HttpServletRequest request) {
-        String token = null;
-        try {
-            token = jwtTokenManager.extractTokenFromBearer(request.getHeader(AUTHORIZATION));
-        }
-        catch (NullPointerException e) {
-            throw new NullPointerException("토큰 없음");
-        }
-        if (!Authority.ADMIN.equals(jwtTokenManager.getMemberDetails(token).getAuthority())) {
+        MemberDetails memberDetails = jwtTokenManager.getMemberDetails(request.getHeader(AUTHORIZATION));
+
+        if (!Authority.ADMIN.equals(memberDetails.getAuthority())) {
             throw new NotPermissionException("접근 권한이 존재하지 않습니다.");
         }
 

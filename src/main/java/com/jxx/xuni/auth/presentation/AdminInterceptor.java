@@ -49,9 +49,8 @@ public class AdminInterceptor implements HandlerInterceptor {
 
     private MemberDetails getMemberDetails(HttpServletRequest request) {
         try {
-            String extractedToken = jwtTokenManager.extractTokenFromBearer(request.getHeader(AUTHORIZATION));
-            jwtTokenManager.validateAccessToken(extractedToken);
-            return jwtTokenManager.getMemberDetails(extractedToken);
+            return jwtTokenManager.getMemberDetails(request.getHeader(AUTHORIZATION));
+
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("Authorization 헤더 " + EMPTY_VALUE);
         }

@@ -24,7 +24,7 @@ public class ApiGatewayController {
 
         return ResponseEntity.status(200)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(new DataResponse(200, READ_MEMBER_DETAILS, jwtTokenManager.getTokenInformation(token)));
+                        .body(new DataResponse(200, READ_MEMBER_DETAILS, jwtTokenManager.getMemberDetails(token)));
 
     }
 }

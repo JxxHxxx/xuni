@@ -6,9 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
-import static com.jxx.xuni.auth.domain.AuthProvider.GOOGLE;
 import static com.jxx.xuni.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
 
 @Getter

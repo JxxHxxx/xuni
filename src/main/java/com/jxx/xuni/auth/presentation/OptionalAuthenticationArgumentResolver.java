@@ -32,8 +32,7 @@ public class OptionalAuthenticationArgumentResolver implements HandlerMethodArgu
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         try {
-            String token = request.getHeader(AUTHORIZATION);
-            return jwtTokenManager.getMemberDetails(token.substring(7));
+            return jwtTokenManager.getMemberDetails(request.getHeader(AUTHORIZATION));
         } catch (NullPointerException exception) {
             return SimpleMemberDetails.GUEST();
         } catch (StringIndexOutOfBoundsException exception) {
