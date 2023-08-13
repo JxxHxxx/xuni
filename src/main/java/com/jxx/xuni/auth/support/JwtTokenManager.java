@@ -23,22 +23,18 @@ public class JwtTokenManager {
     private static final String CLAIMS_MEMBER_DETAILS_KEY = "memberDetails";
     private static final String TOKEN_PREFIX = "Bearer ";
 
-    public MemberDetails getTokenInformation(String token) {
-        String pureToken = extractTokenFromBearer(token);
-        validateAccessToken(pureToken);
-
-        return getMemberDetails(pureToken);
-    }
-
-    public void validateAccessToken(String token) {
-        checkNull(token);
-        checkTokenValidation(token);
-    }
-
     public MemberDetails getMemberDetails(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
+        String pureToken = removeBearerFrom(token);
+        validate(pureToken);
+
+        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(pureToken).getBody();
         Object memberClaims = claims.get(CLAIMS_MEMBER_DETAILS_KEY);
         return claimsToMemberDetails(memberClaims);
+    }
+
+    public void validate(String token) {
+        checkNull(token);
+        checkTokenValidation(token);
     }
 
     /**
@@ -49,13 +45,13 @@ public class JwtTokenManager {
      * 작성일시 : 2023-07-07
      * 작성자 : jxxHxxx
      */
-    public String extractTokenFromBearer(String authorizationHeaderValue) {
-        checkPrefixOf(authorizationHeaderValue);
-        return authorizationHeaderValue.substring(7);
+    public String removeBearerFrom(String token) {
+        checkPrefixOf(token);
+        return token.substring(TOKEN_PREFIX.length());
     }
 
-    private void checkPrefixOf(String value) {
-        if(!value.startsWith(TOKEN_PREFIX)) {
+    private void checkPrefixOf(String token) {
+        if(!token.startsWith(TOKEN_PREFIX) || token.isBlank()) {
             throw new IllegalArgumentException("헤더 값의 형식이 올바르지 못합니다.");
         }
     }
