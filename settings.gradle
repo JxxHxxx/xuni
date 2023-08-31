@@ -1,1 +1,6 @@
 rootProject.name = 'xuni'
+
+include 'xuni-core'
+include 'xuni-api'
+include 'xuni-admin'
+include 'xuni-batch'

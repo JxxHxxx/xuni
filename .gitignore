@@ -40,3 +40,9 @@ src/main/resources/application.properties
 /src/main/resources/data.sql
 /src/main/resources/application-dev.properties
 /deploy.sh
+/xuni-admin/src/main/resources/application.properties
+/xuni-api/src/main/resources/application.properties
+/xuni-batch/src/main/resources/application.properties
+/xuni-core/src/main/resources/application.properties
+/xuni-core/src/test/resources/application.properties
+/xuni-core/src/main/resources/application-dev.properties
