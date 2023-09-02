@@ -1,15 +1,11 @@
 package com.xuni.api.review.presentation;
 
-import com.xuni.auth.support.JwtTokenManager;
-import com.xuni.auth.support.JwtTokenProvider;
-import com.xuni.review.application.ReviewLikeService;
-import com.xuni.review.application.ReviewService;
-import com.xuni.review.domain.ReviewLikeRepository;
-import com.xuni.review.domain.ReviewRepository;
+import com.xuni.api.review.application.ReviewLikeService;
+import com.xuni.api.review.application.ReviewService;
+import com.xuni.api.review.infra.ReviewLikeRepository;
+import com.xuni.api.review.infra.ReviewRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
 @TestConfiguration
 public class ReviewControllerTestConfig {
@@ -21,19 +17,5 @@ public class ReviewControllerTestConfig {
     ReviewLikeService reviewLikeService;
     @MockBean
     ReviewLikeRepository reviewLikeRepository;
-    @Bean
-    JwtTokenProvider jwtTokenProvider() {
-        return new JwtTokenProvider();
-    }
-    @Bean
-    JwtTokenManager jwtTokenManager() {
-        return new JwtTokenManager();
-    }
-    @Bean
-    CharacterEncodingFilter characterEncodingFilter() {
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("UTF-8");
-        characterEncodingFilter.setForceEncoding(true);
-        return characterEncodingFilter;
-    }
+
 }

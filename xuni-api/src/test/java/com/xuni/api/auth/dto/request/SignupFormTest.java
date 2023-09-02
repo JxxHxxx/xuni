@@ -1,7 +1,8 @@
 package com.xuni.api.auth.dto.request;
 
-import com.xuni.api.auth.application.AuthControllerTestConfig;
-import com.xuni.auth.presentation.AuthController;
+import com.xuni.api.auth.presentation.AuthController;
+import com.xuni.api.auth.presentation.AuthControllerTestConfig;
+import com.xuni.api.support.JwtTestConfiguration;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.assertj.core.api.Assertions;
@@ -10,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import java.util.ArrayList;
@@ -17,8 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-@WebMvcTest(AuthController.class)
-@Import(AuthControllerTestConfig.class)
+@SpringBootTest
+@Import({AuthControllerTestConfig.class, JwtTestConfiguration.class})
 class SignupFormTest {
 
     @Autowired

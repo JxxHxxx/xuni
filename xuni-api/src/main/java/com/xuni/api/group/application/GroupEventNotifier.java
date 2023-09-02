@@ -4,7 +4,7 @@ import com.xuni.common.event.trigger.GroupAccessedEvent;
 import com.xuni.common.event.connector.ReviewCreatedConnector;
 import com.xuni.common.exception.CommonExceptionMessage;
 import com.xuni.group.domain.Group;
-import com.xuni.group.query.GroupReadRepository;
+import com.xuni.api.group.query.GroupReadRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;

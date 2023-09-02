@@ -1,14 +1,16 @@
 package com.xuni.api.studyproduct.presentation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.xuni.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.support.JwtTokenProvider;
 import com.xuni.api.common.service.AmazonS3Handler;
-import com.xuni.group.domain.TestGroupServiceSupporter;
+import com.xuni.api.group.TestGroupServiceSupporter;
 import com.xuni.api.studyproduct.application.StudyProductCreateService;
+import com.xuni.api.support.ControllerCommon;
+import com.xuni.api.support.JwtTestConfiguration;
 import com.xuni.common.domain.Category;
-import com.xuni.studyproduct.dto.request.StudyProductContentForm;
-import com.xuni.studyproduct.dto.request.StudyProductForm;
-import com.xuni.studyproduct.dto.response.StudyProductCreateResponse;
+import com.xuni.api.studyproduct.dto.request.StudyProductContentForm;
+import com.xuni.api.studyproduct.dto.request.StudyProductForm;
+import com.xuni.api.studyproduct.dto.response.StudyProductCreateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,10 +27,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
-import static com.xuni.ApiDocumentUtils.*;
+import static com.xuni.api.ApiDocumentUtils.*;
+import static com.xuni.api.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_CREATED;
+import static com.xuni.api.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_DETAIL_CREATED;
 import static com.xuni.common.exception.CommonExceptionMessage.ONLY_ADMIN;
-import static com.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_CREATED;
-import static com.xuni.studyproduct.dto.response.StudyProductApiMessage.STUDY_PRODUCT_DETAIL_CREATED;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.LOCATION;
@@ -40,10 +42,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@Import(StudyProductControllerTestConfig.class)
-class StudyProductCreateControllerTest extends StudyProductCommon {
+@Import({StudyProductControllerTestConfig.class, JwtTestConfiguration.class})
+class StudyProductCreateControllerTest extends ControllerCommon {
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    JwtTokenProvider testJwtTokenProvider;
     @Autowired
     AmazonS3Handler amazonS3Handler;
     @Autowired
@@ -60,7 +62,7 @@ class StudyProductCreateControllerTest extends StudyProductCommon {
     @Test
     void create_study_product_docs() throws Exception {
         //given
-        String AdminToken = jwtTokenProvider.issue(TestGroupServiceSupporter.AdminMemberDetails(1l));
+        String AdminToken = testJwtTokenProvider.issue(TestGroupServiceSupporter.AdminMemberDetails(1l));
         MockMultipartFile data = new MockMultipartFile("data", "data", "application/json", byteForm);
 
         StudyProductCreateResponse response = new StudyProductCreateResponse("study-product-identifier");
@@ -97,7 +99,7 @@ class StudyProductCreateControllerTest extends StudyProductCommon {
     @Test
     void create_study_product_fail() throws Exception {
         //given
-        String userToken = jwtTokenProvider.issue(TestGroupServiceSupporter.UserMemberDetails(1l));
+        String userToken = testJwtTokenProvider.issue(TestGroupServiceSupporter.UserMemberDetails(1l));
 
         //when - then
         MockMultipartFile data = new MockMultipartFile("data", "data", "application/json", byteForm);
@@ -112,7 +114,7 @@ class StudyProductCreateControllerTest extends StudyProductCommon {
     @Test
     void reate_study_product_content_docs() throws Exception {
         //given
-        String AdminToken = jwtTokenProvider.issue(TestGroupServiceSupporter.AdminMemberDetails(1l));
+        String AdminToken = testJwtTokenProvider.issue(TestGroupServiceSupporter.AdminMemberDetails(1l));
         String studyProductId = "6f7e5d4a-4893-4efc-b8c4-fdda39cabd55";
         List<StudyProductContentForm> form = List.of(
                 new StudyProductContentForm("spring IOC"),

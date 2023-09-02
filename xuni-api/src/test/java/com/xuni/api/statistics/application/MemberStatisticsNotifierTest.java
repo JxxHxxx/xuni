@@ -1,17 +1,17 @@
 package com.xuni.api.statistics.application;
 
+import com.xuni.api.auth.infra.MemberRepository;
 import com.xuni.api.group.TestGroupServiceSupporter;
-import com.xuni.group.query.GroupReadRepository;
+import com.xuni.api.group.query.GroupReadRepository;
+import com.xuni.api.statistics.infra.MemberStatisticsRepository;
+import com.xuni.api.studyproduct.infra.StudyProductRepository;
 import com.xuni.auth.domain.LoginInfo;
 import com.xuni.auth.domain.Member;
-import com.xuni.auth.domain.MemberRepository;
 import com.xuni.common.domain.Category;
 import com.xuni.common.event.trigger.StatisticsAccessedEvent;
 import com.xuni.group.domain.Group;
 import com.xuni.statistics.domain.MemberStatistics;
-import com.xuni.statistics.domain.MemberStatisticsRepository;
 import com.xuni.studyproduct.domain.StudyProduct;
-import com.xuni.studyproduct.domain.StudyProductRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,12 +42,16 @@ class MemberStatisticsNotifierTest {
 
     @BeforeEach
     void beforeEach() {
+        // 초기화
+        memberRepository.deleteAll();
+        groupReadRepository.deleteAll();
+        memberStatisticsRepository.deleteAll();
         // member 생성
         Member member = new Member(LoginInfo.of("xuni@naver.com", "12341234"), "유니", XUNI);
         memberRepository.save(member);
 
         Member findMember = memberRepository.findByLoginInfoEmail("xuni@naver.com").get();
-        Long mid = findMember.getId();
+        Long memberId = findMember.getId();
 
         // study 상품 생성
         StudyProduct studyProduct = StudyProduct.builder()
@@ -60,19 +64,19 @@ class MemberStatisticsNotifierTest {
         String spid = product.getId();
 
         // 시작 그룹 생성
-        Group group = TestGroupServiceSupporter.startGroup(spid, mid);
+        Group group = TestGroupServiceSupporter.startGroup(spid, memberId);
         Group savedGroup = groupReadRepository.save(group);
         groupId = savedGroup.getId();
 
         studyProductId = spid;
-        memberId = mid;
+        this.memberId = memberId;
     }
 
     String studyProductId = null;
     Long memberId = null;
     Long groupId = null;
 
-    @DisplayName("MemberStatistics 가 존재하지 않을 경우 StatisticsUpdateEven t를 발생하면" +
+    @DisplayName("MemberStatistics 가 존재하지 않을 경우 StatisticsUpdateEvent를 발생하면" +
             "사용자의 MemberStatistics 이 생성되고 progress 가 업데이트 된다.")
     @Test
     void handle_statistics_update_event() {

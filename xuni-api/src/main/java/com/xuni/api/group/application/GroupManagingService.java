@@ -1,9 +1,9 @@
 package com.xuni.api.group.application;
 
 import com.xuni.api.auth.application.MemberDetails;
+import com.xuni.api.group.infra.GroupRepository;
 import com.xuni.group.domain.Group;
 import com.xuni.group.domain.GroupMember;
-import com.xuni.group.domain.GroupRepository;
 import com.xuni.group.domain.GroupTaskForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

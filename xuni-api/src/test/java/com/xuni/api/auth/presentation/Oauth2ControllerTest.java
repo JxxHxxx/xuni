@@ -1,8 +1,9 @@
 package com.xuni.api.auth.presentation;
 
 
-import com.xuni.api.auth.application.AuthControllerTestConfig;
-import com.xuni.auth.application.GoogleClient;
+import com.xuni.api.auth.application.GoogleClient;
+import com.xuni.api.support.ControllerCommon;
+import com.xuni.api.support.JwtTestConfiguration;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 
-@Import(AuthControllerTestConfig.class)
-class Oauth2ControllerTest extends AuthCommon {
+@Import({AuthControllerTestConfig.class, JwtTestConfiguration.class})
+class Oauth2ControllerTest extends ControllerCommon {
 
     @Autowired
     GoogleClient googleClient;

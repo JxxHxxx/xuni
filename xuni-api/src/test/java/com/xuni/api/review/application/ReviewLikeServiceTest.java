@@ -1,12 +1,17 @@
 package com.xuni.api.review.application;
 
+import com.xuni.api.review.infra.ReviewLikeRepository;
+import com.xuni.api.review.infra.ReviewRepository;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
+import com.xuni.review.domain.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ServiceTest
 class ReviewLikeServiceTest extends ServiceCommon {

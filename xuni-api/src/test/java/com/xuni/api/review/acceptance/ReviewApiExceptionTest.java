@@ -1,16 +1,16 @@
 package com.xuni.api.review.acceptance;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xuni.auth.application.SimpleMemberDetails;
+import com.xuni.api.auth.application.SimpleMemberDetails;
+import com.xuni.api.auth.infra.MemberRepository;
+import com.xuni.api.studyproduct.infra.StudyProductRepository;
 import com.xuni.auth.domain.AuthProvider;
 import com.xuni.auth.domain.LoginInfo;
 import com.xuni.auth.domain.Member;
-import com.xuni.auth.domain.MemberRepository;
-import com.xuni.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.support.JwtTokenProvider;
 import com.xuni.common.domain.Category;
-import com.xuni.review.dto.request.ReviewForm;
+import com.xuni.api.review.dto.request.ReviewForm;
 import com.xuni.studyproduct.domain.StudyProduct;
-import com.xuni.studyproduct.domain.StudyProductRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

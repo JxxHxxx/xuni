@@ -1,7 +1,7 @@
 package com.xuni.api.group.dto.response;
 
 import com.xuni.common.query.PageInfo;
-import com.xuni.group.query.GroupAllQueryResponse;
+import com.xuni.api.group.query.GroupAllQueryResponse;
 import lombok.Getter;
 
 import java.util.List;

@@ -1,14 +1,14 @@
 package com.xuni.api.group.acceptance;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xuni.auth.application.SimpleMemberDetails;
+import com.xuni.api.auth.application.SimpleMemberDetails;
+import com.xuni.api.auth.infra.MemberRepository;
 import com.xuni.auth.domain.AuthProvider;
 import com.xuni.auth.domain.LoginInfo;
 import com.xuni.auth.domain.Member;
-import com.xuni.auth.domain.MemberRepository;
-import com.xuni.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.support.JwtTokenProvider;
 import com.xuni.common.domain.Category;
-import com.xuni.group.dto.request.GroupCreateForm;
+import com.xuni.api.group.dto.request.GroupCreateForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,7 @@ public class GroupApiExceptionTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    JwtTokenProvider testJwtTokenProvider;
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
@@ -72,7 +72,7 @@ public class GroupApiExceptionTest {
                 Category.JAVA);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/groups")
-                        .header("Authorization", jwtTokenProvider.issue(new SimpleMemberDetails(memberId, "xuni@xuni.com", "유니")))
+                        .header("Authorization", testJwtTokenProvider.issue(new SimpleMemberDetails(memberId, "xuni@xuni.com", "유니")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(form)))
                 .andExpect(status().isBadRequest())

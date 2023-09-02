@@ -1,9 +1,12 @@
 package com.xuni.api.group.presentation;
 
-import com.xuni.auth.application.SimpleMemberDetails;
-import com.xuni.auth.support.JwtTokenProvider;
-import com.xuni.group.dto.request.GroupCreateForm;
-import com.xuni.group.dto.response.GroupApiMessage;
+import com.xuni.api.ApiDocumentUtils;
+import com.xuni.api.auth.application.SimpleMemberDetails;
+import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.group.dto.request.GroupCreateForm;
+import com.xuni.api.group.dto.response.GroupApiMessage;
+import com.xuni.api.support.ControllerCommon;
+import com.xuni.api.support.JwtTestConfiguration;
 import com.xuni.auth.domain.LoginInfo;
 import com.xuni.auth.domain.Member;
 import org.apache.http.HttpHeaders;
@@ -22,7 +25,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static com.xuni.ApiDocumentUtils.*;
+
 import static com.xuni.common.domain.Category.JAVA;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -30,10 +33,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(GroupControllerTestConfig.class)
-public class GroupCreateControllerTest extends GroupCommon {
+@Import({GroupControllerTestConfig.class, JwtTestConfiguration.class})
+public class GroupCreateControllerTest extends ControllerCommon {
+
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    JwtTokenProvider testJwtTokenProvider;
 
     Long memberId = null;
     String authToken;
@@ -47,7 +51,7 @@ public class GroupCreateControllerTest extends GroupCommon {
                 .build();
 
         memberId = member.getId();
-        authToken = jwtTokenProvider.issue(new SimpleMemberDetails(memberId, member.receiveEmail(), member.getName()));
+        authToken = testJwtTokenProvider.issue(new SimpleMemberDetails(memberId, member.receiveEmail(), member.getName()));
 
     }
 

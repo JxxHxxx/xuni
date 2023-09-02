@@ -1,12 +1,15 @@
 package com.xuni.api.review.presentation;
 
-import com.xuni.auth.application.SimpleMemberDetails;
-import com.xuni.auth.support.JwtTokenProvider;
-import com.xuni.review.application.ReviewService;
+import com.xuni.api.ApiDocumentUtils;
+import com.xuni.api.auth.application.SimpleMemberDetails;
+import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.review.application.ReviewService;
+import com.xuni.api.support.ControllerCommon;
+import com.xuni.api.support.JwtTestConfiguration;
 import com.xuni.review.domain.Progress;
-import com.xuni.review.dto.request.ReviewForm;
-import com.xuni.review.dto.request.ReviewUpdateForm;
-import com.xuni.review.dto.response.ReviewOneResponse;
+import com.xuni.api.review.dto.request.ReviewForm;
+import com.xuni.api.review.dto.request.ReviewUpdateForm;
+import com.xuni.api.review.dto.response.ReviewOneResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.xuni.ApiDocumentUtils.getDocumentRequest;
-import static com.xuni.ApiDocumentUtils.getDocumentResponse;
+import static com.xuni.api.review.dto.response.ReviewApiMessage.*;
 import static java.nio.charset.StandardCharsets.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.http.HttpHeaders.*;
@@ -31,11 +33,11 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import(ReviewControllerTestConfig.class)
-class ReviewControllerTest extends ReviewCommon {
+@Import({ReviewControllerTestConfig.class, JwtTestConfiguration.class})
+class ReviewControllerTest extends ControllerCommon {
 
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    JwtTokenProvider testJwtTokenProvider;
     @Autowired
     ReviewService reviewService;
 
@@ -47,7 +49,7 @@ class ReviewControllerTest extends ReviewCommon {
         ReviewForm form = new ReviewForm(3, "ORM 기초를 쌓는데 정말 유익한 것 같아요", 50);
 
         ResultActions result = mockMvc.perform(post("/study-products/{study-product-id}/reviews", studyProductId)
-                .header(AUTHORIZATION, jwtTokenProvider.issue(memberDetails))
+                .header(AUTHORIZATION, testJwtTokenProvider.issue(memberDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(form)));
 
@@ -142,7 +144,7 @@ class ReviewControllerTest extends ReviewCommon {
         ResultActions result = mockMvc.perform(patch("/reviews/{review-id}", 1l)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(UTF_8)
-                .header("Authorization", jwtTokenProvider.issue(memberDetails))
+                .header("Authorization", testJwtTokenProvider.issue(memberDetails))
                 .content(objectMapper.writeValueAsString(updateForm))
         );
 
@@ -179,7 +181,7 @@ class ReviewControllerTest extends ReviewCommon {
         ResultActions result = mockMvc.perform(delete("/reviews/{review-id}", 1l)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(UTF_8)
-                .header("Authorization", jwtTokenProvider.issue(memberDetails))
+                .header("Authorization", testJwtTokenProvider.issue(memberDetails))
         );
 
         result

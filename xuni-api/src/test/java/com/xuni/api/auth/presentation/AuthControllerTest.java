@@ -1,14 +1,15 @@
 package com.xuni.api.auth.presentation;
 
-import com.xuni.api.auth.application.AuthControllerTestConfig;
-import com.xuni.auth.application.AuthService;
-import com.xuni.auth.application.SimpleMemberDetails;
-import com.xuni.auth.dto.request.AuthCodeForm;
-import com.xuni.auth.dto.request.EmailForm;
-import com.xuni.auth.dto.request.LoginForm;
-import com.xuni.auth.dto.request.SignupForm;
-import com.xuni.auth.dto.response.CreateAuthCodeEvent;
-import com.xuni.auth.dto.response.VerifyAuthCodeEvent;
+import com.xuni.api.auth.application.AuthService;
+import com.xuni.api.auth.application.SimpleMemberDetails;
+import com.xuni.api.auth.dto.request.AuthCodeForm;
+import com.xuni.api.auth.dto.request.EmailForm;
+import com.xuni.api.auth.dto.request.LoginForm;
+import com.xuni.api.auth.dto.request.SignupForm;
+import com.xuni.api.auth.dto.response.CreateAuthCodeEvent;
+import com.xuni.api.auth.dto.response.VerifyAuthCodeEvent;
+import com.xuni.api.support.ControllerCommon;
+import com.xuni.api.support.JwtTestConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -21,14 +22,15 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.xuni.api.auth.dto.response.AuthResponseMessage.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import(AuthControllerTestConfig.class)
-class AuthControllerTest extends AuthCommon{
+@Import({AuthControllerTestConfig.class, JwtTestConfiguration.class})
+class AuthControllerTest extends ControllerCommon {
 
     @Autowired
     AuthService authService;

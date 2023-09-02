@@ -2,7 +2,7 @@ package com.xuni.api.statistics.application;
 
 import com.xuni.api.statistics.dto.response.StudyProductStatisticsReadResponse;
 import com.xuni.statistics.domain.StudyProductStatistics;
-import com.xuni.statistics.domain.StudyProductStatisticsRepository;
+import com.xuni.api.statistics.infra.StudyProductStatisticsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

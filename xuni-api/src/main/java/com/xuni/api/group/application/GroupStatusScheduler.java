@@ -15,14 +15,14 @@ import org.springframework.stereotype.Component;
 public class GroupStatusScheduler {
 
     private final GroupStatusHandler groupStatusHandler;
-
-//    @Scheduled(cron = "0 0 0 * * *")
-    public void doChangeToStart() {
-        groupStatusHandler.changeToStart();
-    }
-
-//    @Scheduled(cron = "5 0 0 * * *")
-    public void doChangeToEnd() {
-        groupStatusHandler.changeToEnd();
-    }
+//
+////    @Scheduled(cron = "0 0 0 * * *")
+//    public void doChangeToStart() {
+//        groupStatusHandler.changeToStart();
+//    }
+//
+////    @Scheduled(cron = "5 0 0 * * *")
+//    public void doChangeToEnd() {
+//        groupStatusHandler.changeToEnd();
+//    }
 }

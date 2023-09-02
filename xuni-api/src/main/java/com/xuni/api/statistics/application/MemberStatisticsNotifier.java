@@ -1,10 +1,10 @@
 package com.xuni.api.statistics.application;
 
+import com.xuni.api.statistics.infra.MemberStatisticsRepository;
 import com.xuni.common.event.connector.ReviewCreatedConnector;
 import com.xuni.common.event.trigger.GroupAccessedEvent;
 import com.xuni.common.event.trigger.StatisticsAccessedEvent;
 import com.xuni.statistics.domain.MemberStatistics;
-import com.xuni.statistics.domain.MemberStatisticsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;

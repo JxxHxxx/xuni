@@ -1,11 +1,14 @@
 package com.xuni.api.group.presentation;
 
-import com.xuni.auth.application.SimpleMemberDetails;
-import com.xuni.auth.support.JwtTokenProvider;
-import com.xuni.group.domain.TestGroupServiceSupporter;
-import com.xuni.group.dto.request.GroupTaskForm;
+import com.xuni.api.ApiDocumentUtils;
+import com.xuni.api.auth.application.SimpleMemberDetails;
+import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.group.TestGroupServiceSupporter;
+import com.xuni.api.support.ControllerCommon;
+import com.xuni.api.support.JwtTestConfiguration;
 import com.xuni.auth.domain.LoginInfo;
 import com.xuni.auth.domain.Member;
+import com.xuni.group.domain.GroupTaskForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,20 +22,19 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static com.xuni.ApiDocumentUtils.getDocumentRequest;
-import static com.xuni.ApiDocumentUtils.getDocumentResponse;
+import static com.xuni.api.group.dto.response.GroupApiMessage.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(GroupControllerTestConfig.class)
-class GroupManagingControllerTest extends GroupCommon {
+@Import({GroupControllerTestConfig.class, JwtTestConfiguration.class})
+class GroupManagingControllerTest extends ControllerCommon {
+    
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    JwtTokenProvider testJwtTokenProvider;
 
     Long memberId = null;
     //given
@@ -47,7 +49,7 @@ class GroupManagingControllerTest extends GroupCommon {
                 .build();
 
         memberId = member.getId();
-        authToken = jwtTokenProvider.issue(new SimpleMemberDetails(memberId, member.receiveEmail(), member.getName()));
+        authToken = testJwtTokenProvider.issue(new SimpleMemberDetails(memberId, member.receiveEmail(), member.getName()));
 
     }
 

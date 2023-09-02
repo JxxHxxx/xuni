@@ -1,15 +1,15 @@
 package com.xuni.api.group.acceptance;
 
-import com.xuni.auth.application.MemberDetails;
-import com.xuni.auth.application.SimpleMemberDetails;
-import com.xuni.group.application.GroupJoinFacade;
-import com.xuni.group.application.GroupManagingService;
+import com.xuni.api.auth.application.MemberDetails;
+import com.xuni.api.auth.application.SimpleMemberDetails;
+import com.xuni.api.auth.infra.MemberRepository;
+import com.xuni.api.group.TestGroupServiceSupporter;
+import com.xuni.api.group.application.GroupJoinFacade;
+import com.xuni.api.group.application.GroupManagingService;
+import com.xuni.api.group.infra.GroupRepository;
 import com.xuni.group.domain.Group;
-import com.xuni.group.domain.GroupRepository;
-import com.xuni.group.domain.TestGroupServiceSupporter;
 import com.xuni.auth.domain.LoginInfo;
 import com.xuni.auth.domain.Member;
-import com.xuni.auth.domain.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

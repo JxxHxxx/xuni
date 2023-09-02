@@ -1,13 +1,15 @@
 package com.xuni.api.studyproduct.presentation;
 
+import com.xuni.api.studyproduct.query.StudyProductQueryResponse;
+import com.xuni.api.support.ControllerCommon;
+import com.xuni.api.support.JwtTestConfiguration;
 import com.xuni.common.query.PageConverter;
 import com.xuni.common.query.PageInfo;
 import com.xuni.api.studyproduct.application.StudyProductReadService;
 import com.xuni.common.domain.Category;
 import com.xuni.studyproduct.domain.Content;
-import com.xuni.studyproduct.dto.response.StudyProductContentReadResponse;
-import com.xuni.studyproduct.dto.response.StudyProductQueryResponse;
-import com.xuni.studyproduct.dto.response.StudyProductReadResponse;
+import com.xuni.api.studyproduct.dto.response.StudyProductContentReadResponse;
+import com.xuni.api.studyproduct.dto.response.StudyProductReadResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -26,8 +28,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 import java.util.UUID;
 
-import static com.xuni.ApiDocumentUtils.getDocumentRequest;
-import static com.xuni.ApiDocumentUtils.getDocumentResponse;
+import static com.xuni.api.ApiDocumentUtils.getDocumentRequest;
+import static com.xuni.api.ApiDocumentUtils.getDocumentResponse;
+import static com.xuni.api.studyproduct.dto.response.StudyProductApiMessage.*;
 import static com.xuni.common.domain.Category.NETWORK;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -39,8 +42,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import(StudyProductControllerTestConfig.class)
-public class StudyProductReadControllerTest extends StudyProductCommon{
+@Import({StudyProductControllerTestConfig.class, JwtTestConfiguration.class})
+public class StudyProductReadControllerTest extends ControllerCommon {
 
     @Autowired
     StudyProductReadService studyProductReadService;
