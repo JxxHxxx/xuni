@@ -9,6 +9,7 @@
 
 == 인증 코드 생성
 === HTTP request
+
 include::{snippets}/auth/create-code/http-request.adoc[]
 
 === HTTP response

@@ -1,10 +1,10 @@
-package com.xuni.group.query;
+package com.xuni.api.group.query;
 
+import com.xuni.api.group.TestGroupServiceSupporter;
+import com.xuni.api.group.infra.GroupRepository;
+import com.xuni.api.group.query.dynamic.GroupSearchCondition;
 import com.xuni.group.domain.Group;
-import com.xuni.group.domain.GroupRepository;
 import com.xuni.group.domain.Study;
-import com.xuni.group.domain.TestGroupServiceSupporter;
-import com.xuni.group.query.dynamic.GroupSearchCondition;
 import com.xuni.common.domain.Category;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;

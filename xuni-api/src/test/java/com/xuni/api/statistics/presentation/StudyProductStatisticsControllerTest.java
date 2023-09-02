@@ -27,8 +27,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import({StudyProductControllerTestConfig.class, JwtTestConfiguration.class})
+@Import({StatisticsControllerTestConfig.class, JwtTestConfiguration.class})
 class StudyProductStatisticsControllerTest extends ControllerCommon  {
+
     @Autowired
     JwtTokenProvider testJwtTokenProvider;
     @Autowired

@@ -43,6 +43,7 @@ class MemberStatisticsNotifierTest {
     @BeforeEach
     void beforeEach() {
         // 초기화
+        memberRepository.deleteAll();
         groupReadRepository.deleteAll();
         memberStatisticsRepository.deleteAll();
         // member 생성
@@ -50,7 +51,7 @@ class MemberStatisticsNotifierTest {
         memberRepository.save(member);
 
         Member findMember = memberRepository.findByLoginInfoEmail("xuni@naver.com").get();
-        Long mid = findMember.getId();
+        Long memberId = findMember.getId();
 
         // study 상품 생성
         StudyProduct studyProduct = StudyProduct.builder()
@@ -63,19 +64,19 @@ class MemberStatisticsNotifierTest {
         String spid = product.getId();
 
         // 시작 그룹 생성
-        Group group = TestGroupServiceSupporter.startGroup(spid, mid);
+        Group group = TestGroupServiceSupporter.startGroup(spid, memberId);
         Group savedGroup = groupReadRepository.save(group);
         groupId = savedGroup.getId();
 
         studyProductId = spid;
-        memberId = mid;
+        this.memberId = memberId;
     }
 
     String studyProductId = null;
     Long memberId = null;
     Long groupId = null;
 
-    @DisplayName("MemberStatistics 가 존재하지 않을 경우 StatisticsUpdateEven t를 발생하면" +
+    @DisplayName("MemberStatistics 가 존재하지 않을 경우 StatisticsUpdateEvent를 발생하면" +
             "사용자의 MemberStatistics 이 생성되고 progress 가 업데이트 된다.")
     @Test
     void handle_statistics_update_event() {

@@ -1,16 +1,17 @@
-package com.xuni.group.domain;
+package com.xuni.api.group.infra;
 
+import com.xuni.api.auth.infra.MemberRepository;
+import com.xuni.api.group.TestGroupServiceSupporter;
 import com.xuni.auth.domain.LoginInfo;
 import com.xuni.auth.domain.Member;
-import com.xuni.auth.domain.MemberRepository;
 import com.xuni.common.domain.Category;
+import com.xuni.group.domain.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
