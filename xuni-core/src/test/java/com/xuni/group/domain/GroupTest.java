@@ -359,7 +359,7 @@ class GroupTest {
         //given - 그룹 시작 상태로 변경
         Group group = makeTestGroup(5);
         group.closeRecruitment(1l);
-        group.start(1l, TestGroupServiceSupporter.studyCheckForms);
+        group.start(1l, TestGroupFactory.studyCheckForms);
         //when
         group.doTask(2l, 1l);
 
@@ -378,7 +378,7 @@ class GroupTest {
         //given - 그룹 시작 상태로 변경
         Group group = makeTestGroup(5);
         group.changeGroupStatusTo(status);
-        group.initializeGroupTask(TestGroupServiceSupporter.studyCheckForms);
+        group.initializeGroupTask(TestGroupFactory.studyCheckForms);
 
         //when - then
         assertThatThrownBy(() -> group.doTask(2l, 1l))
@@ -393,7 +393,7 @@ class GroupTest {
         //given - 그룹 시작 상태로 변경
         Group group = makeTestGroup(5);
         group.changeGroupStatusTo(START);
-        group.initializeGroupTask(TestGroupServiceSupporter.studyCheckForms); // chapter 는 1,2,3 까지 존재합니다.
+        group.initializeGroupTask(TestGroupFactory.studyCheckForms); // chapter 는 1,2,3 까지 존재합니다.
 
         //when - then
         //
@@ -410,7 +410,7 @@ class GroupTest {
         //given
         Long groupMemberId = 1l;
 
-        Group group = TestGroupServiceSupporter.receiveSampleGroup(groupMemberId);
+        Group group = TestGroupFactory.receiveSampleGroup(groupMemberId);
         GroupMember groupMember = group.getGroupMembers().get(0);
         LocalDateTime beforeLastVisitedTime = groupMember.getLastVisitedTime();
         //when
@@ -432,7 +432,7 @@ class GroupTest {
         Long groupMemberId = 1l;
         Long notGroupMemberId = 100l;
 
-        Group group = TestGroupServiceSupporter.receiveSampleGroup(groupMemberId);
+        Group group = TestGroupFactory.receiveSampleGroup(groupMemberId);
         GroupMember groupMember = group.getGroupMembers().get(0);
         LocalDateTime beforeLastVisitedTime = groupMember.getLastVisitedTime();
         //when
@@ -449,7 +449,7 @@ class GroupTest {
     @Test
     void receive_study_checks_case_group_member() {
         //given
-        Group group = TestGroupServiceSupporter.startedGroupSample(1l, 5);
+        Group group = TestGroupFactory.startedGroupSample(1l, 5);
         //when
         group.doTask(1l, 1l);
         List<Task> myTasks = group.receiveTasksOf(1l);

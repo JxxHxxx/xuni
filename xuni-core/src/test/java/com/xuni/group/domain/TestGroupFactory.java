@@ -9,7 +9,7 @@ import static com.xuni.group.domain.GroupStatus.*;
 
 // TODO : 원활한 테스트를 위해 꼭 필요한 클래스인 만큼 필요한 케이스 별로 잘 정리해서 작성하자. Refactoring 필요
 
-public class TestGroupServiceSupporter {
+public class TestGroupFactory {
 
     public static Group receiveSampleGroup(Long hostId) {
         return new Group(
@@ -34,27 +34,6 @@ public class TestGroupServiceSupporter {
                 new Capacity(5),
                 Study.of("UUID","Real MySQL", category),
                 new Host(1l, "재헌"));
-    }
-
-    public static Group receiveEndGroup(Category category) {
-        Group group = receiveSampleGroup(category);
-        group.changeGroupStatusTo(END);
-
-        return group;
-    }
-
-    public static Group receiveGatherCompleteGroup(Category category) {
-        Group group = receiveSampleGroup(category);
-        group.changeGroupStatusTo(GATHER_COMPLETE);
-
-        return group;
-    }
-
-    public static Group receiveStartGroup(Category category) {
-        Group group = receiveSampleGroup(category);
-        group.changeGroupStatusTo(START);
-
-        return group;
     }
 
     public static Group startedGroupSample(Long hostId, Integer capacity) {
