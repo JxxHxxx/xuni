@@ -6,6 +6,7 @@ import com.xuni.api.auth.application.AuthService;
 import com.xuni.api.auth.application.GoogleClient;
 import com.xuni.api.auth.application.PasswordEncoder;
 import com.xuni.api.auth.infra.MemberRepository;
+import com.xuni.api.group.application.GroupCreateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;

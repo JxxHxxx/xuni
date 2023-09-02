@@ -90,6 +90,7 @@ project(':xuni-api') {
 
     asciidoctor {
         inputs.dir snippetsDir
+        configurations 'asciidoctorExtensions'
         dependsOn test
     }
 
@@ -99,6 +100,10 @@ project(':xuni-api') {
 
     bootJar {
         enabled = true
+        dependsOn asciidoctor
+        from ("${asciidoctor.outputDir}") {
+            into 'static/docs'
+        }
     }
     jar {
         enabled = false
