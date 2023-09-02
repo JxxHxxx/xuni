@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
-import static com.xuni.studyproduct.dto.response.StudyProductExceptionMessage.NOT_EXIST_CATEGORY;
+import static com.xuni.api.studyproduct.dto.response.StudyProductExceptionMessage.NOT_EXIST_CATEGORY;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest

@@ -1,11 +1,11 @@
 package com.xuni.api.studyproduct.application;
 
+import com.xuni.api.studyproduct.infra.StudyProductRepository;
 import com.xuni.common.domain.Category;
 import com.xuni.studyproduct.domain.Content;
 import com.xuni.studyproduct.domain.StudyProduct;
-import com.xuni.studyproduct.domain.StudyProductRepository;
-import com.xuni.studyproduct.dto.response.StudyProductContentReadResponse;
-import com.xuni.studyproduct.dto.response.StudyProductReadResponse;
+import com.xuni.api.studyproduct.dto.response.StudyProductContentReadResponse;
+import com.xuni.api.studyproduct.dto.response.StudyProductReadResponse;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;

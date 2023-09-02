@@ -1,18 +1,19 @@
-package com.xuni.api.statistics.presentation;
+package com.xuni.api.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest({MemberStatisticsController.class, StudyProductStatisticsController.class})
+@SpringBootTest
+@AutoConfigureMockMvc
 @AutoConfigureRestDocs
-public class StatisticsCommon {
+public class ControllerCommon {
+
     @Autowired
     protected MockMvc mockMvc;
     @Autowired
     protected ObjectMapper objectMapper;
-
 }

@@ -1,18 +1,21 @@
 package com.xuni.api.review.application;
 
-import com.xuni.auth.application.SimpleMemberDetails;
-import com.xuni.review.dto.request.ReviewForm;
-import com.xuni.review.dto.request.ReviewUpdateForm;
-import com.xuni.review.dto.response.RatingResponse;
-import com.xuni.review.dto.response.ReviewOneResponse;
+import com.xuni.api.auth.application.SimpleMemberDetails;
+import com.xuni.api.review.dto.request.ReviewForm;
+import com.xuni.api.review.dto.request.ReviewUpdateForm;
+import com.xuni.api.review.dto.response.RatingResponse;
+import com.xuni.api.review.dto.response.ReviewOneResponse;
+import com.xuni.api.review.infra.ReviewRepository;
 import com.xuni.api.statistics.application.StudyProductStatisticsService;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
+import com.xuni.review.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
 import java.util.List;
 
 import static com.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;

@@ -1,5 +1,7 @@
 package com.xuni.api.review.application;
 
+import com.xuni.api.review.infra.ReviewLikeRepository;
+import com.xuni.api.review.infra.ReviewRepository;
 import com.xuni.review.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

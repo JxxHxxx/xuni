@@ -2,14 +2,14 @@ package com.xuni.api.studyproduct.presentation;
 
 import com.xuni.api.studyproduct.dto.response.StudyProductContentReadResponse;
 import com.xuni.api.studyproduct.dto.response.StudyProductReadResponse;
+import com.xuni.api.studyproduct.query.StudyProductQueryResponse;
+import com.xuni.api.studyproduct.query.dynamic.StudyProductSearchCondition;
 import com.xuni.common.http.DataResponse;
 import com.xuni.common.http.PageResponse;
 import com.xuni.common.query.PageInfo;
 import com.xuni.common.query.PageConverter;
 import com.xuni.api.studyproduct.application.StudyProductReadService;
 import com.xuni.common.domain.Category;
-import com.xuni.studyproduct.query.StudyProductQueryResponse;
-import com.xuni.studyproduct.query.dynamic.StudyProductSearchCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

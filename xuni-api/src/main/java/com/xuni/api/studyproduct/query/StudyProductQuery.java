@@ -1,6 +1,6 @@
-package com.xuni.studyproduct.query;
+package com.xuni.api.studyproduct.query;
 
-import com.xuni.studyproduct.query.dynamic.StudyProductSearchCondition;
+import com.xuni.api.studyproduct.query.dynamic.StudyProductSearchCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

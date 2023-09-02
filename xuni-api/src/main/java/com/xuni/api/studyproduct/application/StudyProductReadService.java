@@ -1,5 +1,8 @@
 package com.xuni.api.studyproduct.application;
 
+import com.xuni.api.studyproduct.query.StudyProductQueryResponse;
+import com.xuni.api.studyproduct.query.StudyProductReadRepository;
+import com.xuni.api.studyproduct.query.dynamic.StudyProductSearchCondition;
 import com.xuni.common.domain.Category;
 import com.xuni.common.query.PagingModifier;
 import com.xuni.common.query.ModifiedPagingForm;
@@ -7,9 +10,6 @@ import com.xuni.studyproduct.domain.Content;
 import com.xuni.studyproduct.domain.StudyProduct;
 import com.xuni.api.studyproduct.dto.response.StudyProductContentReadResponse;
 import com.xuni.api.studyproduct.dto.response.StudyProductReadResponse;
-import com.xuni.studyproduct.query.StudyProductQueryResponse;
-import com.xuni.studyproduct.query.StudyProductReadRepository;
-import com.xuni.studyproduct.query.dynamic.StudyProductSearchCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;

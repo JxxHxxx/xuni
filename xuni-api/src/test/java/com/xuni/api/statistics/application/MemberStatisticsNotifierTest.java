@@ -1,17 +1,17 @@
 package com.xuni.api.statistics.application;
 
+import com.xuni.api.auth.infra.MemberRepository;
 import com.xuni.api.group.TestGroupServiceSupporter;
-import com.xuni.group.query.GroupReadRepository;
+import com.xuni.api.group.query.GroupReadRepository;
+import com.xuni.api.statistics.infra.MemberStatisticsRepository;
+import com.xuni.api.studyproduct.infra.StudyProductRepository;
 import com.xuni.auth.domain.LoginInfo;
 import com.xuni.auth.domain.Member;
-import com.xuni.auth.domain.MemberRepository;
 import com.xuni.common.domain.Category;
 import com.xuni.common.event.trigger.StatisticsAccessedEvent;
 import com.xuni.group.domain.Group;
 import com.xuni.statistics.domain.MemberStatistics;
-import com.xuni.statistics.domain.MemberStatisticsRepository;
 import com.xuni.studyproduct.domain.StudyProduct;
-import com.xuni.studyproduct.domain.StudyProductRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,6 +42,9 @@ class MemberStatisticsNotifierTest {
 
     @BeforeEach
     void beforeEach() {
+        // 초기화
+        groupReadRepository.deleteAll();
+        memberStatisticsRepository.deleteAll();
         // member 생성
         Member member = new Member(LoginInfo.of("xuni@naver.com", "12341234"), "유니", XUNI);
         memberRepository.save(member);

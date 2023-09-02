@@ -1,12 +1,13 @@
-package com.xuni.api.auth.presentation.gateway;
+package com.xuni.api.auth.presentation;
 
-import com.xuni.api.auth.application.AuthControllerTestConfig;
-import com.xuni.api.auth.presentation.AuthCommon;
-import com.xuni.auth.application.MemberDetails;
-import com.xuni.auth.application.SimpleMemberDetails;
+import com.xuni.api.ApiDocumentUtils;
+import com.xuni.api.auth.application.MemberDetails;
+import com.xuni.api.auth.application.SimpleMemberDetails;
+import com.xuni.api.support.ControllerCommon;
+import com.xuni.api.support.JwtTestConfiguration;
 import com.xuni.auth.domain.Authority;
-import com.xuni.auth.support.JwtTokenManager;
-import com.xuni.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.support.JwtTokenManager;
+import com.xuni.api.auth.support.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,8 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static com.xuni.ApiDocumentUtils.getDocumentRequest;
-import static com.xuni.ApiDocumentUtils.getDocumentResponse;
-import static com.xuni.auth.dto.response.AuthResponseMessage.READ_MEMBER_DETAILS;
+
+import static com.xuni.api.auth.dto.response.AuthResponseMessage.READ_MEMBER_DETAILS;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -26,20 +26,20 @@ import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import(AuthControllerTestConfig.class)
-class ApiGatewayControllerTest extends AuthCommon {
+@Import({AuthControllerTestConfig.class, JwtTestConfiguration.class})
+class ApiGatewayControllerTest extends ControllerCommon {
 
     @Autowired
-    JwtTokenProvider tokenProvider;
+    JwtTokenProvider testJwtTokenProvider;
     @Autowired
-    JwtTokenManager tokenManager;
+    JwtTokenManager testJwtTokenManager;
     String token;
 
     @BeforeEach
     void beforeEach() {
         // initialize token
         MemberDetails memberDetails = new SimpleMemberDetails(1l, "xuni@xuni.com", "uni", Authority.ADMIN);
-        token = tokenProvider.issue(memberDetails);
+        token = testJwtTokenProvider.issue(memberDetails);
     }
 
     @Test

@@ -1,6 +1,6 @@
-package com.xuni.group.query;
+package com.xuni.api.group.query;
 
-import com.xuni.group.query.dynamic.GroupSearchCondition;
+import com.xuni.api.group.query.dynamic.GroupSearchCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

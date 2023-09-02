@@ -1,21 +1,23 @@
 package com.xuni.api.review.presentation;
 
-import com.xuni.auth.application.SimpleMemberDetails;
-import com.xuni.auth.support.JwtTokenProvider;
-import com.xuni.review.application.ReviewLikeService;
+import com.xuni.api.ApiDocumentUtils;
+import com.xuni.api.auth.application.SimpleMemberDetails;
+import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.review.application.ReviewLikeService;
+import com.xuni.api.support.ControllerCommon;
+import com.xuni.api.support.JwtTestConfiguration;
 import com.xuni.review.domain.LikeStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.headers.HeaderDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import static com.xuni.ApiDocumentUtils.getDocumentRequest;
-import static com.xuni.ApiDocumentUtils.getDocumentResponse;
-import static com.xuni.review.dto.response.ReviewApiMessage.REVIEW_LIKE_CREATE;
-import static com.xuni.review.dto.response.ReviewApiMessage.REVIEW_LIKE_UPDATE;
-import static org.apache.http.HttpHeaders.AUTHORIZATION;
+
+import static com.xuni.api.review.dto.response.ReviewApiMessage.REVIEW_LIKE_CREATE;
+import static com.xuni.api.review.dto.response.ReviewApiMessage.REVIEW_LIKE_UPDATE;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -24,11 +26,11 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import(ReviewControllerTestConfig.class)
-class ReviewLikeControllerTest extends ReviewCommon {
+@Import({ReviewControllerTestConfig.class, JwtTestConfiguration.class})
+class ReviewLikeControllerTest extends ControllerCommon {
 
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    JwtTokenProvider testJwtTokenProvider;
     @Autowired
     ReviewLikeService reviewLikeService;
 
@@ -39,7 +41,7 @@ class ReviewLikeControllerTest extends ReviewCommon {
         Long reviewId = 1l;
         SimpleMemberDetails memberDetails = new SimpleMemberDetails(1l, "xuni@naver.com", "유니");
         mockMvc.perform(post("/reviews/{review-id}/like", reviewId)
-                .header(HttpHeaders.AUTHORIZATION, jwtTokenProvider.issue(memberDetails))
+                .header(HttpHeaders.AUTHORIZATION, testJwtTokenProvider.issue(memberDetails))
                 .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isCreated())
@@ -70,7 +72,7 @@ class ReviewLikeControllerTest extends ReviewCommon {
         Long reviewId = 1l;
         SimpleMemberDetails memberDetails = new SimpleMemberDetails(1l, "xuni@naver.com", "유니");
         mockMvc.perform(post("/reviews/{review-id}/like", reviewId)
-                        .header(HttpHeaders.AUTHORIZATION, jwtTokenProvider.issue(memberDetails))
+                        .header(HttpHeaders.AUTHORIZATION, testJwtTokenProvider.issue(memberDetails))
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())

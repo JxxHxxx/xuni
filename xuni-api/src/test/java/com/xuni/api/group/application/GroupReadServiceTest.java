@@ -1,8 +1,14 @@
 package com.xuni.api.group.application;
 
+import com.xuni.api.group.TestGroupServiceSupporter;
+import com.xuni.api.group.dto.response.GroupReadAllResponse;
+import com.xuni.api.group.dto.response.GroupReadOneResponse;
+import com.xuni.api.group.dto.response.GroupStudyCheckResponse;
+import com.xuni.api.group.infra.GroupRepository;
 import com.xuni.group.domain.*;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
+import com.xuni.api.group.query.GroupAllQueryResponse;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 

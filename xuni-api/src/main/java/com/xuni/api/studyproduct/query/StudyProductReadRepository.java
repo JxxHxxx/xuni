@@ -1,4 +1,4 @@
-package com.xuni.studyproduct.query;
+package com.xuni.api.studyproduct.query;
 
 import com.xuni.common.domain.Category;
 import com.xuni.studyproduct.domain.StudyProduct;

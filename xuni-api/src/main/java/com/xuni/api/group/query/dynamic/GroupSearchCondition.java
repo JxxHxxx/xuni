@@ -1,4 +1,4 @@
-package com.xuni.group.query.dynamic;
+package com.xuni.api.group.query.dynamic;
 
 import com.xuni.common.domain.Category;
 

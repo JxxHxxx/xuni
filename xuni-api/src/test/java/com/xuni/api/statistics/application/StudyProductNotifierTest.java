@@ -1,16 +1,16 @@
 package com.xuni.api.statistics.application;
 
+import com.xuni.api.statistics.infra.StudyProductStatisticsRepository;
+import com.xuni.api.studyproduct.infra.StudyProductRepository;
 import com.xuni.common.domain.Category;
 import com.xuni.common.event.trigger.statistics.ReviewCreatedEvent;
 import com.xuni.common.event.trigger.statistics.ReviewDeletedEvent;
 import com.xuni.common.event.trigger.statistics.ReviewUpdatedEvent;
 import com.xuni.statistics.domain.StudyProductStatistics;
-import com.xuni.statistics.domain.StudyProductStatisticsRepository;
 import com.xuni.api.studyproduct.application.StudyProductCreateService;
 import com.xuni.studyproduct.domain.StudyProduct;
-import com.xuni.studyproduct.domain.StudyProductRepository;
-import com.xuni.studyproduct.dto.request.StudyProductForm;
-import com.xuni.studyproduct.dto.response.StudyProductCreateResponse;
+import com.xuni.api.studyproduct.dto.request.StudyProductForm;
+import com.xuni.api.studyproduct.dto.response.StudyProductCreateResponse;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;

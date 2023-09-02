@@ -1,11 +1,11 @@
-package com.xuni.group.query;
+package com.xuni.api.group.query;
 
 
+import com.xuni.api.group.query.dynamic.GroupSearchCondition;
 import com.xuni.common.query.ConditionUtils;
 import com.xuni.group.domain.GroupStatus;
 import com.xuni.group.domain.QGroup;
 import com.xuni.group.domain.QGroupMember;
-import com.xuni.group.query.dynamic.GroupSearchCondition;
 import com.xuni.common.domain.Category;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;

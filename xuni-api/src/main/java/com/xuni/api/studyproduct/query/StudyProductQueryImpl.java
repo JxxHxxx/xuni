@@ -1,11 +1,11 @@
-package com.xuni.studyproduct.query;
+package com.xuni.api.studyproduct.query;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.xuni.api.studyproduct.query.dynamic.StudyProductSearchCondition;
 import com.xuni.common.domain.Category;
 import com.xuni.common.query.ConditionUtils;
 import com.xuni.studyproduct.domain.QStudyProduct;
-import com.xuni.studyproduct.query.dynamic.StudyProductSearchCondition;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

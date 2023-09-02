@@ -1,12 +1,21 @@
 package com.xuni.api.group.presentation;
 
-import com.xuni.auth.application.SimpleMemberDetails;
-import com.xuni.auth.support.JwtTokenProvider;
+import com.xuni.api.ApiDocumentUtils;
+import com.xuni.api.auth.application.SimpleMemberDetails;
+import com.xuni.api.group.TestGroupServiceSupporter;
+import com.xuni.api.group.application.GroupReadService;
+import com.xuni.api.group.dto.response.GroupMemberDto;
+import com.xuni.api.group.dto.response.GroupReadAllResponse;
+import com.xuni.api.group.dto.response.GroupReadOneResponse;
+import com.xuni.api.group.dto.response.GroupStudyCheckResponse;
+import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.support.ControllerCommon;
+import com.xuni.api.support.JwtTestConfiguration;
 import com.xuni.common.query.PageInfo;
-import com.xuni.group.application.GroupReadService;
 import com.xuni.group.domain.*;
 import com.xuni.common.query.PageConverter;
 import com.xuni.common.domain.Category;
+import com.xuni.api.group.query.GroupAllQueryResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -26,8 +35,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.xuni.ApiDocumentUtils.getDocumentRequest;
-import static com.xuni.ApiDocumentUtils.getDocumentResponse;
+import static com.xuni.api.group.dto.response.GroupApiMessage.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -36,11 +44,11 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import(GroupControllerTestConfig.class)
-class GroupReadControllerTest extends GroupCommon {
+@Import({GroupControllerTestConfig.class, JwtTestConfiguration.class})
+class GroupReadControllerTest extends ControllerCommon {
 
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    JwtTokenProvider testJwtTokenProvider;
     @Autowired
     GroupReadService groupReadService;
     @Autowired
@@ -368,7 +376,7 @@ class GroupReadControllerTest extends GroupCommon {
 
         ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.get("/groups/{group-id}/chapters", 1l)
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", jwtTokenProvider.issue(memberDetails)));
+                .header("Authorization", testJwtTokenProvider.issue(memberDetails)));
 
         result
                 .andExpect(status().isOk())
@@ -428,7 +436,7 @@ class GroupReadControllerTest extends GroupCommon {
 
         ResultActions result = mockMvc.perform(RestDocumentationRequestBuilders.get("/members/{member-id}/groups", "1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", jwtTokenProvider.issue(memberDetails)));
+                .header("Authorization", testJwtTokenProvider.issue(memberDetails)));
 
         result
                 .andExpect(status().isOk())

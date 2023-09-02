@@ -1,4 +1,4 @@
-package com.xuni.api.auth.presentation.gateway;
+package com.xuni.api.auth.presentation;
 
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.support.JwtTokenManager;

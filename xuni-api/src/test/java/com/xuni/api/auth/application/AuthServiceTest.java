@@ -6,6 +6,8 @@ import com.xuni.api.auth.dto.request.LoginForm;
 import com.xuni.api.auth.dto.request.SignupForm;
 import com.xuni.api.auth.dto.response.CreateAuthCodeEvent;
 import com.xuni.api.auth.dto.response.VerifyAuthCodeEvent;
+import com.xuni.api.auth.infra.AuthCodeRepository;
+import com.xuni.api.auth.infra.MemberRepository;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.auth.domain.*;
 import org.junit.jupiter.api.*;

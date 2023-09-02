@@ -1,8 +1,11 @@
 package com.xuni.api.statistics.presentation;
 
-import com.xuni.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.support.JwtTokenProvider;
 import com.xuni.api.statistics.application.StudyProductStatisticsService;
-import com.xuni.statistics.dto.response.StudyProductStatisticsReadResponse;
+import com.xuni.api.statistics.dto.response.StudyProductStatisticsReadResponse;
+import com.xuni.api.studyproduct.presentation.StudyProductControllerTestConfig;
+import com.xuni.api.support.ControllerCommon;
+import com.xuni.api.support.JwtTestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +18,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.UUID;
 
-import static com.xuni.statistics.dto.response.StatisticsApiMessage.STUDY_PRODUCT_STAT_READ_ALL;
-import static com.xuni.statistics.dto.response.StatisticsApiMessage.STUDY_PRODUCT_STAT_READ_ONE;
+import static com.xuni.api.statistics.dto.response.StatisticsApiMessage.STUDY_PRODUCT_STAT_READ_ALL;
+import static com.xuni.api.statistics.dto.response.StatisticsApiMessage.STUDY_PRODUCT_STAT_READ_ONE;
 import static java.nio.charset.StandardCharsets.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -24,10 +27,10 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import(StatisticsControllerTestConfig.class)
-class StudyProductStatisticsControllerTest extends StatisticsCommon{
+@Import({StudyProductControllerTestConfig.class, JwtTestConfiguration.class})
+class StudyProductStatisticsControllerTest extends ControllerCommon  {
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    JwtTokenProvider testJwtTokenProvider;
     @Autowired
     StudyProductStatisticsService studyProductStatisticsService;
 
@@ -72,7 +75,7 @@ class StudyProductStatisticsControllerTest extends StatisticsCommon{
     void read_one() throws Exception {
         String studyProductId = UUID.randomUUID().toString();
         StudyProductStatisticsReadResponse response = new StudyProductStatisticsReadResponse(studyProductId, 125, 25);
-        BDDMockito.given(studyProductStatisticsService.readOne(any())).willReturn(response);
+        BDDMockito.given(studyProductStatisticsService.readOne(anyString())).willReturn(response);
 
         ResultActions result = mockMvc.perform(get("/statistics/study-products/{study-product-id}", studyProductId)
                 .contentType(MediaType.APPLICATION_JSON)

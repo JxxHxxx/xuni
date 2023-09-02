@@ -1,6 +1,7 @@
 package com.xuni.api.review.application;
 
 import com.xuni.api.auth.application.MemberDetails;
+import com.xuni.api.review.infra.ReviewRepository;
 import com.xuni.common.event.trigger.statistics.ReviewCreatedEvent;
 import com.xuni.common.event.trigger.statistics.ReviewDeletedEvent;
 import com.xuni.common.event.trigger.statistics.ReviewUpdatedEvent;

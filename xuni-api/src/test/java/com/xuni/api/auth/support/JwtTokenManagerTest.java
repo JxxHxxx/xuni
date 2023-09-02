@@ -1,7 +1,7 @@
 package com.xuni.api.auth.support;
 
-import com.xuni.auth.application.MemberDetails;
-import com.xuni.auth.application.SimpleMemberDetails;
+import com.xuni.api.auth.application.MemberDetails;
+import com.xuni.api.auth.application.SimpleMemberDetails;
 import com.xuni.auth.domain.exception.ExpiredTokenException;
 import com.xuni.api.support.ServiceOnlyTest;
 import io.jsonwebtoken.Claims;

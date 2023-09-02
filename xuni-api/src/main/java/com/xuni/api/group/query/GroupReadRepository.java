@@ -1,4 +1,4 @@
-package com.xuni.group.query;
+package com.xuni.api.group.query;
 
 import com.xuni.group.domain.Group;
 import com.xuni.common.domain.Category;

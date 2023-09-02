@@ -1,9 +1,11 @@
 package com.xuni.api.studyproduct.application;
 
+import com.xuni.api.studyproduct.infra.StudyProductRepository;
 import com.xuni.common.domain.Category;
 import com.xuni.api.studyproduct.acceptance.TestCachingConfig;
-import com.xuni.studyproduct.dto.request.StudyProductContentForm;
+import com.xuni.api.studyproduct.dto.request.StudyProductContentForm;
 import com.xuni.api.support.ServiceTest;
+import com.xuni.studyproduct.domain.StudyProduct;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,7 @@ import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
-import static com.xuni.studyproduct.dto.response.StudyProductApiMessage.NOT_EXIST_STUDY_PRODUCT;
+import static com.xuni.api.studyproduct.dto.response.StudyProductApiMessage.NOT_EXIST_STUDY_PRODUCT;
 
 @ServiceTest
 @Import(TestCachingConfig.class)

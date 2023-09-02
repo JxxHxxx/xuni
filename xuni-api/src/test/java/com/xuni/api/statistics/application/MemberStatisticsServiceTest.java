@@ -1,8 +1,8 @@
 package com.xuni.api.statistics.application;
 
+import com.xuni.api.statistics.infra.MemberStatisticsRepository;
 import com.xuni.statistics.domain.MemberStatistics;
-import com.xuni.statistics.domain.MemberStatisticsRepository;
-import com.xuni.statistics.dto.response.ReviewNeedResponse;
+import com.xuni.api.statistics.dto.response.ReviewNeedResponse;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;
