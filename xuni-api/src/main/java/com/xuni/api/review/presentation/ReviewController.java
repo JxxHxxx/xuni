@@ -2,8 +2,8 @@ package com.xuni.api.review.presentation;
 
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.presentation.AuthenticatedMember;
-import com.xuni.common.http.DataResponse;
-import com.xuni.common.http.SimpleResponse;
+import com.xuni.core.common.http.DataResponse;
+import com.xuni.core.common.http.SimpleResponse;
 import com.xuni.api.review.application.ReviewService;
 import com.xuni.api.review.dto.request.ReviewForm;
 import com.xuni.api.review.dto.request.ReviewUpdateForm;

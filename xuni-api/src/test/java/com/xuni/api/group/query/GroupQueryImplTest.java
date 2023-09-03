@@ -3,9 +3,9 @@ package com.xuni.api.group.query;
 import com.xuni.api.group.TestGroupServiceSupporter;
 import com.xuni.api.group.infra.GroupRepository;
 import com.xuni.api.group.query.dynamic.GroupSearchCondition;
-import com.xuni.group.domain.Group;
-import com.xuni.group.domain.Study;
-import com.xuni.common.domain.Category;
+import com.xuni.core.group.domain.Group;
+import com.xuni.core.group.domain.Study;
+import com.xuni.core.common.domain.Category;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,8 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
-import static com.xuni.group.domain.GroupStatus.*;
-import static com.xuni.common.domain.Category.*;
+import static com.xuni.core.common.domain.Category.*;
+import static com.xuni.core.group.domain.GroupStatus.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 

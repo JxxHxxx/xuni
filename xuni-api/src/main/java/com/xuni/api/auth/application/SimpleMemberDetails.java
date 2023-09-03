@@ -1,12 +1,11 @@
 package com.xuni.api.auth.application;
 
-import com.xuni.auth.domain.Authority;
-import com.xuni.common.exception.CommonExceptionMessage;
-import com.xuni.common.exception.NotPermissionException;
+import com.xuni.core.auth.domain.Authority;
+import com.xuni.core.common.exception.NotPermissionException;
 import lombok.Getter;
 
-import static com.xuni.auth.domain.Authority.*;
-import static com.xuni.common.exception.CommonExceptionMessage.*;
+import static com.xuni.core.auth.domain.Authority.*;
+import static com.xuni.core.common.exception.CommonExceptionMessage.PRIVATE_ACCESSIBLE;
 
 @Getter
 public class SimpleMemberDetails implements MemberDetails {

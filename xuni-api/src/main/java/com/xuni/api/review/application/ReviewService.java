@@ -2,21 +2,21 @@ package com.xuni.api.review.application;
 
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.review.infra.ReviewRepository;
-import com.xuni.common.event.trigger.statistics.ReviewCreatedEvent;
-import com.xuni.common.event.trigger.statistics.ReviewDeletedEvent;
-import com.xuni.common.event.trigger.statistics.ReviewUpdatedEvent;
+import com.xuni.core.common.event.trigger.statistics.ReviewCreatedEvent;
+import com.xuni.core.common.event.trigger.statistics.ReviewDeletedEvent;
+import com.xuni.core.common.event.trigger.statistics.ReviewUpdatedEvent;
 import com.xuni.api.review.dto.request.ReviewForm;
 import com.xuni.api.review.dto.request.ReviewUpdateForm;
 import com.xuni.api.review.dto.response.RatingResponse;
 import com.xuni.api.review.dto.response.ReviewOneResponse;
-import com.xuni.review.domain.*;
+import com.xuni.core.review.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
-import static com.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
+import static com.xuni.core.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
 
 @Service
 @RequiredArgsConstructor

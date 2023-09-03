@@ -1,7 +1,7 @@
 package com.xuni.api.auth.support;
 
 import com.xuni.api.auth.application.MemberDetails;
-import com.xuni.common.support.ServiceOnly;
+import com.xuni.core.common.support.ServiceOnly;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

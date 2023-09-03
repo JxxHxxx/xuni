@@ -1,7 +1,7 @@
 package com.xuni.api.studyproduct.dto.response;
 
-import com.xuni.common.domain.Category;
-import com.xuni.studyproduct.domain.Content;
+import com.xuni.core.common.domain.Category;
+import com.xuni.core.studyproduct.domain.Content;
 
 import java.util.List;
 

@@ -4,7 +4,7 @@ import com.xuni.api.auth.application.GoogleClient;
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.dto.response.LoginResponse;
 import com.xuni.api.auth.support.JwtTokenProvider;
-import com.xuni.common.http.DataResponse;
+import com.xuni.core.common.http.DataResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 import static com.xuni.api.auth.dto.response.AuthResponseMessage.LOGIN;
-import static org.apache.http.HttpHeaders.*;
 
 @RestController
 @RequiredArgsConstructor

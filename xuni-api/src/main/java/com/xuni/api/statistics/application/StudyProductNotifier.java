@@ -1,17 +1,15 @@
 package com.xuni.api.statistics.application;
 
-import com.xuni.common.event.trigger.StudyProductCreatedEvent;
-import com.xuni.common.event.trigger.statistics.ReviewCreatedEvent;
-import com.xuni.common.event.trigger.statistics.ReviewDeletedEvent;
-import com.xuni.common.event.trigger.statistics.ReviewUpdatedEvent;
+import com.xuni.core.common.event.trigger.StudyProductCreatedEvent;
+import com.xuni.core.common.event.trigger.statistics.ReviewCreatedEvent;
+import com.xuni.core.common.event.trigger.statistics.ReviewDeletedEvent;
+import com.xuni.core.common.event.trigger.statistics.ReviewUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-
-import static org.springframework.transaction.event.TransactionPhase.*;
 
 //TODO : 비즈니스 로직 COMMIT / 이벤트 처리 ROLLBACK 되는 상황에서 어떻게 재시도할지 방법을 구상 및 구현
 

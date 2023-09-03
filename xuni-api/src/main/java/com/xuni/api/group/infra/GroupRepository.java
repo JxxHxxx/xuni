@@ -1,6 +1,6 @@
 package com.xuni.api.group.infra;
 
-import com.xuni.group.domain.Group;
+import com.xuni.core.group.domain.Group;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;

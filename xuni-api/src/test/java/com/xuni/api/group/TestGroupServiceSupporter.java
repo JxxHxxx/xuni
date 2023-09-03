@@ -1,16 +1,16 @@
 package com.xuni.api.group;
 
 import com.xuni.api.auth.application.SimpleMemberDetails;
-import com.xuni.common.domain.Category;
-import com.xuni.group.domain.*;
+import com.xuni.core.common.domain.Category;
+import com.xuni.core.group.domain.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.xuni.auth.domain.Authority.ADMIN;
-import static com.xuni.auth.domain.Authority.USER;
-import static com.xuni.group.domain.GroupStatus.*;
+import static com.xuni.core.auth.domain.Authority.ADMIN;
+import static com.xuni.core.auth.domain.Authority.USER;
+import static com.xuni.core.group.domain.GroupStatus.*;
 
 // TODO : 원활한 테스트를 위해 꼭 필요한 클래스인 만큼 필요한 케이스 별로 잘 정리해서 작성하자. Refactoring 필요
 

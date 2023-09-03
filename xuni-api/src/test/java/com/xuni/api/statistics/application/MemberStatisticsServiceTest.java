@@ -1,7 +1,7 @@
 package com.xuni.api.statistics.application;
 
 import com.xuni.api.statistics.infra.MemberStatisticsRepository;
-import com.xuni.statistics.domain.MemberStatistics;
+import com.xuni.core.statistics.domain.MemberStatistics;
 import com.xuni.api.statistics.dto.response.ReviewNeedResponse;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static com.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
+import static com.xuni.core.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
 import static org.assertj.core.api.Assertions.*;
 
 

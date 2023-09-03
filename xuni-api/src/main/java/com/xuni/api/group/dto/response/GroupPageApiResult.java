@@ -1,6 +1,6 @@
 package com.xuni.api.group.dto.response;
 
-import com.xuni.common.query.PageInfo;
+import com.xuni.core.common.query.PageInfo;
 import com.xuni.api.group.query.GroupAllQueryResponse;
 import lombok.Getter;
 

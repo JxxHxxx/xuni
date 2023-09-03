@@ -1,10 +1,10 @@
 package com.xuni.api.studyproduct.acceptance;
 
 import com.xuni.api.studyproduct.infra.StudyProductRepository;
-import com.xuni.common.domain.Category;
+import com.xuni.core.common.domain.Category;
 import com.xuni.api.studyproduct.application.StudyProductCreateService;
 import com.xuni.api.studyproduct.application.StudyProductReadService;
-import com.xuni.studyproduct.domain.StudyProduct;
+import com.xuni.core.studyproduct.domain.StudyProduct;
 import com.xuni.api.studyproduct.dto.request.StudyProductForm;
 import com.xuni.api.studyproduct.dto.response.StudyProductContentReadResponse;
 import com.xuni.api.studyproduct.dto.response.StudyProductReadResponse;

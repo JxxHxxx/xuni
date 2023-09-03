@@ -2,13 +2,13 @@ package com.xuni.api.statistics.application;
 
 import com.xuni.api.statistics.dto.response.ReviewNeedResponse;
 import com.xuni.api.statistics.infra.MemberStatisticsRepository;
-import com.xuni.common.event.trigger.StatisticsAccessedEvent;
-import com.xuni.statistics.domain.MemberStatistics;
+import com.xuni.core.common.event.trigger.StatisticsAccessedEvent;
+import com.xuni.core.statistics.domain.MemberStatistics;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import static com.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
+import static com.xuni.core.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
 
 @Service
 @RequiredArgsConstructor

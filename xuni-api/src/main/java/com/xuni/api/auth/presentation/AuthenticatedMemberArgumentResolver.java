@@ -1,9 +1,9 @@
 package com.xuni.api.auth.presentation;
 
 import com.xuni.api.auth.application.MemberDetails;
-import com.xuni.auth.domain.exception.UnauthenticatedException;
+import com.xuni.core.auth.domain.exception.UnauthenticatedException;
 import com.xuni.api.auth.support.JwtTokenManager;
-import com.xuni.common.exception.CommonExceptionMessage;
+import com.xuni.core.common.exception.CommonExceptionMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;

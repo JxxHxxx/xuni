@@ -7,13 +7,10 @@ import com.xuni.api.auth.dto.request.EmailForm;
 import com.xuni.api.auth.dto.request.LoginForm;
 import com.xuni.api.auth.dto.request.SignupForm;
 import com.xuni.api.auth.support.JwtTokenProvider;
-import com.xuni.api.auth.application.AuthMailService;
-import com.xuni.api.auth.application.AuthService;
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.dto.response.*;
-import com.xuni.api.auth.support.JwtTokenProvider;
-import com.xuni.common.http.DataResponse;
-import com.xuni.common.http.SimpleResponse;
+import com.xuni.core.common.http.DataResponse;
+import com.xuni.core.common.http.SimpleResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +19,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.xuni.api.auth.dto.response.AuthResponseMessage.*;
-import static org.apache.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor

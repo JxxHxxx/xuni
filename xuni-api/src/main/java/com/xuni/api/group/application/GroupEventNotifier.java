@@ -1,9 +1,9 @@
 package com.xuni.api.group.application;
 
-import com.xuni.common.event.trigger.GroupAccessedEvent;
-import com.xuni.common.event.connector.ReviewCreatedConnector;
-import com.xuni.common.exception.CommonExceptionMessage;
-import com.xuni.group.domain.Group;
+import com.xuni.core.common.event.trigger.GroupAccessedEvent;
+import com.xuni.core.common.event.connector.ReviewCreatedConnector;
+import com.xuni.core.common.exception.CommonExceptionMessage;
+import com.xuni.core.group.domain.Group;
 import com.xuni.api.group.query.GroupReadRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;

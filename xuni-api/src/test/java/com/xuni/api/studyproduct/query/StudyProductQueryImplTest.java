@@ -2,8 +2,8 @@ package com.xuni.api.studyproduct.query;
 
 import com.xuni.api.studyproduct.infra.StudyProductRepository;
 import com.xuni.api.studyproduct.query.dynamic.StudyProductSearchCondition;
-import com.xuni.common.domain.Category;
-import com.xuni.studyproduct.domain.StudyProduct;
+import com.xuni.core.common.domain.Category;
+import com.xuni.core.studyproduct.domain.StudyProduct;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;

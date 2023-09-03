@@ -1,6 +1,6 @@
 package com.xuni.api.support;
 
-import com.xuni.common.support.ServiceOnly;
+import com.xuni.core.common.support.ServiceOnly;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 

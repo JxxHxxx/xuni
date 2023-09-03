@@ -5,13 +5,13 @@ import com.xuni.api.group.TestGroupServiceSupporter;
 import com.xuni.api.group.query.GroupReadRepository;
 import com.xuni.api.statistics.infra.MemberStatisticsRepository;
 import com.xuni.api.studyproduct.infra.StudyProductRepository;
-import com.xuni.auth.domain.LoginInfo;
-import com.xuni.auth.domain.Member;
-import com.xuni.common.domain.Category;
-import com.xuni.common.event.trigger.StatisticsAccessedEvent;
-import com.xuni.group.domain.Group;
-import com.xuni.statistics.domain.MemberStatistics;
-import com.xuni.studyproduct.domain.StudyProduct;
+import com.xuni.core.auth.domain.LoginInfo;
+import com.xuni.core.auth.domain.Member;
+import com.xuni.core.common.domain.Category;
+import com.xuni.core.common.event.trigger.StatisticsAccessedEvent;
+import com.xuni.core.group.domain.Group;
+import com.xuni.core.statistics.domain.MemberStatistics;
+import com.xuni.core.studyproduct.domain.StudyProduct;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.xuni.auth.domain.AuthProvider.XUNI;
+import static com.xuni.core.auth.domain.AuthProvider.XUNI;
 
 @Transactional // 영속성 컨택스트 종료 방지
 @SpringBootTest

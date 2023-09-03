@@ -5,7 +5,7 @@ import com.xuni.api.auth.presentation.AuthenticatedMember;
 import com.xuni.api.group.application.GroupJoinFacade;
 import com.xuni.api.group.application.GroupManagingService;
 import com.xuni.api.group.dto.response.GroupApiSimpleResult;
-import com.xuni.group.domain.GroupTaskForm;
+import com.xuni.core.group.domain.GroupTaskForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

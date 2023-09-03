@@ -1,7 +1,7 @@
 package com.xuni.api.studyproduct.query;
 
-import com.xuni.common.domain.Category;
-import com.xuni.studyproduct.domain.StudyProduct;
+import com.xuni.core.common.domain.Category;
+import com.xuni.core.studyproduct.domain.StudyProduct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

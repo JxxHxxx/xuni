@@ -1,7 +1,7 @@
 package com.xuni.api.group.application;
 
 import com.xuni.api.auth.application.MemberDetails;
-import com.xuni.group.domain.exception.GroupJoinException;
+import com.xuni.core.group.domain.exception.GroupJoinException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;

@@ -9,7 +9,7 @@ import com.xuni.api.auth.dto.response.VerifyAuthCodeEvent;
 import com.xuni.api.auth.infra.AuthCodeRepository;
 import com.xuni.api.auth.infra.MemberRepository;
 import com.xuni.api.support.ServiceCommon;
-import com.xuni.auth.domain.*;
+import com.xuni.core.auth.domain.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -20,11 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.xuni.auth.domain.AuthProvider.*;
+import static com.xuni.core.auth.domain.AuthProvider.*;
 import static com.xuni.api.auth.dto.response.AuthResponseMessage.EXISTED_EMAIL;
 import static com.xuni.api.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
-import static com.xuni.auth.domain.exception.ExceptionMessage.ALREADY_EXIST_EMAIL;
-import static com.xuni.auth.domain.exception.ExceptionMessage.NOT_EXIST_AUTH_CODE;
+import static com.xuni.core.auth.domain.exception.ExceptionMessage.ALREADY_EXIST_EMAIL;
+import static com.xuni.core.auth.domain.exception.ExceptionMessage.NOT_EXIST_AUTH_CODE;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

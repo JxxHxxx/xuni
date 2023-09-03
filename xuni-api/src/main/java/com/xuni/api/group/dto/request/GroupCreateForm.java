@@ -1,6 +1,6 @@
 package com.xuni.api.group.dto.request;
 
-import com.xuni.common.domain.Category;
+import com.xuni.core.common.domain.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

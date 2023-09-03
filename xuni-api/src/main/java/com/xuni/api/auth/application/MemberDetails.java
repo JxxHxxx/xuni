@@ -1,6 +1,6 @@
 package com.xuni.api.auth.application;
 
-import com.xuni.auth.domain.Authority;
+import com.xuni.core.auth.domain.Authority;
 
 /**
  * 추후 확장성을 위해 인터페이스화

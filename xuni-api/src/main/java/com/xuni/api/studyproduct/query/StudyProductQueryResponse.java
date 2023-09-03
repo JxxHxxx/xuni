@@ -1,7 +1,7 @@
 package com.xuni.api.studyproduct.query;
 
 import com.querydsl.core.annotations.QueryProjection;
-import com.xuni.common.domain.Category;
+import com.xuni.core.common.domain.Category;
 
 public record StudyProductQueryResponse(
         String studyProductId,

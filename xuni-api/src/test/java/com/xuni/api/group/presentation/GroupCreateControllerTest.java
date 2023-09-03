@@ -7,8 +7,8 @@ import com.xuni.api.group.dto.request.GroupCreateForm;
 import com.xuni.api.group.dto.response.GroupApiMessage;
 import com.xuni.api.support.ControllerCommon;
 import com.xuni.api.support.JwtTestConfiguration;
-import com.xuni.auth.domain.LoginInfo;
-import com.xuni.auth.domain.Member;
+import com.xuni.core.auth.domain.LoginInfo;
+import com.xuni.core.auth.domain.Member;
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -26,7 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 
-import static com.xuni.common.domain.Category.JAVA;
+import static com.xuni.core.common.domain.Category.JAVA;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

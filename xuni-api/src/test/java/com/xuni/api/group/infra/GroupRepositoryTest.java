@@ -2,10 +2,10 @@ package com.xuni.api.group.infra;
 
 import com.xuni.api.auth.infra.MemberRepository;
 import com.xuni.api.group.TestGroupServiceSupporter;
-import com.xuni.auth.domain.LoginInfo;
-import com.xuni.auth.domain.Member;
-import com.xuni.common.domain.Category;
-import com.xuni.group.domain.*;
+import com.xuni.core.auth.domain.LoginInfo;
+import com.xuni.core.auth.domain.Member;
+import com.xuni.core.common.domain.Category;
+import com.xuni.core.group.domain.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static com.xuni.auth.domain.AuthProvider.*;
-import static com.xuni.group.domain.GroupStatus.*;
+import static com.xuni.core.auth.domain.AuthProvider.*;
+import static com.xuni.core.group.domain.GroupStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional

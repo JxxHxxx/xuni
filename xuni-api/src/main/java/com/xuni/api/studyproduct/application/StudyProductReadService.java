@@ -3,11 +3,11 @@ package com.xuni.api.studyproduct.application;
 import com.xuni.api.studyproduct.query.StudyProductQueryResponse;
 import com.xuni.api.studyproduct.query.StudyProductReadRepository;
 import com.xuni.api.studyproduct.query.dynamic.StudyProductSearchCondition;
-import com.xuni.common.domain.Category;
-import com.xuni.common.query.PagingModifier;
-import com.xuni.common.query.ModifiedPagingForm;
-import com.xuni.studyproduct.domain.Content;
-import com.xuni.studyproduct.domain.StudyProduct;
+import com.xuni.core.common.domain.Category;
+import com.xuni.core.common.query.PagingModifier;
+import com.xuni.core.common.query.ModifiedPagingForm;
+import com.xuni.core.studyproduct.domain.Content;
+import com.xuni.core.studyproduct.domain.StudyProduct;
 import com.xuni.api.studyproduct.dto.response.StudyProductContentReadResponse;
 import com.xuni.api.studyproduct.dto.response.StudyProductReadResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
+import static com.xuni.core.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
 
 @Service
 @RequiredArgsConstructor

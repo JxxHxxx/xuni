@@ -1,7 +1,7 @@
 package com.xuni.api.auth.infra;
 
-import com.xuni.auth.domain.AuthCode;
-import com.xuni.auth.domain.UsageType;
+import com.xuni.core.auth.domain.AuthCode;
+import com.xuni.core.auth.domain.UsageType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

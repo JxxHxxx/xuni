@@ -1,6 +1,6 @@
 package com.xuni.api.review.dto.response;
 
-import com.xuni.review.domain.Progress;
+import com.xuni.core.review.domain.Progress;
 
 import java.time.LocalDateTime;
 

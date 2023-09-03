@@ -9,7 +9,10 @@ import com.xuni.api.review.infra.ReviewRepository;
 import com.xuni.api.statistics.application.StudyProductStatisticsService;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
-import com.xuni.review.domain.*;
+import com.xuni.core.review.domain.Content;
+import com.xuni.core.review.domain.Progress;
+import com.xuni.core.review.domain.Review;
+import com.xuni.core.review.domain.Reviewer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
-import static com.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
+import static com.xuni.core.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
