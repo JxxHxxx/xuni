@@ -6,20 +6,22 @@ import com.xuni.api.auth.dto.request.LoginForm;
 import com.xuni.api.auth.dto.request.SignupForm;
 import com.xuni.api.auth.infra.AuthCodeRepository;
 import com.xuni.api.auth.infra.MemberRepository;
-import com.xuni.auth.domain.*;
 import com.xuni.api.auth.dto.response.CreateAuthCodeEvent;
 import com.xuni.api.auth.dto.response.VerifyAuthCodeEvent;
+import com.xuni.core.auth.domain.AuthCode;
+import com.xuni.core.auth.domain.Member;
+import com.xuni.core.auth.domain.UsageType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.xuni.auth.domain.AuthProvider.*;
+import static com.xuni.core.auth.domain.AuthProvider.*;
 import static com.xuni.api.auth.dto.response.AuthResponseMessage.EXISTED_EMAIL;
 import static com.xuni.api.auth.dto.response.AuthResponseMessage.LOGIN_FAIL;
-import static com.xuni.auth.domain.exception.ExceptionMessage.ALREADY_EXIST_EMAIL;
-import static com.xuni.auth.domain.exception.ExceptionMessage.NOT_EXIST_AUTH_CODE;
+import static com.xuni.core.auth.domain.exception.ExceptionMessage.ALREADY_EXIST_EMAIL;
+import static com.xuni.core.auth.domain.exception.ExceptionMessage.NOT_EXIST_AUTH_CODE;
 
 @Service
 @RequiredArgsConstructor

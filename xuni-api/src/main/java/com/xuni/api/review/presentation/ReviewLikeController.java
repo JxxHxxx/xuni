@@ -2,9 +2,9 @@ package com.xuni.api.review.presentation;
 
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.presentation.AuthenticatedMember;
-import com.xuni.common.http.SimpleResponse;
+import com.xuni.core.common.http.SimpleResponse;
 import com.xuni.api.review.application.ReviewLikeService;
-import com.xuni.review.domain.LikeStatus;
+import com.xuni.core.review.domain.LikeStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -2,8 +2,8 @@ package com.xuni.api.auth.presentation;
 
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.support.JwtTokenManager;
-import com.xuni.common.exception.CommonExceptionMessage;
-import com.xuni.common.exception.NotPermissionException;
+import com.xuni.core.common.exception.CommonExceptionMessage;
+import com.xuni.core.common.exception.NotPermissionException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import java.lang.reflect.Method;
 
-import static com.xuni.auth.domain.Authority.*;
+import static com.xuni.core.auth.domain.Authority.*;
 
 @RequiredArgsConstructor
 public class AdminInterceptor implements HandlerInterceptor {

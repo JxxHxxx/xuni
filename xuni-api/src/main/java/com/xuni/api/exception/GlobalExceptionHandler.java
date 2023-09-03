@@ -1,16 +1,16 @@
 package com.xuni.api.exception;
 
-import com.xuni.auth.domain.exception.UnauthenticatedException;
-import com.xuni.common.exception.NotPermissionException;
-import com.xuni.exception.ExceptionResponse;
-import com.xuni.exception.ExceptionResponses;
-import com.xuni.group.domain.exception.CapacityOutOfBoundException;
-import com.xuni.group.domain.exception.GroupJoinException;
-import com.xuni.group.domain.exception.NotAppropriateGroupStatusException;
-import com.xuni.auth.domain.PasswordNotMatchedException;
-import com.xuni.auth.domain.exception.AuthCodeException;
-import com.xuni.statistics.domain.exception.RatingOutOfBoundException;
-import com.xuni.statistics.domain.exception.ReviewCntOutOfBoundException;
+import com.xuni.core.auth.domain.exception.UnauthenticatedException;
+import com.xuni.core.common.exception.NotPermissionException;
+import com.xuni.core.exception.ExceptionResponse;
+import com.xuni.core.exception.ExceptionResponses;
+import com.xuni.core.group.domain.exception.CapacityOutOfBoundException;
+import com.xuni.core.group.domain.exception.GroupJoinException;
+import com.xuni.core.group.domain.exception.NotAppropriateGroupStatusException;
+import com.xuni.core.auth.domain.PasswordNotMatchedException;
+import com.xuni.core.auth.domain.exception.AuthCodeException;
+import com.xuni.core.statistics.domain.exception.RatingOutOfBoundException;
+import com.xuni.core.statistics.domain.exception.ReviewCntOutOfBoundException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SecurityException;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
-import static com.xuni.common.exception.CommonExceptionMessage.REQUIRED_LOGIN;
+import static com.xuni.core.common.exception.CommonExceptionMessage.REQUIRED_LOGIN;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

@@ -1,8 +1,8 @@
 package com.xuni.api.studyproduct.presentation;
 
 import com.xuni.api.auth.presentation.Admin;
-import com.xuni.common.http.DataResponse;
-import com.xuni.common.http.SimpleResponse;
+import com.xuni.core.common.http.DataResponse;
+import com.xuni.core.common.http.SimpleResponse;
 import com.xuni.api.common.service.AmazonS3Handler;
 import com.xuni.api.studyproduct.application.StudyProductCreateService;
 import com.xuni.api.studyproduct.dto.request.StudyProductContentForm;

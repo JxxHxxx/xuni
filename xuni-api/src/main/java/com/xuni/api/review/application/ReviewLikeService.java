@@ -2,7 +2,9 @@ package com.xuni.api.review.application;
 
 import com.xuni.api.review.infra.ReviewLikeRepository;
 import com.xuni.api.review.infra.ReviewRepository;
-import com.xuni.review.domain.*;
+import com.xuni.core.review.domain.LikeStatus;
+import com.xuni.core.review.domain.Review;
+import com.xuni.core.review.domain.ReviewLike;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

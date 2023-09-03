@@ -2,7 +2,7 @@ package com.xuni.api.group.application;
 
 import com.xuni.api.group.dto.request.GroupCreateForm;
 import com.xuni.api.group.infra.GroupRepository;
-import com.xuni.group.domain.*;
+import com.xuni.core.group.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

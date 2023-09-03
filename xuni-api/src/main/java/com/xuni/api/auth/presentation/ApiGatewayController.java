@@ -2,7 +2,7 @@ package com.xuni.api.auth.presentation;
 
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.support.JwtTokenManager;
-import com.xuni.common.http.DataResponse;
+import com.xuni.core.common.http.DataResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

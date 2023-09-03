@@ -2,16 +2,16 @@ package com.xuni.api.group.application;
 
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.group.infra.GroupRepository;
-import com.xuni.group.domain.Group;
-import com.xuni.group.domain.GroupMember;
-import com.xuni.group.domain.GroupTaskForm;
+import com.xuni.core.group.domain.Group;
+import com.xuni.core.group.domain.GroupMember;
+import com.xuni.core.group.domain.GroupTaskForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.xuni.group.domain.GroupMessage.NOT_EXISTED_GROUP;
+import static com.xuni.core.group.domain.GroupMessage.NOT_EXISTED_GROUP;
 
 @Service
 @RequiredArgsConstructor

@@ -2,9 +2,9 @@ package com.xuni.api.auth.support;
 
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.application.SimpleMemberDetails;
-import com.xuni.auth.domain.exception.ExpiredTokenException;
-import com.xuni.common.support.ServiceOnly;
-import com.xuni.auth.domain.Authority;
+import com.xuni.core.auth.domain.exception.ExpiredTokenException;
+import com.xuni.core.common.support.ServiceOnly;
+import com.xuni.core.auth.domain.Authority;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
-import static com.xuni.auth.domain.Authority.*;
+import static com.xuni.core.auth.domain.Authority.*;
 
 @Slf4j
 @ServiceOnly

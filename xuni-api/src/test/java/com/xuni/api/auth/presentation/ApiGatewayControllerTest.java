@@ -5,7 +5,7 @@ import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.application.SimpleMemberDetails;
 import com.xuni.api.support.ControllerCommon;
 import com.xuni.api.support.JwtTestConfiguration;
-import com.xuni.auth.domain.Authority;
+import com.xuni.core.auth.domain.Authority;
 import com.xuni.api.auth.support.JwtTokenManager;
 import com.xuni.api.auth.support.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;

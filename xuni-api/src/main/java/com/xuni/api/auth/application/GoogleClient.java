@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xuni.api.auth.infra.MemberRepository;
-import com.xuni.auth.domain.LoginInfo;
-import com.xuni.auth.domain.Member;
+import com.xuni.core.auth.domain.LoginInfo;
+import com.xuni.core.auth.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.xuni.api.auth.application.Oauth2Const.*;
-import static com.xuni.auth.domain.AuthProvider.*;
+import static com.xuni.core.auth.domain.AuthProvider.*;
 
 @Component
 @RequiredArgsConstructor

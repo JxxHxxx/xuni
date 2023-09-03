@@ -1,8 +1,8 @@
 package com.xuni.api.group.application;
 
 import com.xuni.api.auth.infra.MemberRepository;
-import com.xuni.auth.domain.Member;
-import com.xuni.group.domain.Host;
+import com.xuni.core.auth.domain.Member;
+import com.xuni.core.group.domain.Host;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

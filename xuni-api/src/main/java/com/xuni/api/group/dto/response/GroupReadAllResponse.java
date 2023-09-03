@@ -1,6 +1,6 @@
 package com.xuni.api.group.dto.response;
 
-import com.xuni.group.domain.*;
+import com.xuni.core.group.domain.*;
 import lombok.Getter;
 
 @Getter

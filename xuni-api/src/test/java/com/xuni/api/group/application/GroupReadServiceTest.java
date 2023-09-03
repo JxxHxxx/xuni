@@ -5,7 +5,9 @@ import com.xuni.api.group.dto.response.GroupReadAllResponse;
 import com.xuni.api.group.dto.response.GroupReadOneResponse;
 import com.xuni.api.group.dto.response.GroupStudyCheckResponse;
 import com.xuni.api.group.infra.GroupRepository;
-import com.xuni.group.domain.*;
+import com.xuni.core.group.domain.Group;
+import com.xuni.core.group.domain.GroupMember;
+import com.xuni.core.group.domain.GroupStatus;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
 import com.xuni.api.group.query.GroupAllQueryResponse;
@@ -14,9 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.xuni.group.domain.GroupStatus.*;
-import static com.xuni.common.domain.Category.*;
-import static com.xuni.common.domain.Category.SPRING_FRAMEWORK;
+import static com.xuni.core.common.domain.Category.*;
+import static com.xuni.core.group.domain.GroupStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ServiceTest

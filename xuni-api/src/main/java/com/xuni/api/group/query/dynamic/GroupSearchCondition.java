@@ -1,6 +1,6 @@
 package com.xuni.api.group.query.dynamic;
 
-import com.xuni.common.domain.Category;
+import com.xuni.core.common.domain.Category;
 
 public class GroupSearchCondition {
     private Category category;

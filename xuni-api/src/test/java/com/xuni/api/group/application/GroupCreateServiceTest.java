@@ -1,12 +1,11 @@
 package com.xuni.api.group.application;
 
-import com.xuni.XuniCore;
 import com.xuni.api.auth.infra.MemberRepository;
 import com.xuni.api.group.infra.GroupRepository;
 import com.xuni.api.group.dto.request.GroupCreateForm;
-import com.xuni.auth.domain.LoginInfo;
-import com.xuni.auth.domain.Member;
-import com.xuni.common.domain.Category;
+import com.xuni.core.auth.domain.LoginInfo;
+import com.xuni.core.auth.domain.Member;
+import com.xuni.core.common.domain.Category;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
 import org.assertj.core.api.Assertions;
@@ -15,13 +14,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static com.xuni.auth.domain.AuthProvider.XUNI;
+import static com.xuni.core.auth.domain.AuthProvider.XUNI;
 import static org.assertj.core.api.Assertions.*;
 
 @ServiceTest

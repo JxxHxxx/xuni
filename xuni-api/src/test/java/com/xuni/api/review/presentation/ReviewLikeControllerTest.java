@@ -6,7 +6,7 @@ import com.xuni.api.auth.support.JwtTokenProvider;
 import com.xuni.api.review.application.ReviewLikeService;
 import com.xuni.api.support.ControllerCommon;
 import com.xuni.api.support.JwtTestConfiguration;
-import com.xuni.review.domain.LikeStatus;
+import com.xuni.core.review.domain.LikeStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;

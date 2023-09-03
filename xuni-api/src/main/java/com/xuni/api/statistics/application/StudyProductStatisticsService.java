@@ -1,7 +1,7 @@
 package com.xuni.api.statistics.application;
 
 import com.xuni.api.statistics.dto.response.StudyProductStatisticsReadResponse;
-import com.xuni.statistics.domain.StudyProductStatistics;
+import com.xuni.core.statistics.domain.StudyProductStatistics;
 import com.xuni.api.statistics.infra.StudyProductStatisticsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.xuni.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
+import static com.xuni.core.common.exception.CommonExceptionMessage.NOT_EXIST_ENTITY;
 
 @Service
 @RequiredArgsConstructor

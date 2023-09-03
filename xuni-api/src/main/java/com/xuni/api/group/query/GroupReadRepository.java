@@ -1,7 +1,7 @@
 package com.xuni.api.group.query;
 
-import com.xuni.group.domain.Group;
-import com.xuni.common.domain.Category;
+import com.xuni.core.group.domain.Group;
+import com.xuni.core.common.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

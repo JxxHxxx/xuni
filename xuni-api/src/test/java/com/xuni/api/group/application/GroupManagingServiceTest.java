@@ -2,9 +2,9 @@ package com.xuni.api.group.application;
 
 import com.xuni.api.auth.application.SimpleMemberDetails;
 import com.xuni.api.group.TestGroupServiceSupporter;
-import com.xuni.group.domain.Group;
+import com.xuni.core.group.domain.Group;
 import com.xuni.api.group.infra.GroupRepository;
-import com.xuni.group.domain.Task;
+import com.xuni.core.group.domain.Task;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
 import org.junit.jupiter.api.*;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.xuni.group.domain.GroupMessage.NOT_EXISTED_GROUP;
-import static com.xuni.group.domain.GroupStatus.*;
+import static com.xuni.core.group.domain.GroupMessage.NOT_EXISTED_GROUP;
+import static com.xuni.core.group.domain.GroupStatus.*;
 import static org.assertj.core.api.Assertions.*;
 
 @ServiceTest

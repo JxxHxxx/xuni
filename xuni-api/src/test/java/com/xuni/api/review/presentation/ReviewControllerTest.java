@@ -6,7 +6,7 @@ import com.xuni.api.auth.support.JwtTokenProvider;
 import com.xuni.api.review.application.ReviewService;
 import com.xuni.api.support.ControllerCommon;
 import com.xuni.api.support.JwtTestConfiguration;
-import com.xuni.review.domain.Progress;
+import com.xuni.core.review.domain.Progress;
 import com.xuni.api.review.dto.request.ReviewForm;
 import com.xuni.api.review.dto.request.ReviewUpdateForm;
 import com.xuni.api.review.dto.response.ReviewOneResponse;

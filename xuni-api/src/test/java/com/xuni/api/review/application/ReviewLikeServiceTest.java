@@ -4,7 +4,7 @@ import com.xuni.api.review.infra.ReviewLikeRepository;
 import com.xuni.api.review.infra.ReviewRepository;
 import com.xuni.api.support.ServiceCommon;
 import com.xuni.api.support.ServiceTest;
-import com.xuni.review.domain.*;
+import com.xuni.core.review.domain.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

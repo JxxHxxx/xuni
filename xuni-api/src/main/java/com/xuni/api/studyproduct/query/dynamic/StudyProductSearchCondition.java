@@ -1,6 +1,6 @@
 package com.xuni.api.studyproduct.query.dynamic;
 
-import com.xuni.common.domain.Category;
+import com.xuni.core.common.domain.Category;
 
 public record StudyProductSearchCondition(
         String name,

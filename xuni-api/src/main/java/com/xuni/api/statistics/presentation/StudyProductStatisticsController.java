@@ -1,6 +1,6 @@
 package com.xuni.api.statistics.presentation;
 
-import com.xuni.common.http.DataResponse;
+import com.xuni.core.common.http.DataResponse;
 import com.xuni.api.statistics.application.StudyProductStatisticsService;
 import com.xuni.api.statistics.dto.response.StudyProductStatisticsReadResponse;
 import lombok.RequiredArgsConstructor;

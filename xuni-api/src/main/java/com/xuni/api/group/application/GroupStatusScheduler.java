@@ -1,6 +1,6 @@
 package com.xuni.api.group.application;
 
-import com.xuni.group.domain.GroupStatusHandler;
+import com.xuni.core.group.domain.GroupStatusHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

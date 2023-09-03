@@ -2,15 +2,15 @@ package com.xuni.api.group.query;
 
 
 import com.xuni.api.group.query.dynamic.GroupSearchCondition;
-import com.xuni.common.query.ConditionUtils;
-import com.xuni.group.domain.GroupStatus;
-import com.xuni.group.domain.QGroup;
-import com.xuni.group.domain.QGroupMember;
-import com.xuni.common.domain.Category;
+import com.xuni.core.common.query.ConditionUtils;
+import com.xuni.core.group.domain.GroupStatus;
+import com.xuni.core.group.domain.QGroup;
+import com.xuni.core.common.domain.Category;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.xuni.core.group.domain.QGroupMember;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.*;
 

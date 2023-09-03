@@ -1,7 +1,7 @@
 package com.xuni.api.studyproduct.presentation;
 
 import com.xuni.api.common.service.AmazonS3Handler;
-import com.xuni.common.query.PageConverter;
+import com.xuni.core.common.query.PageConverter;
 import com.xuni.api.studyproduct.application.StudyProductCreateService;
 import com.xuni.api.studyproduct.application.StudyProductReadService;
 import org.springframework.boot.test.context.TestConfiguration;

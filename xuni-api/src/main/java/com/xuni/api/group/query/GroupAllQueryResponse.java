@@ -1,7 +1,7 @@
 package com.xuni.api.group.query;
 
 import com.querydsl.core.annotations.QueryProjection;
-import com.xuni.group.domain.*;
+import com.xuni.core.group.domain.*;
 import lombok.Getter;
 
 @Getter

@@ -1,6 +1,6 @@
 package com.xuni.api.studyproduct.dto.response;
 
-import com.xuni.common.domain.Category;
+import com.xuni.core.common.domain.Category;
 
 public record StudyProductReadResponse(
         String studyProductId,

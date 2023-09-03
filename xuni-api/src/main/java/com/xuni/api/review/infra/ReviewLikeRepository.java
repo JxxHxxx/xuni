@@ -1,6 +1,6 @@
 package com.xuni.api.review.infra;
 
-import com.xuni.review.domain.ReviewLike;
+import com.xuni.core.review.domain.ReviewLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
