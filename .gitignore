@@ -47,3 +47,4 @@ src/main/resources/application.properties
 /xuni-core/src/test/resources/application.properties
 /xuni-core/src/main/resources/application-dev.properties
 /xuni-api/src/test/resources/application.properties
+/xuni-batch/src/main/resources/application.yml

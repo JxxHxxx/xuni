@@ -1,7 +1,7 @@
 package com.xuni.api.support;
 
-import com.xuni.api.auth.support.JwtTokenManager;
-import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.application.jwt.JwtTokenManager;
+import com.xuni.api.auth.application.jwt.JwtTokenProvider;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.CharacterEncodingFilter;

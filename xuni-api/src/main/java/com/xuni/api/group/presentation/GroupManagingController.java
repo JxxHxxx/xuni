@@ -1,7 +1,7 @@
 package com.xuni.api.group.presentation;
 
 import com.xuni.api.auth.application.MemberDetails;
-import com.xuni.api.auth.presentation.AuthenticatedMember;
+import com.xuni.api.auth.annotation.AuthenticatedMember;
 import com.xuni.api.group.application.GroupJoinFacade;
 import com.xuni.api.group.application.GroupManagingService;
 import com.xuni.api.group.dto.response.GroupApiSimpleResult;

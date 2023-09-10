@@ -2,7 +2,7 @@ package com.xuni.api.group.presentation;
 
 import com.xuni.api.ApiDocumentUtils;
 import com.xuni.api.auth.application.SimpleMemberDetails;
-import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.application.jwt.JwtTokenProvider;
 import com.xuni.api.group.TestGroupServiceSupporter;
 import com.xuni.api.support.ControllerCommon;
 import com.xuni.api.support.JwtTestConfiguration;

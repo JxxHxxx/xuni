@@ -1,7 +1,7 @@
 package com.xuni.api.statistics.presentation;
 
 import com.xuni.api.auth.application.MemberDetails;
-import com.xuni.api.auth.presentation.AuthenticatedMember;
+import com.xuni.api.auth.annotation.AuthenticatedMember;
 import com.xuni.core.common.http.DataResponse;
 import com.xuni.api.statistics.application.MemberStatisticsService;
 import com.xuni.api.statistics.dto.response.ReviewNeedResponse;

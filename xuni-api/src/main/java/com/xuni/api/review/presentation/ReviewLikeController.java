@@ -1,7 +1,7 @@
 package com.xuni.api.review.presentation;
 
 import com.xuni.api.auth.application.MemberDetails;
-import com.xuni.api.auth.presentation.AuthenticatedMember;
+import com.xuni.api.auth.annotation.AuthenticatedMember;
 import com.xuni.core.common.http.SimpleResponse;
 import com.xuni.api.review.application.ReviewLikeService;
 import com.xuni.core.review.domain.LikeStatus;

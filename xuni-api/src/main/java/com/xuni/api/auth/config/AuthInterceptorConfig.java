@@ -1,7 +1,10 @@
 package com.xuni.api.auth.config;
 
 import com.xuni.api.auth.presentation.*;
-import com.xuni.api.auth.support.JwtTokenManager;
+import com.xuni.api.auth.presentation.filter.ActuatorFilter;
+import com.xuni.api.auth.presentation.filter.AdminInterceptor;
+import com.xuni.api.auth.presentation.filter.JwtAuthInterceptor;
+import com.xuni.api.auth.application.jwt.JwtTokenManager;
 import jakarta.servlet.Filter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

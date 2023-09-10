@@ -8,7 +8,7 @@ import com.xuni.api.group.dto.response.GroupMemberDto;
 import com.xuni.api.group.dto.response.GroupReadAllResponse;
 import com.xuni.api.group.dto.response.GroupReadOneResponse;
 import com.xuni.api.group.dto.response.GroupStudyCheckResponse;
-import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.application.jwt.JwtTokenProvider;
 import com.xuni.api.support.ControllerCommon;
 import com.xuni.api.support.JwtTestConfiguration;
 import com.xuni.core.common.query.PageInfo;

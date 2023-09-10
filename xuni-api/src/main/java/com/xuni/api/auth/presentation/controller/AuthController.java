@@ -1,4 +1,4 @@
-package com.xuni.api.auth.presentation;
+package com.xuni.api.auth.presentation.controller;
 
 import com.xuni.api.auth.application.AuthMailService;
 import com.xuni.api.auth.application.AuthService;
@@ -6,7 +6,7 @@ import com.xuni.api.auth.dto.request.AuthCodeForm;
 import com.xuni.api.auth.dto.request.EmailForm;
 import com.xuni.api.auth.dto.request.LoginForm;
 import com.xuni.api.auth.dto.request.SignupForm;
-import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.application.jwt.JwtTokenProvider;
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.dto.response.*;
 import com.xuni.core.common.http.DataResponse;

@@ -1,7 +1,7 @@
 package com.xuni.api.statistics.presentation;
 
 import com.xuni.api.auth.application.SimpleMemberDetails;
-import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.application.jwt.JwtTokenProvider;
 import com.xuni.api.statistics.application.MemberStatisticsService;
 import com.xuni.api.statistics.dto.response.ReviewNeedResponse;
 import com.xuni.api.support.ControllerCommon;
