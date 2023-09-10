@@ -1,9 +1,10 @@
 package com.xuni.api.auth.presentation;
 
+import com.xuni.api.auth.annotation.OptionalAuthentication;
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.application.SimpleMemberDetails;
 import com.xuni.core.auth.domain.exception.UnauthenticatedException;
-import com.xuni.api.auth.support.JwtTokenManager;
+import com.xuni.api.auth.application.jwt.JwtTokenManager;
 import com.xuni.core.common.exception.CommonExceptionMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

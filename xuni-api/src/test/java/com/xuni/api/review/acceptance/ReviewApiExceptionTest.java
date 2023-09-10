@@ -7,7 +7,7 @@ import com.xuni.api.studyproduct.infra.StudyProductRepository;
 import com.xuni.core.auth.domain.AuthProvider;
 import com.xuni.core.auth.domain.LoginInfo;
 import com.xuni.core.auth.domain.Member;
-import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.application.jwt.JwtTokenProvider;
 import com.xuni.core.common.domain.Category;
 import com.xuni.api.review.dto.request.ReviewForm;
 import com.xuni.core.studyproduct.domain.StudyProduct;

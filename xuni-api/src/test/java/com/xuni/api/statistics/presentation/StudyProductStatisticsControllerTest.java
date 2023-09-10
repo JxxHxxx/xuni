@@ -1,9 +1,8 @@
 package com.xuni.api.statistics.presentation;
 
-import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.application.jwt.JwtTokenProvider;
 import com.xuni.api.statistics.application.StudyProductStatisticsService;
 import com.xuni.api.statistics.dto.response.StudyProductStatisticsReadResponse;
-import com.xuni.api.studyproduct.presentation.StudyProductControllerTestConfig;
 import com.xuni.api.support.ControllerCommon;
 import com.xuni.api.support.JwtTestConfiguration;
 import org.junit.jupiter.api.Test;

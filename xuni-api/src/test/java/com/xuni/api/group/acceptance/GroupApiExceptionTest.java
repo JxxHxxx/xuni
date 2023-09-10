@@ -6,7 +6,7 @@ import com.xuni.api.auth.infra.MemberRepository;
 import com.xuni.core.auth.domain.AuthProvider;
 import com.xuni.core.auth.domain.LoginInfo;
 import com.xuni.core.auth.domain.Member;
-import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.application.jwt.JwtTokenProvider;
 import com.xuni.core.common.domain.Category;
 import com.xuni.api.group.dto.request.GroupCreateForm;
 import org.junit.jupiter.api.AfterEach;

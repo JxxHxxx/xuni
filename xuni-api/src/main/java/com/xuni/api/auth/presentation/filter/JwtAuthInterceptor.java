@@ -1,6 +1,6 @@
-package com.xuni.api.auth.presentation;
+package com.xuni.api.auth.presentation.filter;
 
-import com.xuni.api.auth.support.JwtTokenManager;
+import com.xuni.api.auth.application.jwt.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

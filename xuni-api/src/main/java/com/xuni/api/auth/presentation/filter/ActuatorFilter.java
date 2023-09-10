@@ -1,7 +1,7 @@
-package com.xuni.api.auth.presentation;
+package com.xuni.api.auth.presentation.filter;
 
 import com.xuni.api.auth.application.MemberDetails;
-import com.xuni.api.auth.support.JwtTokenManager;
+import com.xuni.api.auth.application.jwt.JwtTokenManager;
 import com.xuni.core.common.exception.NotPermissionException;
 import com.xuni.core.auth.domain.Authority;
 import jakarta.servlet.*;

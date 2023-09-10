@@ -1,9 +1,9 @@
-package com.xuni.api.auth.presentation;
+package com.xuni.api.auth.presentation.controller;
 
 import com.xuni.api.auth.application.GoogleClient;
 import com.xuni.api.auth.application.MemberDetails;
 import com.xuni.api.auth.dto.response.LoginResponse;
-import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.application.jwt.JwtTokenProvider;
 import com.xuni.core.common.http.DataResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

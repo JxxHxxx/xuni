@@ -1,7 +1,7 @@
 package com.xuni.api.studyproduct.presentation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.xuni.api.auth.support.JwtTokenProvider;
+import com.xuni.api.auth.application.jwt.JwtTokenProvider;
 import com.xuni.api.common.service.AmazonS3Handler;
 import com.xuni.api.group.TestGroupServiceSupporter;
 import com.xuni.api.studyproduct.application.StudyProductCreateService;

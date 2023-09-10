@@ -1,8 +1,8 @@
 package com.xuni.api.group.presentation;
 
 import com.xuni.api.auth.application.MemberDetails;
-import com.xuni.api.auth.presentation.AuthenticatedMember;
-import com.xuni.api.auth.presentation.OptionalAuthentication;
+import com.xuni.api.auth.annotation.AuthenticatedMember;
+import com.xuni.api.auth.annotation.OptionalAuthentication;
 import com.xuni.api.group.dto.response.GroupReadAllResponse;
 import com.xuni.api.group.dto.response.GroupReadOneResponse;
 import com.xuni.api.group.dto.response.GroupStudyCheckResponse;

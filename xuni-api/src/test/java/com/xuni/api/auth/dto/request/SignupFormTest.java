@@ -1,6 +1,5 @@
 package com.xuni.api.auth.dto.request;
 
-import com.xuni.api.auth.presentation.AuthController;
 import com.xuni.api.auth.presentation.AuthControllerTestConfig;
 import com.xuni.api.support.JwtTestConfiguration;
 import jakarta.validation.ConstraintViolation;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
